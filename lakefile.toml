@@ -1,0 +1,10 @@
+name = "kripke-game-analysis"
+version = "0.1.0"
+defaultTargets = ["kripke-game-analysis"]
+
+[[lean_lib]]
+name = "KripkeGameAnalysis"
+
+[[lean_exe]]
+name = "kripke-game-analysis"
+root = "Main"
