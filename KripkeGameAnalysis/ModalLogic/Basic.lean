@@ -13,6 +13,7 @@ inductive ModalFormula (vars : Type) : Type where
 | neg : ModalFormula vars → ModalFormula vars
 | and : ModalFormula vars → ModalFormula vars → ModalFormula vars
 | box : ModalFormula vars → ModalFormula vars
+deriving BEq, DecidableEq
 
 namespace ModalFormula
   variable {vars : Type}
