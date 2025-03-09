@@ -51,14 +51,12 @@ namespace KripkeGameVisibleState
         exists x.val.accessiblityRelationSize
         constructor
         -- ↑↑xval.accessiblityRelationSize ∈ Finset.univ
-        { simp }
+        · simp
         -- mapRelSizeToStateInj ↑↑xval.accessiblityRelationSize = x
-        {
-          simp only [mapRelSizeToStateInj]; simp; simp only [mapRelSizeToState]; apply Subtype.ext; simp;
+        · simp only [mapRelSizeToStateInj]; simp; simp only [mapRelSizeToState]; apply Subtype.ext; simp;
           apply KripkeGameVisibleState.ext
-          { simp }
-          { simp; exact x.property }
-        }
+          · simp
+          · simp; exact x.property
     }
 
   def withNewQueryAndAnswer (state : KripkeGameVisibleState n) (query : ModalFormula KripkeGameVars)
