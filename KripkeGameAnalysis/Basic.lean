@@ -21,21 +21,24 @@ instance KripkeGameVars.fintype : Fintype KripkeGameVars :=
 
 def KripkeGameVars.all : Finset KripkeGameVars := Finset.univ
 
-inductive ModalFormula : Type
-| var : KripkeGameVars → ModalFormula
-| neg : ModalFormula → ModalFormula
-| and : ModalFormula → ModalFormula → ModalFormula
-| box : ModalFormula → ModalFormula
+inductive ModalFormula (vars : Type) : Type where
+| var : vars → ModalFormula vars
+| neg : ModalFormula vars → ModalFormula vars
+| and : ModalFormula vars → ModalFormula vars → ModalFormula vars
+| box : ModalFormula vars → ModalFormula vars
 
 namespace ModalFormula
-  abbrev p := ModalFormula.var KripkeGameVars.p
-  abbrev q := ModalFormula.var KripkeGameVars.q
-  abbrev r := ModalFormula.var KripkeGameVars.r
-  abbrev s := ModalFormula.var KripkeGameVars.s
-  abbrev not := ModalFormula.neg
-  abbrev or φ1 φ2 := ModalFormula.not (ModalFormula.and (ModalFormula.not φ1) (ModalFormula.not φ2))
-  abbrev implies φ1 φ2 := ModalFormula.or (ModalFormula.not φ1) φ2
-  abbrev dia φ := ModalFormula.not (ModalFormula.box (ModalFormula.not φ))
+  abbrev p := var KripkeGameVars.p
+  abbrev q := var KripkeGameVars.q
+  abbrev r := var KripkeGameVars.r
+  abbrev s := var KripkeGameVars.s
+
+  variable {finVars : Type} [Fintype finVars] [DecidableEq finVars]
+
+  abbrev not := fun (φ: ModalFormula finVars) => neg φ
+  abbrev or := fun (φ1 φ2: ModalFormula finVars) => not (and (not φ1) (not φ2))
+  abbrev implies := fun (φ1 φ2: ModalFormula finVars) => or (not φ1) φ2
+  abbrev dia := fun (φ: ModalFormula finVars) => not (box (not φ))
 end ModalFormula
 
 /-- A Kripke frame of `frameSize` possible worlds is a directed graph with `frameSize` nodes.
@@ -60,30 +63,30 @@ namespace KripkeFrame
   def accessibilityRelationCount (frame : KripkeFrame n) : ℕ :=
     ((frame.allNodes.product (frame.allNodes)).filter (fun a => frame.accessible a.fst a.snd)).card
 
-  def Valuation (frame : KripkeFrame n) : Type := KripkeGameVars → frame.Node → Bool
+  def Valuation (frame : KripkeFrame n) (vars : Type) : Type := vars → frame.Node → Bool
 
-  def Valuation.satisfiesAt {frame : KripkeFrame n} (i : frame.Node) (fml : ModalFormula) (val : frame.Valuation) : Bool :=
+  def Valuation.satisfiesAt {frame : KripkeFrame n} (i : frame.Node) (fml : ModalFormula vars) (val : frame.Valuation vars) : Bool :=
   match fml with
     | ModalFormula.var x => val x i
     | ModalFormula.neg φ => !(val.satisfiesAt i φ)
     | ModalFormula.and φ1 φ2 => val.satisfiesAt i φ1 && val.satisfiesAt i φ2
     | ModalFormula.box φ => decide (∀j ∈ frame.allNodes, if frame.accessible i j then val.satisfiesAt j φ else true)
 
-  def Valuation.isoToFinSetEquiv {frame : KripkeFrame n}: (Finset (KripkeGameVars × frame.Node)) ≃ frame.Valuation :=
+  def Valuation.isoToFinSetEquiv {frame : KripkeFrame n}: (Finset (KripkeGameVars × frame.Node)) ≃ (frame.Valuation KripkeGameVars) :=
     finsetProdEquivCurriedCharacteristic
 
-  def allValuations (frame : KripkeFrame n) : Finset (frame.Valuation) :=
+  def allValuations (frame : KripkeFrame n) : Finset (frame.Valuation KripkeGameVars) :=
     let valuationsAsPsets := (Finset.product KripkeGameVars.all frame.allNodes).powerset
     valuationsAsPsets.map ((@KripkeFrame.Valuation.isoToFinSetEquiv _ frame).toEmbedding)
 
-  def Node.satisfiesForAllValuations {frame : KripkeFrame n} (i : frame.Node) (fml : ModalFormula) : Bool :=
+  def Node.satisfiesForAllValuations {frame : KripkeFrame n} (i : frame.Node) (fml : ModalFormula KripkeGameVars) : Bool :=
     decide (∀val ∈ frame.allValuations, val.satisfiesAt i fml)
 
-  def countSatisfyingNodes (frame : KripkeFrame n) (fml : ModalFormula) : ℕ :=
+  def countSatisfyingNodes (frame : KripkeFrame n) (fml : ModalFormula KripkeGameVars) : ℕ :=
     (frame.allNodes.filter (fun i => i.satisfiesForAllValuations fml)).card
 
   lemma countSatisfyingNodes_leq_frameSize
-    (frame : KripkeFrame n) (fml : ModalFormula) : frame.countSatisfyingNodes fml ≤ n := by
+    (frame : KripkeFrame n) (fml : ModalFormula KripkeGameVars) : frame.countSatisfyingNodes fml ≤ n := by
     simp only [KripkeFrame.countSatisfyingNodes]
     simp only [← frame.allNodes_card_eq_frameSize]
     apply Finset.card_filter_le
@@ -92,7 +95,7 @@ end KripkeFrame
 structure KripkeGameVisibleState where
   frameSize : ℕ
   accessiblityRelationSize : Fin (frameSize * frameSize + 1)
-  queriesAndAnswers : List (ModalFormula × Fin (frameSize + 1))
+  queriesAndAnswers : List ((ModalFormula KripkeGameVars) × Fin (frameSize + 1))
 
 namespace KripkeGameVisibleState
   def allPossibleInitialVisibleStates : Finset KripkeGameVisibleState :=
@@ -109,7 +112,7 @@ namespace KripkeGameVisibleState
       intro n1 n2 h; simp only [mapRelSizeToState] at h; injection h
     (Finset.univ : Finset (Fin (4 * 4 + 1))).map ⟨mapRelSizeToState, mappingInjective⟩
 
-  def withNewQueryAndAnswer (state : KripkeGameVisibleState) (query : ModalFormula) (answer : Fin (state.frameSize + 1)) : KripkeGameVisibleState :=
+  def withNewQueryAndAnswer (state : KripkeGameVisibleState) (query : ModalFormula KripkeGameVars) (answer : Fin (state.frameSize + 1)) : KripkeGameVisibleState :=
     { state with queriesAndAnswers := (query, answer) :: state.queriesAndAnswers }
 
   def possibleFramesUptoIso (state : KripkeGameVisibleState) : Finset (KripkeFrame state.frameSize) :=
@@ -119,7 +122,7 @@ namespace KripkeGameVisibleState
 
   inductive WinningStrategy : (n: ℕ) -> (state: KripkeGameVisibleState) -> Type where
     | withExhaustiveSearch : possibleFramesUptoIsoCard state ≤ n -> WinningStrategy n state
-    | withParticularQuery : (nextQuery : ModalFormula) ->
+    | withParticularQuery : (nextQuery : ModalFormula KripkeGameVars) ->
                   (Π answer : Fin (state.frameSize + 1), WinningStrategy n (state.withNewQueryAndAnswer nextQuery answer)) ->
                   WinningStrategy (n + 1) state
 end KripkeGameVisibleState
