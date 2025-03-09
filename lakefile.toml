@@ -8,3 +8,7 @@ name = "KripkeGameAnalysis"
 [[lean_exe]]
 name = "kripke-game-analysis"
 root = "Main"
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
