@@ -61,11 +61,13 @@ namespace FiniteKripkeFrame
   def accessibilityRelationCount (frame : FiniteKripkeFrame n) : ℕ :=
     ((frame.allNodes.product (frame.allNodes)).filter (fun a => frame.accessible a.fst a.snd)).card
 
-  structure FiniteValuation (frame : FiniteKripkeFrame n) (vars : Type) [Fintype vars] [DecidableEq vars] where
-    valuation : frame.Valuation vars
+  section FiniteValuation
+  structure FiniteValuation (frame : FiniteKripkeFrame n) (finVars : Type) [Fintype finVars] [DecidableEq finVars] where
+    valuation : frame.Valuation finVars
 
+  variable {finVars : Type} [Fintype finVars] [DecidableEq finVars]
   namespace FiniteValuation
-    def equivToFinSetRepresentation {finVars : Type} {frame : FiniteKripkeFrame n} [Fintype finVars] [DecidableEq finVars]:
+    def equivToFinSetRepresentation {frame : FiniteKripkeFrame n}:
                                     (frame.FiniteValuation finVars) ≃ (Finset (finVars × frame.vertices)) :=
       let valPowersetEquiv : (frame.Valuation finVars) ≃ (Finset (finVars × frame.vertices)) := finsetProdEquivCurriedCharacteristic.symm
       let valEquiv : (frame.FiniteValuation finVars) ≃ (frame.Valuation finVars) := {
@@ -77,22 +79,21 @@ namespace FiniteKripkeFrame
       valEquiv.trans valPowersetEquiv
   end FiniteValuation
 
-  def allValuations (frame : FiniteKripkeFrame n) (finVars : Type) [varsFin : Fintype finVars] [DecidableEq finVars] : Finset (frame.FiniteValuation finVars) :=
-    let valuationsAsPsets := (Finset.product varsFin.elems frame.allNodes).powerset
-    valuationsAsPsets.map ((@FiniteValuation.equivToFinSetRepresentation _ _ frame).symm.toEmbedding)
+  def allFinValuations (frame : FiniteKripkeFrame n) : Finset (frame.FiniteValuation finVars) :=
+    let valuationsAsPsets := (Finset.product (inferInstance (α := Fintype finVars)).elems frame.allNodes).powerset
+    valuationsAsPsets.map (FiniteValuation.equivToFinSetRepresentation (frame := frame).symm.toEmbedding)
 
-  def satisfiesForAllValuations {frame : FiniteKripkeFrame n} (finVars : Type) [Fintype finVars] [DecidableEq finVars]
-                                (i : frame.vertices) (fml : ModalFormula finVars) : Bool :=
-    decide (∀finval ∈ frame.allValuations finVars, finval.valuation.decideSatisfaction i fml)
+  def satisfiesForAllValuations {frame : FiniteKripkeFrame n} (i : frame.vertices) (fml : ModalFormula finVars) : Bool :=
+    decide (∀finval ∈ frame.allFinValuations, finval.valuation.decideSatisfaction i fml)
 
-  def countSatisfyingNodes (frame : FiniteKripkeFrame n)
-                           (fml : ModalFormula finVars) [Fintype finVars] [DecidableEq finVars] : ℕ :=
-    (frame.allNodes.filter (fun i => satisfiesForAllValuations finVars i fml)).card
+  def countSatisfyingNodes (frame : FiniteKripkeFrame n) (fml : ModalFormula finVars) : ℕ :=
+    (frame.allNodes.filter (fun i => satisfiesForAllValuations i fml)).card
 
-  lemma countSatisfyingNodes_leq_frameSize
-    (frame : FiniteKripkeFrame n) (fml : ModalFormula finVars)
-    [Fintype finVars] [DecidableEq finVars]: frame.countSatisfyingNodes fml ≤ n := by
+  lemma countSatisfyingNodes_leq_frameSize: ∀ {frame : FiniteKripkeFrame n} {fml : ModalFormula finVars},
+                                             frame.countSatisfyingNodes fml ≤ n := by
+    intro frame fml
     simp only [FiniteKripkeFrame.countSatisfyingNodes]
     simp only [← frame.allNodes_card_eq_frameSize]
     apply Finset.card_filter_le
+  end FiniteValuation
 end FiniteKripkeFrame
