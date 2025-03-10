@@ -64,7 +64,7 @@ namespace KripkeGameVisibleState
                             (answer : Fin (state.frameSize + 1)) : KripkeGameVisibleState n :=
     { state with queriesAndAnswers := (query, answer) :: state.queriesAndAnswers }
 
-  def possibleFramesUptoIso (state : KripkeGameVisibleState n) : Finset (FiniteKripkeFrame state.frameSize) :=
+  def possibleFramesUptoIso (state : KripkeGameVisibleState n) : Finset (FiniteKripkeFrame.UptoIso state.frameSize) :=
     sorry
 
   def possibleFramesUptoIsoCard (state : KripkeGameVisibleState n) : ℕ := state.possibleFramesUptoIso.card

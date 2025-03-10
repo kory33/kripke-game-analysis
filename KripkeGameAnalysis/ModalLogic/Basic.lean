@@ -44,4 +44,19 @@ namespace KripkeFrame
     | ModalFormula.and φ1 φ2 => val.decideSatisfaction i φ1 && val.decideSatisfaction i φ2
     | ModalFormula.box φ => decide (∀j: frame.vertices, if frame.accessible i j then val.decideSatisfaction j φ else true)
 
+  section Isomorphism
+  def Isomorphic (frame1 : KripkeFrame v1) (frame2 : KripkeFrame v2) : Prop :=
+    ∃(f : v1 ≃ v2), ∀i j, frame1.accessible i j = frame2.accessible (f i) (f j)
+
+  def isomorphism_equivalence : Equivalence (KripkeFrame.Isomorphic (v1 := v) (v2 := v)) := by
+    constructor
+    · intro frame; exact ⟨Equiv.refl v, by simp⟩
+    · intro frame1 frame2 ⟨f, h⟩; exact ⟨f.symm, by simp [h]⟩
+    · intro frame1 frame2 frame3 ⟨f1, h1⟩ ⟨f2, h2⟩; exact ⟨f1.trans f2, by simp [h1, h2]⟩
+  end Isomorphism
+
+  instance isSetoid (v : Type) : Setoid (KripkeFrame v) :=
+    ⟨KripkeFrame.Isomorphic, KripkeFrame.isomorphism_equivalence⟩
+
+  def UptoIso (v : Type) : Type := Quotient (isSetoid v)
 end KripkeFrame

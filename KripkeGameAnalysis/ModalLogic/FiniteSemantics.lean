@@ -107,6 +107,8 @@ namespace FiniteKripkeFrame
         ext i; congr
         rw [Nat.add_comm, Nat.mul_comm, Nat.mod_add_div _ _]
     }
+
+  def UptoIso (n : Nat) := Quotient (KripkeFrame.isSetoid (Fin n))
 end FiniteKripkeFrame
 
 def FiniteKripkeFrameBitVecRepr (frameSize : Nat) : Type := BitVec (frameSize ^ 2)
