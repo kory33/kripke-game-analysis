@@ -31,20 +31,21 @@ deriving BEq, DecidableEq
 namespace KripkeGameVisibleState
   def frameSize (_ : KripkeGameVisibleState n) : ℕ := n
 
-  -- An initial visible state should have a frame size of 4, and an empty query-answer list.
-  def InitialVisibleState : Type :=
-    { state : KripkeGameVisibleState 4 // state.queriesAndAnswers = [] }
-  instance : DecidableEq InitialVisibleState :=
-    inferInstanceAs (DecidableEq { state : KripkeGameVisibleState 4 // state.queriesAndAnswers = [] })
+  def InitialVisibleState (n: ℕ) : Type :=
+    { state : KripkeGameVisibleState n // state.queriesAndAnswers = [] }
+  instance : DecidableEq (InitialVisibleState n) :=
+    inferInstanceAs (DecidableEq { state : KripkeGameVisibleState n // state.queriesAndAnswers = [] })
 
-  instance : Fintype InitialVisibleState :=
-    let mapRelSizeToState : Fin 17 -> InitialVisibleState := fun accessiblityRelationSize => {
+  instance : Fintype (InitialVisibleState n) :=
+    let mapRelSizeToState : Fin (n * n + 1) -> InitialVisibleState n := fun accessiblityRelationSize => {
       val := { accessiblityRelationSize := accessiblityRelationSize, queriesAndAnswers := [] },
       property := by simp
     }
-    let mapRelSizeToStateInj : Fin 17 ↪ InitialVisibleState := ⟨mapRelSizeToState, by intros x y h; injections⟩
+    let mapRelSizeToStateInj : Fin (n * n + 1) ↪ InitialVisibleState n :=
+      ⟨mapRelSizeToState, by intros x y h; injections⟩
+
     {
-      elems := Finset.univ (α := Fin 17).map mapRelSizeToStateInj
+      elems := Finset.univ (α := Fin (n * n + 1)).map mapRelSizeToStateInj
       complete := by
         intro x
         rw [Finset.mem_map]
@@ -66,7 +67,7 @@ namespace KripkeGameVisibleState
   def possibleFramesUptoIso (state : KripkeGameVisibleState n) : Finset (FiniteKripkeFrame state.frameSize) :=
     sorry
 
-  def possibleFramesUptoIsoCard (state : KripkeGameVisibleState 4) : ℕ := state.possibleFramesUptoIso.card
+  def possibleFramesUptoIsoCard (state : KripkeGameVisibleState n) : ℕ := state.possibleFramesUptoIso.card
 
   inductive WinningStrategy : (moves: ℕ) -> (state: KripkeGameVisibleState n) -> Type where
     | withExhaustiveSearch : possibleFramesUptoIsoCard state ≤ movesn -> WinningStrategy moves state
@@ -75,6 +76,6 @@ namespace KripkeGameVisibleState
                   WinningStrategy (moves + 1) state
 end KripkeGameVisibleState
 
-def kripkeGame_winning_strategy : ∀state : KripkeGameVisibleState.InitialVisibleState,
+def kripkeGame_winning_strategy : ∀state : KripkeGameVisibleState.InitialVisibleState 4,
                                   KripkeGameVisibleState.WinningStrategy 10 state.val :=
   sorry
