@@ -47,7 +47,7 @@ namespace KripkeGameVisibleState
       elems := Finset.univ (α := Fin 17).map mapRelSizeToStateInj
       complete := by
         intro x
-        rw [Finset.map_eq_image mapRelSizeToStateInj Finset.univ, Finset.mem_image]
+        rw [Finset.mem_map]
         exists x.val.accessiblityRelationSize
         constructor
         -- ↑↑xval.accessiblityRelationSize ∈ Finset.univ
