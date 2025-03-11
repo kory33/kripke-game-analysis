@@ -33,6 +33,9 @@ def KripkeFrame (vertices : Type) : Type := vertices → vertices → Bool
 namespace KripkeFrame
   instance [Fintype v] : DecidableEq (KripkeFrame v) := inferInstanceAs (DecidableEq (v → v → Bool))
 
+  @[ext] lemma ext {v : Type} {frame1 frame2 : KripkeFrame v} (h : ∀i j, frame1 i j = frame2 i j) : frame1 = frame2 :=
+    funext (λ i => funext (λ j => h i j))
+
   def vertices (_ : KripkeFrame v) : Type := v
   abbrev accessible (frame : KripkeFrame v) (i j : frame.vertices) : Bool := frame i j
 
