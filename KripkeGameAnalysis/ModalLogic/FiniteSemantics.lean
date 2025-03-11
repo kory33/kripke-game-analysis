@@ -1,5 +1,6 @@
 import Init.Data.BitVec.Basic
 import Mathlib.Data.Nat.Cast.Order.Basic
+import Mathlib.Data.Fintype.Perm
 
 import KripkeGameAnalysis.ModalLogic.Basic
 import KripkeGameAnalysis.GenericExtras.BitVec
@@ -7,6 +8,8 @@ import KripkeGameAnalysis.GenericExtras.BitVec
 /--
 A finite Kripke frame is a Kripke frame with a finite number of vertices.
 We think of the vertices in the Kripke frame as being numbered from `0` to `frameSize - 1`, inclusive.
+
+TODO: use BitVec representation here instead and provide isomorphism + coersion to KripkeFrame instead?
 -/
 def FiniteKripkeFrame (frameSize : Nat) : Type := KripkeFrame (Fin frameSize)
 
@@ -18,6 +21,7 @@ def FiniteKripkeFrame (frameSize : Nat) : Type := KripkeFrame (Fin frameSize)
 namespace FiniteKripkeFrame
   instance (frame : FiniteKripkeFrame n) : Fintype frame.vertices := inferInstanceAs (Fintype (Fin n))
   instance (frame : FiniteKripkeFrame n) : DecidableEq frame.vertices := inferInstanceAs (DecidableEq (Fin n))
+  instance : DecidableEq (FiniteKripkeFrame n) := inferInstanceAs (DecidableEq (KripkeFrame (Fin n)))
 
   def allNodes (frame : FiniteKripkeFrame n) : Finset frame.vertices := Finset.univ
   lemma allNodes_card_eq_frameSize (frame : FiniteKripkeFrame n) : frame.allNodes.card = n :=
@@ -108,7 +112,29 @@ namespace FiniteKripkeFrame
         rw [Nat.add_comm, Nat.mul_comm, Nat.mod_add_div _ _]
     }
 
+  instance : HasEquiv (FiniteKripkeFrame n) := inferInstanceAs (HasEquiv (KripkeFrame (Fin n)))
   def UptoIso (n : Nat) := Quotient (KripkeFrame.isSetoid (Fin n))
+  namespace UptoIso
+    def enumerateClass(f : FiniteKripkeFrame n) : Finset (FiniteKripkeFrame n) :=
+      let permutateFrame : Equiv.Perm (Fin n) → FiniteKripkeFrame n := fun f' i j => f (f' i) (f' j)
+      Finset.univ (α := Equiv.Perm (Fin n)).image permutateFrame
+
+    theorem enumerateClass_mem_iff (f f' : FiniteKripkeFrame n) : f' ∈ enumerateClass f ↔ f' ≈ f := by
+      simp [enumerateClass]
+      apply Iff.intro
+      · intro iso_exists
+        rcases iso_exists with ⟨iso, iso_prop⟩
+        simp [HasEquiv.Equiv, KripkeFrame.Isomorphic]
+        exists iso
+        intro i j
+        exact (congr_fun (congr_fun iso_prop i) j).symm
+      · intro equiv
+        simp [HasEquiv.Equiv, KripkeFrame.Isomorphic] at equiv
+        rcases equiv with ⟨iso, iso_prop⟩
+        exists iso
+        ext i j
+        exact (iso_prop i j).symm
+  end UptoIso
 end FiniteKripkeFrame
 
 def FiniteKripkeFrameBitVecRepr (frameSize : Nat) : Type := BitVec (frameSize ^ 2)

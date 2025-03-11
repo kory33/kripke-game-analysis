@@ -31,8 +31,10 @@ and returns `true` if there is an edge from vertex `i` to vertex `j`, and `false
 -/
 def KripkeFrame (vertices : Type) : Type := vertices → vertices → Bool
 namespace KripkeFrame
+  instance [Fintype v] : DecidableEq (KripkeFrame v) := inferInstanceAs (DecidableEq (v → v → Bool))
+
   def vertices (_ : KripkeFrame v) : Type := v
-  def accessible (frame : KripkeFrame v) (i j : frame.vertices) : Bool := frame i j
+  abbrev accessible (frame : KripkeFrame v) (i j : frame.vertices) : Bool := frame i j
 
   def Valuation (frame : KripkeFrame v) (vars : Type) : Type := vars → frame.vertices → Bool
 
@@ -55,6 +57,7 @@ namespace KripkeFrame
     · intro frame1 frame2 frame3 ⟨f1, h1⟩ ⟨f2, h2⟩; exact ⟨f1.trans f2, by simp [h1, h2]⟩
   end Isomorphism
 
+  instance iso_equiv : HasEquiv (KripkeFrame v) := ⟨KripkeFrame.Isomorphic⟩
   instance isSetoid (v : Type) : Setoid (KripkeFrame v) :=
     ⟨KripkeFrame.Isomorphic, KripkeFrame.isomorphism_equivalence⟩
 
