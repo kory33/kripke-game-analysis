@@ -60,7 +60,6 @@ namespace KripkeFrame
     · intro frame1 frame2 frame3 ⟨f1, h1⟩ ⟨f2, h2⟩; exact ⟨f1.trans f2, by simp [h1, h2]⟩
   end Isomorphism
 
-  instance iso_equiv : HasEquiv (KripkeFrame v) := ⟨KripkeFrame.Isomorphic⟩
   instance isSetoid (v : Type) : Setoid (KripkeFrame v) :=
     ⟨KripkeFrame.Isomorphic, KripkeFrame.isomorphism_equivalence⟩
 

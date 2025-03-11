@@ -2,9 +2,11 @@ import Init.Data.BitVec.Basic
 import Mathlib.Data.Nat.Cast.Order.Basic
 import Mathlib.Data.Fintype.Perm
 import Mathlib.Data.Finset.Max
+import Mathlib.Data.Finset.Sort
 
-import KripkeGameAnalysis.ModalLogic.Basic
+import KripkeGameAnalysis.Generic.FinClassSetoid
 import KripkeGameAnalysis.GenericExtras.BitVec
+import KripkeGameAnalysis.ModalLogic.Basic
 
 /--
 A finite Kripke frame is a Kripke frame with a finite number of vertices.
@@ -100,7 +102,13 @@ namespace FiniteKripkeFrame
 
   instance : Fintype (FiniteKripkeFrame n) := inferInstanceAs (Fintype (BitVec (n ^ 2)))
   instance : DecidableEq (FiniteKripkeFrame n) := inferInstanceAs (DecidableEq (BitVec (n ^ 2)))
+end FiniteKripkeFrame
 
+namespace KripkeFrame
+  instance : Fintype (KripkeFrame (Fin n)) := Fintype.ofEquiv _ FiniteKripkeFrame.equivToKripkeFrameFin
+end KripkeFrame
+
+namespace FiniteKripkeFrame
   def allNodes (frame : FiniteKripkeFrame n) : Finset frame.vertices := Finset.univ
   lemma allNodes_card_eq_frameSize (frame : FiniteKripkeFrame n) : frame.allNodes.card = n :=
     by apply Fintype.card_fin
@@ -147,16 +155,23 @@ namespace FiniteKripkeFrame
     apply Finset.card_filter_le
   end FiniteValuation
 
-  instance instHasEquiv : HasEquiv (FiniteKripkeFrame n) where Equiv := fun frame1 frame2 => frame1.asKripkeFrame ≈ frame2
-  def UptoIso (n : Nat) := Quotient (KripkeFrame.isSetoid (Fin n))
-  namespace UptoIso
-    def enumerateClass(f : FiniteKripkeFrame n) : Finset (FiniteKripkeFrame n) :=
+  section Isomorphism
+  instance isSetoid (n : ℕ) : Setoid (FiniteKripkeFrame n) where
+    r := fun frame1 frame2 => frame1.asKripkeFrame ≈ frame2
+    iseqv := by
+      constructor
+      · intro frame; exact KripkeFrame.isomorphism_equivalence.refl _
+      · intro frame1 frame2 h; exact KripkeFrame.isomorphism_equivalence.symm h
+      · intro frame1 frame2 frame3 h1 h2; exact KripkeFrame.isomorphism_equivalence.trans h1 h2
+  def UptoIso (n: ℕ) : Type := Quotient (isSetoid n)
+
+  instance FinClassSetoid (n : ℕ) : FinClassSetoid (FiniteKripkeFrame n) where
+    enumerateClass := fun f =>
       let permutateFrame : Equiv.Perm (Fin n) → FiniteKripkeFrame n := fun f' =>
         mkFromKripkeFrameFin (fun i j => f (f' i) (f' j))
       Finset.univ (α := Equiv.Perm (Fin n)).image permutateFrame
-
-    theorem enumerateClass_mem_iff (f f' : FiniteKripkeFrame n) : (f' ∈ enumerateClass f) ↔ (f' ≈ f) := by
-      simp [enumerateClass]
+    enumerateClass_mem_iff f f' := by
+      simp
       apply Iff.intro
       · intro iso_exists
         rcases iso_exists with ⟨iso, iso_prop⟩
@@ -171,50 +186,34 @@ namespace FiniteKripkeFrame
         exists iso
         ext i j; simp; exact (iso_prop i j).symm
 
-    lemma enumerateClass_self_mem (f : FiniteKripkeFrame n) : f ∈ enumerateClass f := by
-      apply (enumerateClass_mem_iff f f).mpr
-      exact (KripkeFrame.isomorphism_equivalence.refl _)
+  def canonicalize (f : FiniteKripkeFrame n) : FiniteKripkeFrame n :=
+    let classOf_f := FinClassSetoid.enumerateClass f
+    let nonempty : classOf_f.Nonempty := by have : f ∈ classOf_f := FinClassSetoid.enumerateClass_self_mem f; exists f
+    classOf_f.min' nonempty
 
-    theorem enumerateClass_equiv_eq (f f' : FiniteKripkeFrame n) : enumerateClass f = enumerateClass f' ↔ f ≈ f' := by
-      apply Iff.intro
-      · intro h
-        have f_mem_enumerateClass_f' : f ∈ enumerateClass f' := by rw [←h]; exact enumerateClass_self_mem f
-        exact (enumerateClass_mem_iff f' f).mp f_mem_enumerateClass_f'
-      · intro h
-        ext a
-        apply Iff.intro
-        · intro h'
-          apply (enumerateClass_mem_iff _ _).mpr
-          apply (enumerateClass_mem_iff _ _).mp at h'
-          exact (KripkeFrame.isomorphism_equivalence.trans h' h)
-        · intro h'
-          apply (enumerateClass_mem_iff _ _).mpr
-          apply (enumerateClass_mem_iff _ _).mp at h'
-          exact (KripkeFrame.isomorphism_equivalence.trans h' (KripkeFrame.isomorphism_equivalence.symm h))
+  theorem canonicalize_equiv_self (f : FiniteKripkeFrame n) : (canonicalize f) ≈ f := by
+    simp [canonicalize]
+    set lhs := (FinClassSetoid.enumerateClass f).min' _
+    have lhs_in_class_f : lhs ∈ FinClassSetoid.enumerateClass f := Finset.min'_mem _ _
+    exact (FinClassSetoid.enumerateClass_mem_iff lhs f).mp lhs_in_class_f
 
-    def canonicalize (f : FiniteKripkeFrame n) : FiniteKripkeFrame n :=
-      let classOf_f := enumerateClass f
-      let nonempty : classOf_f.Nonempty := by have : f ∈ classOf_f := enumerateClass_self_mem f; exists f
-      classOf_f.min' nonempty
-
-    theorem canonicalize_equiv_self (f : FiniteKripkeFrame n) : (canonicalize f) ≈ f := by
+  theorem canonicalize_eq_iff_equiv (f f' : FiniteKripkeFrame n) : canonicalize f = canonicalize f' ↔ f ≈ f' := by
+    apply Iff.intro
+    · intro h
+      have p1 : f ≈ canonicalize f := KripkeFrame.isomorphism_equivalence.symm (canonicalize_equiv_self f)
+      rw [h] at p1
+      exact (KripkeFrame.isomorphism_equivalence.trans p1 (canonicalize_equiv_self f'))
+    · intro h
       simp [canonicalize]
-      set lhs := (enumerateClass f).min' _
-      have lhs_in_class_f : lhs ∈ enumerateClass f := Finset.min'_mem _ _
-      exact (enumerateClass_mem_iff f lhs).mp lhs_in_class_f
+      have enumerateClass_f_eq := (FinClassSetoid.enumerateClass_eq f f').mpr h
+      simp [enumerateClass_f_eq]
 
-    theorem canonicalize_eq_iff_equiv (f f' : FiniteKripkeFrame n) : canonicalize f = canonicalize f' ↔ f ≈ f' := by
-      apply Iff.intro
-      · intro h
-        have p1 : f ≈ canonicalize f := KripkeFrame.isomorphism_equivalence.symm (canonicalize_equiv_self f)
-        rw [h] at p1
-        exact (KripkeFrame.isomorphism_equivalence.trans p1 (canonicalize_equiv_self f'))
-      · intro h
-        simp [canonicalize]
-        have enumerateClass_f_eq := (enumerateClass_equiv_eq f f').mpr h
-        simp [enumerateClass_f_eq]
+  theorem canonicalize_weakly_regressive : canonicalize f ≤ f := by
+    simp [canonicalize]; apply Finset.min'_le _ _; exact FinClassSetoid.enumerateClass_self_mem f
 
-    theorem canonicalize_weakly_regressive : canonicalize f ≤ f := by
-      simp [canonicalize]; apply Finset.min'_le _ _; exact enumerateClass_self_mem f
+  -- TODO : use HashSet-based implementation for better performance
+  instance : Fintype (UptoIso n) := Quotient.fintype (isSetoid n)
+  end Isomorphism
+  namespace UptoIso
   end UptoIso
 end FiniteKripkeFrame
