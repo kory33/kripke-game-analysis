@@ -3,6 +3,7 @@ import Mathlib.Data.Nat.Cast.Order.Basic
 import Mathlib.Data.Fintype.Perm
 import Mathlib.Data.Finset.Max
 import Mathlib.Data.Finset.Sort
+import Mathlib.Data.Finset.Insert
 
 import KripkeGameAnalysis.Generic.FinClassSetoid
 import KripkeGameAnalysis.Generic.SetoidWithCanonicalizer
@@ -103,6 +104,7 @@ namespace FiniteKripkeFrame
 
   instance : Fintype (FiniteKripkeFrame n) := inferInstanceAs (Fintype (BitVec (n ^ 2)))
   instance : DecidableEq (FiniteKripkeFrame n) := inferInstanceAs (DecidableEq (BitVec (n ^ 2)))
+  instance : Hashable (FiniteKripkeFrame n) := inferInstanceAs (Hashable (BitVec (n ^ 2)))
 end FiniteKripkeFrame
 
 namespace KripkeFrame
@@ -186,6 +188,7 @@ namespace FiniteKripkeFrame
         rcases equiv with ⟨iso, iso_prop⟩
         exists iso
         ext i j; simp; exact (iso_prop i j).symm
+  abbrev enumerateClass (f : FiniteKripkeFrame n) : Finset (FiniteKripkeFrame n) := FinClassSetoid.enumerateClass f
 
   instance : SetoidWithCanonicalizer (FiniteKripkeFrame n) where
     canonicalize f :=
@@ -206,9 +209,157 @@ namespace FiniteKripkeFrame
   abbrev canonicalize (f : FiniteKripkeFrame n) : FiniteKripkeFrame n := SetoidWithCanonicalizer.canonicalize f
   theorem canonicalize_weakly_regressive : canonicalize f ≤ f := by
     simp [canonicalize]; apply Finset.min'_le _ _; exact FinClassSetoid.enumerateClass_self_mem f
+  instance : DecidableEq (UptoIso n) := inferInstanceAs (DecidableEq (Quotient (isSetoid n)))
 
-  -- TODO : use HashSet-based implementation for better performance
-  instance : Fintype (UptoIso n) := Quotient.fintype (isSetoid n)
+  instance : Fintype (UptoIso n) :=
+    let allFramesOrdered : List (FiniteKripkeFrame n) := (List.finRange (2 ^ (n ^ 2))).map (BitVec.ofNat (n ^ 2))
+    let insertIfNotSeen (seen : Std.HashSet (FiniteKripkeFrame n))
+                        (frames : Finset (UptoIso n))
+                        (frame : FiniteKripkeFrame n) : Finset (UptoIso n) :=
+      if seen.contains frame then frames else insert (Quotient.mk' frame) frames
+    let foldStep (frame : FiniteKripkeFrame n)
+                 (pair : Std.HashSet (FiniteKripkeFrame n) × Finset (UptoIso n)) :=
+      (pair.fst.insertMany (frame.enumerateClass.sort (· ≤ ·)), insertIfNotSeen pair.fst pair.snd frame)
+
+    let loop_invariant (pair : Std.HashSet (FiniteKripkeFrame n) × Finset (UptoIso n)) :=
+      pair.fst.toList.toFinset.image Quotient.mk' = pair.snd
+
+    let foldStep_elem : ∀ seen accum frame,
+                        loop_invariant (seen, accum) →
+                        Quotient.mk' frame ∈ (foldStep frame (seen, accum)).snd := by
+      intro seen accum frame invariant
+      simp [foldStep, insertIfNotSeen]
+      by_cases h : seen.contains frame
+      · simp [h]
+        simp [loop_invariant] at invariant
+        rw [← invariant]
+        apply Finset.mem_image.mpr
+        exists frame
+        simp
+        exact h
+      · simp [h]
+
+    let foldStep_preserves_elem : ∀ prev frame frame',
+                                  Quotient.mk' frame ∈ prev.snd →
+                                  Quotient.mk' frame ∈ (foldStep frame' prev).snd := by
+      intro prev frame frame' elem
+      simp [foldStep, insertIfNotSeen]
+      by_cases h : prev.fst.contains frame'
+      · simp [h]
+        exact elem
+      · simp [h]
+        exact Or.inr elem
+
+    let foldStep_preserves_invariant : ∀ seen frames frame,
+                             loop_invariant (seen, frames) →
+                             loop_invariant (foldStep frame (seen, frames)) := by
+      intro seen frames frame invariant
+      simp [loop_invariant] at invariant
+      simp [loop_invariant, foldStep, insertIfNotSeen]
+      ext upto_iso; simp
+      by_cases h : seen.contains frame
+      · simp [h]
+        apply Quotient.inductionOn upto_iso (motive := _)
+        intro f
+        apply Iff.intro
+        · intro h
+          rw [←invariant]
+          apply Finset.mem_image.mpr
+          rcases h with ⟨f', f'_in_class_f, f_eq⟩
+          cases f'_in_class_f
+          next f'_in_seen =>
+            exists f'
+            simp
+            exact And.intro f'_in_seen f_eq
+          next f'_in_enumerateClass =>
+            exists frame
+            simp
+            apply And.intro
+            · exact h
+            · have f'_eqv_frame : f' ≈ frame := (FinClassSetoid.enumerateClass_mem_iff f' frame).mp f'_in_enumerateClass
+              simp only [Quotient.mk']
+              rw [← Quotient.sound f'_eqv_frame]
+              simp only [Quotient.mk'] at f_eq
+              exact f_eq
+        · intro h
+          rw [←invariant] at h; simp at h
+          rcases h with ⟨f', f'_in_seen, f_eq⟩
+          exists f'
+          apply And.intro
+          · exact Or.inl f'_in_seen
+          · exact f_eq
+      · simp [h]
+        apply Quotient.inductionOn upto_iso (motive := _)
+        intro f
+        apply Iff.intro
+        · intro h
+          rcases h with ⟨f', f'_in_class_f, f_eq⟩
+          simp only [Quotient.mk']
+          simp only [Quotient.mk'] at f_eq
+          rw [←invariant]
+          cases f'_in_class_f
+          next f'_in_seen =>
+            apply Or.inr
+            simp
+            exists f'
+          next f'_in_enumerateClass =>
+            apply Or.inl
+            rw [← f_eq]
+            apply Quotient.sound
+            exact (FinClassSetoid.enumerateClass_mem_iff f' frame).mp f'_in_enumerateClass
+        · intro h
+          rw [←invariant] at h; simp at h
+          cases h
+          next qf_eq_qframe =>
+            exists frame
+            apply And.intro
+            · apply Or.inr
+              exact FinClassSetoid.enumerateClass_self_mem frame
+            · exact qf_eq_qframe.symm
+          next qf_in_qseen =>
+            rcases qf_in_qseen with ⟨f', f'_in_seen, f_eq⟩
+            exists f'
+            apply And.intro
+            · apply Or.inl
+              assumption
+            · exact f_eq
+
+    let foldStep_invariant : ∀ (frames : List _), loop_invariant (frames.foldr foldStep ⟨∅, ∅⟩) := by
+      intro frames
+      induction frames with
+      | nil =>
+        simp [loop_invariant]
+        apply List.eq_nil_of_length_eq_zero
+        rw [Std.HashSet.length_toList]
+        simp
+      | cons head_frame frames ih =>
+        exact foldStep_preserves_invariant _ _ _ ih
+
+    let foldStep_mem : ∀ (frames : List _) frame,
+                       frame ∈ frames → Quotient.mk' frame ∈ (frames.foldr foldStep ⟨∅, ∅⟩).snd := by
+      intro frames
+      induction frames with
+      | nil => simp
+      | cons head_frame frames ih =>
+        intro frame hyp
+        cases hyp
+        next => exact foldStep_elem _ _ _ (foldStep_invariant _)
+        next frame_in_frames =>
+          simp; exact foldStep_preserves_elem (frames.foldr foldStep (∅, ∅)) _ _ (ih _ frame_in_frames)
+    {
+      elems := (allFramesOrdered.foldr foldStep ⟨∅, ∅⟩).snd,
+      complete := by
+        intro fUptoIso
+        rcases Quotient.exists_rep fUptoIso with ⟨f, f_eq⟩
+        have f_in_allFramesOrdered : f ∈ allFramesOrdered := by
+          simp [allFramesOrdered]
+          exists f.toNat
+          constructor
+          · exists f.toFin
+          · simp
+        rw [←f_eq]
+        exact foldStep_mem _ f f_in_allFramesOrdered
+    }
 
   namespace UptoIso
   end UptoIso

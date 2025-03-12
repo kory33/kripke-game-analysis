@@ -1,9 +1,9 @@
 import Mathlib.Data.Finset.Basic
+import Mathlib.Data.Fintype.Basic
 
 class FinClassSetoid (α : Type) extends Setoid α where
   enumerateClass: α → Finset α
   enumerateClass_mem_iff: ∀ x y, x ∈ enumerateClass y ↔ x ≈ y
-
 namespace FinClassSetoid
 
 lemma enumerateClass_self_mem [FinClassSetoid α] (x : α) : x ∈ enumerateClass x :=
@@ -28,5 +28,33 @@ theorem enumerateClass_eq [FinClassSetoid α] (x y : α) : enumerateClass x = en
 
 instance instEquivDecidable [FinClassSetoid α] [DecidableEq α] : DecidableRel ((· ≈ ·): α → α → Prop) := fun x y =>
   decidable_of_decidable_of_iff (FinClassSetoid.enumerateClass_mem_iff x y)
+
+instance instQuotDecidableEq [s : FinClassSetoid α] [DecidableEq α] : DecidableEq (Quotient s.toSetoid) := fun x y =>
+  let x_elem_enumerateClass_y := x.liftOn (Quotient.mk s.toSetoid · = y) (
+    by
+    intro a b h; simp
+    have qa_eq_qb : Quotient.mk s.toSetoid a = Quotient.mk s.toSetoid b := Quot.sound h
+    rw [qa_eq_qb]
+  )
+  if h : decide (x_elem_enumerateClass_y) then
+    Decidable.isTrue (by
+      simp [x_elem_enumerateClass_y] at h
+      revert h
+      apply Quotient.inductionOn x (motive := _)
+      intro a h
+      rw [Quotient.liftOn_mk] at h
+      assumption
+    )
+  else
+    Decidable.isFalse (by
+      simp [x_elem_enumerateClass_y] at h
+      intro h'
+      apply h
+      revert h'
+      apply Quotient.inductionOn x (motive := _)
+      intro a h
+      rw [Quotient.liftOn_mk]
+      assumption
+    )
 
 end FinClassSetoid
