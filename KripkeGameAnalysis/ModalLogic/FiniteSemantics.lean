@@ -212,50 +212,34 @@ namespace FiniteKripkeFrame
   instance : DecidableEq (UptoIso n) := inferInstanceAs (DecidableEq (Quotient (isSetoid n)))
 
   instance : Fintype (UptoIso n) :=
-    let allFramesOrdered : List (FiniteKripkeFrame n) := (List.finRange (2 ^ (n ^ 2))).map (BitVec.ofNat (n ^ 2))
-    let insertIfNotSeen (seen : Std.HashSet (FiniteKripkeFrame n))
-                        (frames : Finset (UptoIso n))
-                        (frame : FiniteKripkeFrame n) : Finset (UptoIso n) :=
-      if seen.contains frame then frames else insert (Quotient.mk' frame) frames
-    let foldStep (frame : FiniteKripkeFrame n)
-                 (pair : Std.HashSet (FiniteKripkeFrame n) × Finset (UptoIso n)) :=
-      (pair.fst.insertMany (frame.enumerateClass.sort (· ≤ ·)), insertIfNotSeen pair.fst pair.snd frame)
-
     let loop_invariant (pair : Std.HashSet (FiniteKripkeFrame n) × Finset (UptoIso n)) :=
       pair.fst.toList.toFinset.image Quotient.mk' = pair.snd
+    let loop_invariant_base : loop_invariant (∅, ∅) := by
+      simp [loop_invariant]
+      apply List.eq_nil_of_length_eq_zero
+      rw [Std.HashSet.length_toList]
+      simp
 
-    let foldStep_elem : ∀ seen accum frame,
-                        loop_invariant (seen, accum) →
-                        Quotient.mk' frame ∈ (foldStep frame (seen, accum)).snd := by
-      intro seen accum frame invariant
-      simp [foldStep, insertIfNotSeen]
-      by_cases h : seen.contains frame
-      · simp [h]
-        simp [loop_invariant] at invariant
-        rw [← invariant]
-        apply Finset.mem_image.mpr
-        exists frame
-        simp
-        exact h
-      · simp [h]
-
-    let foldStep_preserves_elem : ∀ prev frame frame',
-                                  Quotient.mk' frame ∈ prev.snd →
-                                  Quotient.mk' frame ∈ (foldStep frame' prev).snd := by
-      intro prev frame frame' elem
-      simp [foldStep, insertIfNotSeen]
-      by_cases h : prev.fst.contains frame'
-      · simp [h]
-        exact elem
-      · simp [h]
-        exact Or.inr elem
+    -- Implementation
+    -- TODO: We need to embed the invariant to the folding accumulation
+    --       so that we can prove that Quotient.mk' frame is not in frames
+    --       when seen does not contain frame
+    let allFramesOrdered : List (FiniteKripkeFrame n) := (List.finRange (2 ^ (n ^ 2))).map (BitVec.ofNat (n ^ 2))
+    let foldStep (frame : FiniteKripkeFrame n)
+                 (pair : Std.HashSet (FiniteKripkeFrame n) × Finset (UptoIso n)) : Std.HashSet (FiniteKripkeFrame n) × Finset (UptoIso n) :=
+      let ⟨seen, frames⟩ := pair
+      if seen.contains frame then
+        (seen, frames)
+      else
+        (seen.insertMany (frame.enumerateClass.sort (· ≤ ·)), frames.cons (Quotient.mk' frame) (sorry))
+    let elems := (allFramesOrdered.foldr foldStep ⟨∅, ∅⟩).snd
 
     let foldStep_preserves_invariant : ∀ seen frames frame,
                              loop_invariant (seen, frames) →
                              loop_invariant (foldStep frame (seen, frames)) := by
       intro seen frames frame invariant
       simp [loop_invariant] at invariant
-      simp [loop_invariant, foldStep, insertIfNotSeen]
+      simp [loop_invariant, foldStep]
       ext upto_iso; simp
       by_cases h : seen.contains frame
       · simp [h]
@@ -265,29 +249,16 @@ namespace FiniteKripkeFrame
         · intro h
           rw [←invariant]
           apply Finset.mem_image.mpr
-          rcases h with ⟨f', f'_in_class_f, f_eq⟩
-          cases f'_in_class_f
-          next f'_in_seen =>
-            exists f'
-            simp
-            exact And.intro f'_in_seen f_eq
-          next f'_in_enumerateClass =>
-            exists frame
-            simp
-            apply And.intro
-            · exact h
-            · have f'_eqv_frame : f' ≈ frame := (FinClassSetoid.enumerateClass_mem_iff f' frame).mp f'_in_enumerateClass
-              simp only [Quotient.mk']
-              rw [← Quotient.sound f'_eqv_frame]
-              simp only [Quotient.mk'] at f_eq
-              exact f_eq
+          rcases h with ⟨f', f'_in_seen, f_eq⟩
+          exists f'
+          simp
+          apply And.intro
+          · exact f'_in_seen
+          · exact f_eq
         · intro h
           rw [←invariant] at h; simp at h
           rcases h with ⟨f', f'_in_seen, f_eq⟩
           exists f'
-          apply And.intro
-          · exact Or.inl f'_in_seen
-          · exact f_eq
       · simp [h]
         apply Quotient.inductionOn upto_iso (motive := _)
         intro f
@@ -327,13 +298,34 @@ namespace FiniteKripkeFrame
     let foldStep_invariant : ∀ (frames : List _), loop_invariant (frames.foldr foldStep ⟨∅, ∅⟩) := by
       intro frames
       induction frames with
-      | nil =>
-        simp [loop_invariant]
-        apply List.eq_nil_of_length_eq_zero
-        rw [Std.HashSet.length_toList]
+      | nil => exact loop_invariant_base
+      | cons head_frame frames ih => exact foldStep_preserves_invariant _ _ _ ih
+
+    let foldStep_elem : ∀ seen accum frame,
+                        loop_invariant (seen, accum) →
+                        Quotient.mk' frame ∈ (foldStep frame (seen, accum)).snd := by
+      intro seen accum frame invariant
+      simp [foldStep]
+      by_cases h : seen.contains frame
+      · simp [h]
+        simp [loop_invariant] at invariant
+        rw [← invariant]
+        apply Finset.mem_image.mpr
+        exists frame
         simp
-      | cons head_frame frames ih =>
-        exact foldStep_preserves_invariant _ _ _ ih
+        exact h
+      · simp [h]
+
+    let foldStep_preserves_elem : ∀ prev frame frame',
+                                  Quotient.mk' frame ∈ prev.snd →
+                                  Quotient.mk' frame ∈ (foldStep frame' prev).snd := by
+      intro prev frame frame' elem
+      simp [foldStep]
+      by_cases h : prev.fst.contains frame'
+      · simp [h]
+        exact elem
+      · simp [h]
+        exact Or.inr elem
 
     let foldStep_mem : ∀ (frames : List _) frame,
                        frame ∈ frames → Quotient.mk' frame ∈ (frames.foldr foldStep ⟨∅, ∅⟩).snd := by
@@ -347,7 +339,7 @@ namespace FiniteKripkeFrame
         next frame_in_frames =>
           simp; exact foldStep_preserves_elem (frames.foldr foldStep (∅, ∅)) _ _ (ih _ frame_in_frames)
     {
-      elems := (allFramesOrdered.foldr foldStep ⟨∅, ∅⟩).snd,
+      elems := elems,
       complete := by
         intro fUptoIso
         rcases Quotient.exists_rep fUptoIso with ⟨f, f_eq⟩
