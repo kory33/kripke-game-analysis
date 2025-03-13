@@ -211,7 +211,7 @@ theorem canonicalize_weakly_regressive : canonicalize f ≤ f := by
   simp [canonicalize]; apply Finset.min'_le _ _; exact FinClassSetoid.enumerateClass_self_mem f
 instance : DecidableEq (UptoIso n) := inferInstanceAs (DecidableEq (Quotient (isSetoid n)))
 
-section UptoIsoFintype
+namespace UptoIso
 private def FintypeImplLoopInvariant (seen : Std.HashSet (FiniteKripkeFrame n)) (accum : Finset (UptoIso n)) : Prop :=
   seen.toList.toFinset.image (⟦·⟧) = accum
 private structure FintypeImplLoopState (n : ℕ) where
@@ -359,6 +359,22 @@ instance : Fintype (UptoIso n) :=
         · simp
       exact step_mem _ f f_in_allFramesOrdered
   }
+abbrev univ (n : ℕ) : Finset (UptoIso n) := Finset.univ
 
-end UptoIsoFintype
+def accessibilityRelationCount (f : UptoIso n) : ℕ := f.liftOn (·.accessibilityRelationCount) (by
+  intro f1 f2 h; dsimp only
+  rcases h with ⟨iso, iso_prop⟩
+  dsimp only [FiniteKripkeFrame.accessibilityRelationCount]
+  sorry
+)
+
+def countSatisfyingNodes [Fintype finVars] [DecidableEq finVars]
+                         (f : UptoIso n) (fml : ModalFormula finVars) : ℕ := f.liftOn (·.countSatisfyingNodes fml) (by
+  intro f1 f2 h; dsimp only
+  rcases h with ⟨iso, iso_prop⟩
+  dsimp only [FiniteKripkeFrame.countSatisfyingNodes]
+  sorry
+)
+
+end UptoIso
 end FiniteKripkeFrame
