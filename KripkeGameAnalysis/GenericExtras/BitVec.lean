@@ -37,7 +37,7 @@ namespace BitVec
         induction n with
         | zero => ext _ h; contradiction
         | succ n ih =>
-          ext i hi; simp only
+          ext i hi; dsimp only
           rw [BitVec.getElem_cons hi]
           by_cases h : i = n
           · simp [h]

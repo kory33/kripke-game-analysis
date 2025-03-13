@@ -152,7 +152,7 @@ def countSatisfyingNodes (frame : FiniteKripkeFrame n) (fml : ModalFormula finVa
 lemma countSatisfyingNodes_leq_frameSize: ∀ {frame : FiniteKripkeFrame n} {fml : ModalFormula finVars},
                                             frame.countSatisfyingNodes fml ≤ n := by
   intro frame fml
-  simp only [FiniteKripkeFrame.countSatisfyingNodes]
+  dsimp only [FiniteKripkeFrame.countSatisfyingNodes]
   simp only [← frame.allNodes_card_eq_frameSize]
   apply Finset.card_filter_le
 
@@ -184,7 +184,7 @@ instance FinClassSetoid (n : ℕ) : FinClassSetoid (FiniteKripkeFrame n) where
       apply congrArg (· i j) at iso_prop; simp only [mkFromKripkeFrameFin_coe] at iso_prop
       simp only [KripkeFrame.accessible, Equiv.toFun_as_coe, equivToKripkeFrameFin_coe, asKripkeFrame, iso_prop]
     · intro equiv
-      simp only [HasEquiv.Equiv] at equiv
+      dsimp only [HasEquiv.Equiv] at equiv
       rcases equiv with ⟨iso, iso_prop⟩
       exists iso
       ext i j; simp only [mkFromKripkeFrameFin_coe]; exact (iso_prop i j).symm
@@ -196,12 +196,12 @@ instance : SetoidWithCanonicalizer (FiniteKripkeFrame n) where
     exact FinClassSetoid.enumerateClass_self_mem f
   )
   canonicalize_equiv_self f := by
-    simp only
+    dsimp only
     set lhs := (FinClassSetoid.enumerateClass f).min' _
     apply (FinClassSetoid.enumerateClass_mem_iff lhs f).mp
     exact Finset.min'_mem _ _
   equiv_then_canonicalize_eq f f' := by
-    intro h; simp only
+    intro h; dsimp only
     have enumerateClass_f_eq := (FinClassSetoid.enumerateClass_eq f f').mpr h
     simp only [enumerateClass_f_eq]
 end Isomorphism
@@ -241,7 +241,7 @@ private def FintypeImplLoopState.next (frame : FiniteKripkeFrame n) (state : Fin
       by_contra! frame_equiv_to_some; rcases frame_equiv_to_some with ⟨x, ⟨x_in_seen, x_equiv_frame⟩⟩
       have frame_in_seen : frame ∈ seen := by
         apply seen_covering frame x x_in_seen
-        simp only [HasEquiv.Equiv]
+        dsimp only [HasEquiv.Equiv]
         exact Setoid.symm x_equiv_frame
       exact h frame_in_seen
     )
@@ -249,24 +249,24 @@ private def FintypeImplLoopState.next (frame : FiniteKripkeFrame n) (state : Fin
     {
       seen := seen',
       accum := accum',
-      -- TODO: simplify this proof
       seen_quot_eq_accum := by
         unfold List.toFinset; rw [Finset.image_toFinset]
         simp only [Finset.cons_eq_insert, accum']
         apply Finset.Subset.antisymm
         · intro cls cls_in_seen'_quot
-          simp at cls_in_seen'_quot
-          rcases cls_in_seen'_quot with ⟨frame', ⟨frame'_in_seen', frame'_eq_cls⟩⟩
-          simp [seen']
+          have cls_quot_of_elem_in_seen' : ∃ a ∈ seen', ⟦a⟧ = cls := by simpa using cls_in_seen'_quot
+          rcases cls_quot_of_elem_in_seen' with ⟨frame', ⟨frame'_in_seen', frame'_eq_cls⟩⟩
+          simp only [Finset.mem_insert, accum']
           rw [← frame'_eq_cls]
-          simp [seen'] at frame'_in_seen'
-          rcases frame'_in_seen'
+          have : frame' ∈ seen ∨ frame' ∈ frame.enumerateClass := by simpa [seen'] using frame'_in_seen'
+          rcases this
           next frame'_in_seen =>
             apply Or.inr
-            rw [← seen_quot_eq_accum]; simp
+            rw [← seen_quot_eq_accum]
+            suffices _ : ∃ a ∈ seen, a ≈ frame' by simpa
             exists frame'
             apply And.intro
-            · assumption
+            · trivial
             · exact Setoid.refl _
           next frame'_in_frame_enumerateClass =>
             apply Or.inl
@@ -274,21 +274,19 @@ private def FintypeImplLoopState.next (frame : FiniteKripkeFrame n) (state : Fin
             apply (FinClassSetoid.enumerateClass_mem_iff frame' frame).mp
             exact frame'_in_frame_enumerateClass
         · apply Finset.insert_subset
-          · simp
-            exists frame
-            apply And.intro
-            · simp [seen']
+          · suffices _ : ∃ a ∈ seen', a ≈ frame by simpa
+            exists frame; apply And.intro
+            · suffices _ : frame ∈ seen ∨ frame ∈ frame.enumerateClass by simpa [seen']
               apply Or.inr
               exact FinClassSetoid.enumerateClass_self_mem frame
             · exact Setoid.refl _
           · rw [←seen_quot_eq_accum]
             apply Finset.image_subset_iff.mpr
             intro x h
-            simp at h
-            simp
+            have h : x ∈ seen := by simpa using h
+            suffices _ : ∃ a ∈ seen', a ≈ x by simpa
             exists x; apply And.intro
-            · unfold seen'
-              simp
+            · suffices _ : x ∈ seen ∨ x ∈ frame.enumerateClass by simpa [seen']
               exact Or.inl h
             · exact Setoid.refl _
         ,
@@ -318,7 +316,7 @@ instance : Fintype (UptoIso n) :=
     simp only [FintypeImplLoopState.next, Finset.cons_eq_insert]
     by_cases h : state.seen.contains frame
     · simp only [h, ↓reduceDIte]
-      rcases state with ⟨seen, accum, seen_quot_eq_accum⟩; simp only; simp only at h
+      rcases state with ⟨seen, accum, seen_quot_eq_accum⟩; dsimp only; dsimp only at h
       rw [← seen_quot_eq_accum]
       apply Finset.mem_image.mpr
       exists frame; simp only [List.mem_toFinset, Std.HashSet.mem_toList, and_true]
