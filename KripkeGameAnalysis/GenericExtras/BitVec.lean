@@ -15,11 +15,11 @@ namespace BitVec
     | 0 => BitVec.nil
     | k + 1 => BitVec.cons (f ⟨k, Nat.lt_succ_self k⟩) (mkFromBitPred k (upcastSuccFinFnToFinFn f))
 
-  lemma mkFromBitPred_get (n : Nat) (f : Fin n → Bool) (i : Fin n) : (mkFromBitPred n f)[i.val] = f i := by
+  @[simp] lemma mkFromBitPred_get (n : Nat) (f : Fin n → Bool) (i : Fin n) : (mkFromBitPred n f)[i.val] = f i := by
     induction n with
     | zero => have i_lt_zero := i.is_lt; contradiction
     | succ n ih =>
-      simp [mkFromBitPred]; rw [BitVec.getElem_cons]
+      simp only [mkFromBitPred]; rw [BitVec.getElem_cons]
       split
       · next h =>
         have i_eq : i = ⟨n, ?_⟩ := Fin.eq_of_val_eq h
@@ -35,14 +35,14 @@ namespace BitVec
       left_inv := by
         intro v; unfold mkFromBitPred
         induction n with
-        | zero => simp; ext i h; contradiction
+        | zero => ext _ h; contradiction
         | succ n ih =>
-          simp; ext i hi
+          ext i hi; simp only
           rw [BitVec.getElem_cons hi]
           by_cases h : i = n
           · simp [h]
           · have i_lt_n : i < n := Nat.lt_of_le_of_ne (Nat.lt_succ_iff.mp hi) h
-            simp [h]; rw [mkFromBitPred_get _ _ ⟨i, i_lt_n⟩]
-      right_inv := by intro f; ext i; simp; exact mkFromBitPred_get n f i
+            simp [h, mkFromBitPred_get _ _ ⟨i, i_lt_n⟩]
+      right_inv := by intro f; ext i; simp
     }
 end BitVec
