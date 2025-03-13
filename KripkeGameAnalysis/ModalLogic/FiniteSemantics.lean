@@ -213,11 +213,11 @@ instance : DecidableEq (UptoIso n) := inferInstanceAs (DecidableEq (Quotient (is
 
 section UptoIsoFintype
 private def FintypeImplLoopInvariant (seen : Std.HashSet (FiniteKripkeFrame n)) (accum : Finset (UptoIso n)) : Prop :=
-  seen.toList.toFinset.image Quotient.mk' = accum
+  seen.toList.toFinset.image (⟦·⟧) = accum
 private structure FintypeImplLoopState (n : ℕ) where
   seen : Std.HashSet (FiniteKripkeFrame n)
   accum : Finset (UptoIso n)
-  seen_quot_eq_accum : seen.toList.toFinset.image Quotient.mk' = accum
+  seen_quot_eq_accum : seen.toList.toFinset.image (⟦·⟧) = accum
   seen_covering : ∀ f f', f' ∈ seen → f ≈ f' → f ∈ seen
 private def FintypeImplLoopState.init : FintypeImplLoopState n :=
   {
@@ -235,23 +235,24 @@ private def FintypeImplLoopState.next (frame : FiniteKripkeFrame n) (state : Fin
   if h : seen.contains frame then
     state
   else
-    let accum' := accum.cons (Quotient.mk' frame) (by
+    let accum' := accum.cons ⟦frame⟧ (by
       rw [←seen_quot_eq_accum]
-      simp
+      suffices _ : ∀ x ∈ seen, ¬(x ≈ frame) by simpa
       by_contra! frame_equiv_to_some; rcases frame_equiv_to_some with ⟨x, ⟨x_in_seen, x_equiv_frame⟩⟩
       have frame_in_seen : frame ∈ seen := by
         apply seen_covering frame x x_in_seen
-        simp [HasEquiv.Equiv]
-        exact Setoid.iseqv.symm x_equiv_frame
+        simp only [HasEquiv.Equiv]
+        exact Setoid.symm x_equiv_frame
       exact h frame_in_seen
     )
     let seen' := seen.insertMany (frame.enumerateClass.sort (· ≤ ·))
     {
       seen := seen',
       accum := accum',
+      -- TODO: simplify this proof
       seen_quot_eq_accum := by
-        unfold List.toFinset; rw [Finset.image_toFinset]; simp
-        simp [accum']
+        unfold List.toFinset; rw [Finset.image_toFinset]
+        simp only [Finset.cons_eq_insert, accum']
         apply Finset.Subset.antisymm
         · intro cls cls_in_seen'_quot
           simp at cls_in_seen'_quot
@@ -266,7 +267,7 @@ private def FintypeImplLoopState.next (frame : FiniteKripkeFrame n) (state : Fin
             exists frame'
             apply And.intro
             · assumption
-            · exact (isSetoid n).iseqv.refl _
+            · exact Setoid.refl _
           next frame'_in_frame_enumerateClass =>
             apply Or.inl
             apply Quotient.sound'
@@ -279,7 +280,7 @@ private def FintypeImplLoopState.next (frame : FiniteKripkeFrame n) (state : Fin
             · simp [seen']
               apply Or.inr
               exact FinClassSetoid.enumerateClass_self_mem frame
-            · exact (isSetoid n).iseqv.refl _
+            · exact Setoid.refl _
           · rw [←seen_quot_eq_accum]
             apply Finset.image_subset_iff.mpr
             intro x h
@@ -289,12 +290,13 @@ private def FintypeImplLoopState.next (frame : FiniteKripkeFrame n) (state : Fin
             · unfold seen'
               simp
               exact Or.inl h
-            · exact (isSetoid n).iseqv.refl _
+            · exact Setoid.refl _
         ,
       seen_covering := by
         intro f f' f'_in_seen' f_equiv_f'
-        simp [seen']; simp [seen'] at f'_in_seen'
-        rcases f'_in_seen'
+        suffices _ : f ∈ seen ∨ f ∈ frame.enumerateClass by simpa [seen']
+        have f'_in_seen_or_f'_in_frame_enumerateClass : f' ∈ seen ∨ f' ∈ frame.enumerateClass := by simpa [seen'] using f'_in_seen'
+        rcases f'_in_seen_or_f'_in_frame_enumerateClass
         next f'_in_seen =>
           apply Or.inl
           exact seen_covering f f' f'_in_seen f_equiv_f'
@@ -302,7 +304,7 @@ private def FintypeImplLoopState.next (frame : FiniteKripkeFrame n) (state : Fin
           apply Or.inr
           apply (FinClassSetoid.enumerateClass_mem_iff f frame).mpr
           apply (FinClassSetoid.enumerateClass_mem_iff f' frame).mp at f_in_frame_enumerateClass
-          exact (isSetoid n).iseqv.trans f_equiv_f' f_in_frame_enumerateClass
+          exact Setoid.trans f_equiv_f' f_in_frame_enumerateClass
     }
 
 instance : Fintype (UptoIso n) :=
@@ -311,7 +313,7 @@ instance : Fintype (UptoIso n) :=
   let elems := (allFramesOrdered.foldr FintypeImplLoopState.next FintypeImplLoopState.init).accum
 
   let step_elem : ∀ (frame : FiniteKripkeFrame n) state,
-                  Quotient.mk' frame ∈ (FintypeImplLoopState.next frame state).accum := by
+                  ⟦frame⟧ ∈ (FintypeImplLoopState.next frame state).accum := by
     intro frame state
     simp only [FintypeImplLoopState.next, Finset.cons_eq_insert]
     by_cases h : state.seen.contains frame
@@ -324,8 +326,8 @@ instance : Fintype (UptoIso n) :=
     · simp [h]
 
   let step_preserves_elem : ∀ state (frame : FiniteKripkeFrame n) frame',
-                              Quotient.mk' frame ∈ state.accum →
-                              Quotient.mk' frame ∈ (FintypeImplLoopState.next frame' state).accum := by
+                              ⟦frame⟧ ∈ state.accum →
+                              ⟦frame⟧ ∈ (FintypeImplLoopState.next frame' state).accum := by
     intro state frame frame'
     simp only [FintypeImplLoopState.next, Finset.cons_eq_insert]
     by_cases h : state.seen.contains frame'
@@ -334,7 +336,7 @@ instance : Fintype (UptoIso n) :=
 
   let step_mem : ∀ (frames : List _) frame,
                   frame ∈ frames →
-                  Quotient.mk' frame ∈ (frames.foldr FintypeImplLoopState.next FintypeImplLoopState.init).accum := by
+                  ⟦frame⟧ ∈ (frames.foldr FintypeImplLoopState.next FintypeImplLoopState.init).accum := by
     intro frames
     induction frames with
     | nil => simp
