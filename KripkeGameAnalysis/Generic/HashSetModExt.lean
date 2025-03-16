@@ -1,6 +1,7 @@
 import KripkeGameAnalysis.GenericExtras.HashSet
 import Mathlib.Data.Quot
-import Mathlib.Data.Finset.Basic
+import Mathlib.Data.Finset.Image
+import Mathlib.Data.Finset.Union
 import Mathlib.Data.Multiset.MapFold
 import Batteries.Data.List.Perm
 
@@ -31,28 +32,6 @@ theorem emptyc_toList_eq_nil [EquivBEq α] [LawfulHashable α]: (∅ : Std.HashS
   rw [Std.HashSet.length_toList]
   exact Std.HashSet.size_emptyc
 
-end
-
-section
-variable {α : Type} [BEq α] [Hashable α] [EquivBEq α] [LawfulHashable α] [LawfulBEq α]
-
-def toFinset (s : HashSetModExt α) : Finset α :=
-  s.liftOn (fun s => {
-    val := s.toList,
-    nodup := Std.HashSet.distinct_toList_nodup s
-  }) (by
-    intro s t s_ext_t
-    suffices _ : s.toList.Perm t.toList by simpa
-    rw [List.perm_ext_iff_of_nodup (Std.HashSet.distinct_toList_nodup s) (Std.HashSet.distinct_toList_nodup t)]
-    intro a
-    simp only [Std.HashSet.mem_toList, s_ext_t a]
-  )
-
-end
-
-section
-variable {α : Type} [BEq α] [Hashable α]
-
 def contains (s : HashSetModExt α) (a : α) : Bool :=
   s.liftOn (a ∈ ·) (by intro _ _ e; simp [e a])
 
@@ -71,10 +50,31 @@ instance : Membership α (HashSetModExt α) where
   intro a
   rw [←contains_iff_mem, ←contains_iff_mem, h]
 
+@[simp] theorem mem_emptyc {a : α} : a ∉ (∅ : HashSetModExt α) := by
+  unfold instEmptyCollection; unfold empty; simp
+
 end
 
 section
 variable {α : Type} [BEq α] [Hashable α] [EquivBEq α] [LawfulHashable α] [LawfulBEq α]
+
+def asFinset (s : HashSetModExt α) : Finset α :=
+  s.liftOn (fun s => {
+    val := s.toList,
+    nodup := Std.HashSet.distinct_toList_nodup s
+  }) (by
+    intro s t s_ext_t
+    suffices _ : s.toList.Perm t.toList by simpa
+    rw [List.perm_ext_iff_of_nodup (Std.HashSet.distinct_toList_nodup s) (Std.HashSet.distinct_toList_nodup t)]
+    intro a
+    simp only [Std.HashSet.mem_toList, s_ext_t a]
+  )
+
+@[simp] theorem mem_asFinset {s : HashSetModExt α} {a : α} : a ∈ s.asFinset ↔ a ∈ s := by
+  apply s.ind; intro hs; simp [instMembership, asFinset]
+
+@[simp] theorem emptyc_asFinset : (empty : HashSetModExt α).asFinset = ∅ := by
+  apply Finset.ext; intro a; simp [empty]
 
 def insert (s : HashSetModExt α) (a : α) : HashSetModExt α :=
   s.liftOn (fun s => ⟦s.insert a⟧) (by
@@ -105,6 +105,14 @@ theorem mem_insertAllOfFinset { m: HashSetModExt α } { fs : Finset α }
     clear * - ih
     simp only [Multiset.foldl_cons, ih, mem_insert, beq_iff_eq, Multiset.mem_cons]
     tauto
+
+@[simp] theorem asFinset_insertAllOfFinset_eq_union
+    [DecidableEq α]
+    { m: HashSetModExt α }
+    { fs : Finset α } : (insertAllOfFinset m fs).asFinset = fs ∪ m.asFinset := by
+  apply Finset.ext; intro a
+  simp only [mem_asFinset, mem_insertAllOfFinset, Finset.mem_union]
+
 end
 
 end HashSetModExt

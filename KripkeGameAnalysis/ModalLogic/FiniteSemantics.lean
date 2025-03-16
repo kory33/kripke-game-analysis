@@ -6,8 +6,10 @@ import Mathlib.Data.Finset.Sort
 import Mathlib.Data.Finset.Insert
 
 import KripkeGameAnalysis.Generic.FinClassSetoid
+import KripkeGameAnalysis.Generic.HashSetModExt
 import KripkeGameAnalysis.Generic.SetoidWithCanonicalizer
 import KripkeGameAnalysis.GenericExtras.BitVec
+import KripkeGameAnalysis.GenericExtras.Finset
 import KripkeGameAnalysis.GenericExtras.HashSet
 import KripkeGameAnalysis.ModalLogic.Basic
 
@@ -214,15 +216,15 @@ instance : DecidableEq (UptoIso n) := inferInstanceAs (DecidableEq (Quotient (is
 
 namespace UptoIso
 private structure FintypeImplLoopState (n : ℕ) where
-  seen : Std.HashSet (FiniteKripkeFrame n)
+  seen : HashSetModExt (FiniteKripkeFrame n)
   accum : Finset (UptoIso n)
-  seen_quot_eq_accum : seen.toList.toFinset.image (⟦·⟧) = accum
+  seen_quot_eq_accum : seen.asFinset.image (⟦·⟧) = accum
   seen_covering : ∀ f f', f' ∈ seen → f ≈ f' → f ∈ seen
 private def FintypeImplLoopState.init : FintypeImplLoopState n :=
   {
     seen := ∅,
     accum := ∅,
-    seen_quot_eq_accum := by simp only [Finset.image_eq_empty, List.toFinset_eq_empty_iff, Std.HashSet.emptyc_toList_eq_nil]
+    seen_quot_eq_accum := by apply Finset.image_eq_empty.mpr; exact HashSetModExt.emptyc_asFinset
     seen_covering := by simp
   }
 private def FintypeImplLoopState.next (frame : FiniteKripkeFrame n) (state : FintypeImplLoopState n) : FintypeImplLoopState n :=
@@ -238,62 +240,32 @@ private def FintypeImplLoopState.next (frame : FiniteKripkeFrame n) (state : Fin
       apply seen_covering frame x x_in_seen
       exact Setoid.symm x_equiv_frame
     )
-    -- We can do this order-independently, so we can eliminate sort
-    let seen' := seen.insertMany (frame.enumerateClass.sort (· ≤ ·))
+    let seen' := seen.insertAllOfFinset (frame.enumerateClass)
     {
       seen := seen',
       accum := accum',
       seen_quot_eq_accum := by
-        unfold List.toFinset; rw [Finset.image_toFinset]
-        simp only [Finset.cons_eq_insert, accum']
-        apply Finset.Subset.antisymm
-        · intro cls cls_in_seen'_quot
-          have cls_quot_of_elem_in_seen' : ∃ a ∈ seen', ⟦a⟧ = cls := by simpa using cls_in_seen'_quot
-          rcases cls_quot_of_elem_in_seen' with ⟨frame', ⟨frame'_in_seen', frame'_eq_cls⟩⟩
-          simp only [Finset.mem_insert, accum']
-          rw [← frame'_eq_cls]
-          have : frame' ∈ seen ∨ frame' ∈ frame.enumerateClass := by simpa [seen'] using frame'_in_seen'
-          rcases this
-          next frame'_in_seen =>
-            apply Or.inr
-            rw [← seen_quot_eq_accum]
-            suffices _ : ∃ a ∈ seen, a ≈ frame' by simpa
-            exists frame'
-            apply And.intro
-            · trivial
-            · exact Setoid.refl _
-          next frame'_in_frame_enumerateClass =>
-            apply Or.inl
-            apply Quotient.sound'
-            apply (FinClassSetoid.enumerateClass_mem_iff frame' frame).mp
-            exact frame'_in_frame_enumerateClass
-        · apply Finset.insert_subset
-          · suffices _ : ∃ a ∈ seen', a ≈ frame by simpa
-            exists frame; apply And.intro
-            · suffices _ : frame ∈ seen ∨ frame ∈ frame.enumerateClass by simpa [seen']
-              apply Or.inr
-              exact FinClassSetoid.enumerateClass_self_mem frame
-            · exact Setoid.refl _
-          · rw [←seen_quot_eq_accum]
-            apply Finset.image_subset_iff.mpr
-            intro x h
-            have h : x ∈ seen := by simpa using h
-            suffices _ : ∃ a ∈ seen', a ≈ x by simpa
-            exists x; apply And.intro
-            · suffices _ : x ∈ seen ∨ x ∈ frame.enumerateClass by simpa [seen']
-              exact Or.inl h
-            · exact Setoid.refl _
-        ,
+        unfold seen'; unfold accum'
+        rw [
+          HashSetModExt.asFinset_insertAllOfFinset_eq_union,
+          Finset.image_union,
+          FinClassSetoid.image_quot_enumerateClass_eq_singleton frame,
+          Finset.cons_eq_insert,
+          seen_quot_eq_accum
+        ]
+        simp [Finset.singleton_union_eq_insert],
       seen_covering := by
         intro f f' f'_in_seen' f_equiv_f'
-        suffices _ : f ∈ seen ∨ f ∈ frame.enumerateClass by simpa [seen']
-        have f'_in_seen_or_f'_in_frame_enumerateClass : f' ∈ seen ∨ f' ∈ frame.enumerateClass := by simpa [seen'] using f'_in_seen'
+        unfold seen' at *
+        suffices _ : f ∈ frame.enumerateClass ∨ f ∈ seen by simpa [HashSetModExt.mem_insertAllOfFinset]
+        have f'_in_seen_or_f'_in_frame_enumerateClass : f' ∈ seen ∨ f' ∈ frame.enumerateClass := by
+          clear * - f'_in_seen'; simp only [HashSetModExt.mem_insertAllOfFinset] at f'_in_seen'; tauto
         rcases f'_in_seen_or_f'_in_frame_enumerateClass
         next f'_in_seen =>
-          apply Or.inl
+          apply Or.inr
           exact seen_covering f f' f'_in_seen f_equiv_f'
         next f_in_frame_enumerateClass =>
-          apply Or.inr
+          apply Or.inl
           apply (FinClassSetoid.enumerateClass_mem_iff f frame).mpr
           apply (FinClassSetoid.enumerateClass_mem_iff f' frame).mp at f_in_frame_enumerateClass
           exact Setoid.trans f_equiv_f' f_in_frame_enumerateClass
@@ -309,12 +281,8 @@ instance : Fintype (UptoIso n) :=
     intro frame state
     simp only [FintypeImplLoopState.next, Finset.cons_eq_insert]
     by_cases h : state.seen.contains frame
-    · simp only [h, ↓reduceDIte]
-      rcases state with ⟨seen, accum, seen_quot_eq_accum⟩; dsimp only; dsimp only at h
-      rw [← seen_quot_eq_accum]
-      apply Finset.mem_image.mpr
-      exists frame; simp only [List.mem_toFinset, Std.HashSet.mem_toList, and_true]
-      exact h
+    · suffices _ : ∃ a ∈ state.seen, (isSetoid n) a frame by simpa [h, ←state.seen_quot_eq_accum, HashSetModExt.mem_asFinset]
+      exists frame; exact ⟨h, Setoid.refl frame⟩
     · simp [h]
 
   let step_preserves_elem : ∀ state (frame : FiniteKripkeFrame n) frame',

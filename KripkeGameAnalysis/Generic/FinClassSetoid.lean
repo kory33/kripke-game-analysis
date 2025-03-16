@@ -1,15 +1,15 @@
 import Mathlib.Data.Finset.Basic
 import Mathlib.Data.Fintype.Basic
 
-class FinClassSetoid (α : Type) extends Setoid α where
+class FinClassSetoid (α : Type) [Setoid α] where
   enumerateClass: α → Finset α
   enumerateClass_mem_iff: ∀ x y, x ∈ enumerateClass y ↔ x ≈ y
 namespace FinClassSetoid
 
-lemma enumerateClass_self_mem [FinClassSetoid α] (x : α) : x ∈ enumerateClass x :=
+lemma enumerateClass_self_mem [Setoid α] [FinClassSetoid α] (x : α) : x ∈ enumerateClass x :=
   (FinClassSetoid.enumerateClass_mem_iff x x).mpr (Setoid.refl x)
 
-theorem enumerateClass_eq [FinClassSetoid α] (x y : α) : enumerateClass x = enumerateClass y ↔ x ≈ y := by
+theorem enumerateClass_eq [Setoid α] [FinClassSetoid α] (x y : α) : enumerateClass x = enumerateClass y ↔ x ≈ y := by
   apply Iff.intro
   · intro h
     have x_mem_enumerateClass_y : x ∈ enumerateClass y := by rw [←h]; exact enumerateClass_self_mem x
@@ -19,7 +19,12 @@ theorem enumerateClass_eq [FinClassSetoid α] (x y : α) : enumerateClass x = en
     repeat rw [enumerateClass_mem_iff]
     exact ⟨(Setoid.trans · h), (Setoid.trans · (Setoid.symm h))⟩
 
-instance instEquivDecidable [FinClassSetoid α] [DecidableEq α] : DecidableRel ((· ≈ ·): α → α → Prop) := fun x y =>
+instance instEquivDecidable [Setoid α] [FinClassSetoid α] [DecidableEq α] : DecidableRel ((· ≈ ·): α → α → Prop) := fun x y =>
   decidable_of_decidable_of_iff (FinClassSetoid.enumerateClass_mem_iff x y)
+
+theorem image_quot_enumerateClass_eq_singleton
+    [Setoid α] [FinClassSetoid α] [DecidableEq α]
+    (x : α) : Finset.image (⟦·⟧) (enumerateClass x) = {⟦x⟧} := by
+  sorry
 
 end FinClassSetoid
