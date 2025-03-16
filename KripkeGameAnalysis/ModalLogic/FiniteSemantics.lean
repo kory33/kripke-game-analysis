@@ -8,6 +8,7 @@ import Mathlib.Data.Finset.Insert
 import KripkeGameAnalysis.Generic.FinClassSetoid
 import KripkeGameAnalysis.Generic.SetoidWithCanonicalizer
 import KripkeGameAnalysis.GenericExtras.BitVec
+import KripkeGameAnalysis.GenericExtras.HashSet
 import KripkeGameAnalysis.ModalLogic.Basic
 
 /--
@@ -212,8 +213,6 @@ theorem canonicalize_weakly_regressive : canonicalize f ≤ f := by
 instance : DecidableEq (UptoIso n) := inferInstanceAs (DecidableEq (Quotient (isSetoid n)))
 
 namespace UptoIso
-private def FintypeImplLoopInvariant (seen : Std.HashSet (FiniteKripkeFrame n)) (accum : Finset (UptoIso n)) : Prop :=
-  seen.toList.toFinset.image (⟦·⟧) = accum
 private structure FintypeImplLoopState (n : ℕ) where
   seen : Std.HashSet (FiniteKripkeFrame n)
   accum : Finset (UptoIso n)
@@ -223,11 +222,7 @@ private def FintypeImplLoopState.init : FintypeImplLoopState n :=
   {
     seen := ∅,
     accum := ∅,
-    seen_quot_eq_accum := by
-      simp only [Finset.image_eq_empty, List.toFinset_eq_empty_iff]
-      apply List.eq_nil_of_length_eq_zero
-      rw [Std.HashSet.length_toList]
-      exact Std.HashSet.size_emptyc,
+    seen_quot_eq_accum := by simp only [Finset.image_eq_empty, List.toFinset_eq_empty_iff, Std.HashSet.emptyc_toList_eq_nil]
     seen_covering := by simp
   }
 private def FintypeImplLoopState.next (frame : FiniteKripkeFrame n) (state : FintypeImplLoopState n) : FintypeImplLoopState n :=
@@ -238,13 +233,12 @@ private def FintypeImplLoopState.next (frame : FiniteKripkeFrame n) (state : Fin
     let accum' := accum.cons ⟦frame⟧ (by
       rw [←seen_quot_eq_accum]
       suffices _ : ∀ x ∈ seen, ¬(x ≈ frame) by simpa
-      by_contra! frame_equiv_to_some; rcases frame_equiv_to_some with ⟨x, ⟨x_in_seen, x_equiv_frame⟩⟩
-      have frame_in_seen : frame ∈ seen := by
-        apply seen_covering frame x x_in_seen
-        dsimp only [HasEquiv.Equiv]
-        exact Setoid.symm x_equiv_frame
-      exact h frame_in_seen
+      intro x x_in_seen x_equiv_frame
+      apply h
+      apply seen_covering frame x x_in_seen
+      exact Setoid.symm x_equiv_frame
     )
+    -- We can do this order-independently, so we can eliminate sort
     let seen' := seen.insertMany (frame.enumerateClass.sort (· ≤ ·))
     {
       seen := seen',
