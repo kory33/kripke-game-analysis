@@ -124,6 +124,11 @@ def accessibilityRelationCount (frame : FiniteKripkeFrame n) : ℕ :=
   let asBitVec : BitVec (n ^ 2) := frame
   (Finset.univ.filter (fun (i : Fin (n ^ 2)) => asBitVec[i])).card
 
+def accessibilityRelationCount_eq_card_of_accessible_pairs (frame : FiniteKripkeFrame n) :
+    frame.accessibilityRelationCount = (Finset.univ.filter fun (i, j) => frame i j).card := by
+  dsimp only [accessibilityRelationCount]
+  sorry
+
 section FiniteValuation
 abbrev Valuation (frame : FiniteKripkeFrame n) (vars : Type) : Type := frame.asKripkeFrame.Valuation vars
 structure FiniteValuation (frame : FiniteKripkeFrame n) (finVars : Type) [Fintype finVars] [DecidableEq finVars] where
@@ -324,10 +329,20 @@ instance : Fintype (UptoIso n) :=
 abbrev univ (n : ℕ) : Finset (UptoIso n) := Finset.univ
 
 def accessibilityRelationCount (f : UptoIso n) : ℕ := f.liftOn (·.accessibilityRelationCount) (by
-  intro f1 f2 h; dsimp only
-  rcases h with ⟨iso, iso_prop⟩
-  dsimp only [FiniteKripkeFrame.accessibilityRelationCount]
-  sorry
+  intro f1 f2 h; rcases h with ⟨iso, iso_prop⟩; dsimp only
+  rw [
+    accessibilityRelationCount_eq_card_of_accessible_pairs,
+    accessibilityRelationCount_eq_card_of_accessible_pairs
+  ]; dsimp only
+  let pair_iso : (Fin n × Fin n) ≃ (Fin n × Fin n) := {
+    toFun := fun (i, j) => (iso i, iso j),
+    invFun := fun (i, j) => (iso.invFun i, iso.invFun j),
+    left_inv := by simp [Function.LeftInverse]
+    right_inv := by simp [Function.RightInverse, Function.LeftInverse]
+  }
+  refine Finset.card_equiv pair_iso ?_
+  · suffices _ : ∀ (a b : Fin n), f1 a b = f2 (iso a) (iso b) by simpa
+    intro a b; simpa [KripkeFrame.accessible] using (iso_prop a b)
 )
 
 def countSatisfyingNodes [Fintype finVars] [DecidableEq finVars]
