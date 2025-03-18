@@ -27,54 +27,9 @@ namespace FiniteKripkeFrame
 
 def mk (n : ℕ) (v : BitVec (n ^ 2)) : FiniteKripkeFrame n := v
 
-def kripkeFrameFinNEquivSquareBoolFn : KripkeFrame (Fin n) ≃ (Fin (n ^ 2) → Bool) :=
-  let fin_implies_gt_zero {k : Nat} : Fin k → k > 0 := fun i => by
-    have : k ≠ 0 := by intro h; rw [h] at i; exact Nat.not_lt_zero _ i.is_lt
-    exact Nat.pos_of_ne_zero this
-
-  let frameToBoolFn : KripkeFrame (Fin n) → (Fin (n ^ 2) → Bool) := fun frame i =>
-    let n_gt_zero : n > 0 := by
-      have n_sq_gt_zero : n ^ 2 > 0 := fin_implies_gt_zero i
-      have : n ^ 2 > 0 → n > 0 := by contrapose; simp
-      exact this n_sq_gt_zero
-
-    frame
-      ⟨i.val / n, by apply (Nat.div_lt_iff_lt_mul n_gt_zero).mpr; rw [←Nat.pow_two n]; exact i.is_lt⟩
-      ⟨i.val % n, by exact Nat.mod_lt _ n_gt_zero⟩
-
-  let boolFnToFrame : (Fin (n ^ 2) → Bool) → KripkeFrame (Fin n) := fun boolFn i j =>
-    boolFn
-      ⟨i.val * n + j.val, by
-        rw [Nat.pow_two]
-        calc
-          i.val * n + j.val
-            < i.val * n + n    := Nat.add_lt_add_left j.is_lt (i.val * n)
-          _ = (i.val + 1) * n  := by rw [Nat.right_distrib, Nat.one_mul]
-          _ ≤ n * n            := Nat.mul_le_mul_right n (Nat.succ_le_of_lt i.is_lt)
-      ⟩
-
-  {
-    toFun := frameToBoolFn,
-    invFun := boolFnToFrame,
-    left_inv := by
-      intro frame
-      simp only [Nat.mul_add_mod_self_right, boolFnToFrame, frameToBoolFn]; simp only [FiniteKripkeFrame, KripkeFrame] at frame
-      ext i j; congr
-      · calc
-          (↑i * n + ↑j) / n
-            = (n * ↑i + ↑j) / n := by rw [Nat.mul_comm _ _]
-          _ = ↑i + ↑j / n       := by rw [Nat.mul_add_div (fin_implies_gt_zero i) i j]
-          _ = ↑i                := by rw [Nat.div_eq_of_lt j.is_lt]; simp
-      · exact Nat.mod_eq_of_lt j.is_lt,
-    right_inv := by
-      intro boolFn
-      simp only [frameToBoolFn, boolFnToFrame]
-      ext i; congr
-      rw [Nat.add_comm, Nat.mul_comm, Nat.mod_add_div _ _]
-  }
-
-def equivToKripkeFrameFin: FiniteKripkeFrame n ≃ KripkeFrame (Fin n) :=
-  (BitVec.equivToBitPred (n ^ 2)).trans kripkeFrameFinNEquivSquareBoolFn.symm
+def equivToKripkeFrameFin: FiniteKripkeFrame n ≃ KripkeFrame (Fin n) := by
+  apply (BitVec.equivToBitPred (n ^ 2)).trans
+  exact KripkeFrame.finNFramesEquivFinNSqPred.symm
 
 instance instLinOrd : LinearOrder (FiniteKripkeFrame n) where
   le := fun f1 f2 => (f1 : BitVec (n ^ 2)).ule f2
