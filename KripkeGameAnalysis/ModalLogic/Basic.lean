@@ -52,18 +52,34 @@ match fml with
   | ModalFormula.box φ => decide (∀j: frame.vertices, if frame.accessible i j then val.decideSatisfaction j φ else true)
 
 section Isomorphism
-def Isomorphic (frame1 : KripkeFrame v1) (frame2 : KripkeFrame v2) : Prop :=
-  ∃(f : v1 ≃ v2), ∀i j, frame1.accessible i j = frame2.accessible (f i) (f j)
+@[ext] structure Isomorphism (f1 : KripkeFrame v1) (f2 : KripkeFrame v2) where
+  vertex_iso : v1 ≃ v2
+  preserves_accessibility : ∀i j, accessible f1 i j = accessible f2 (vertex_iso i) (vertex_iso j)
+
+infix:50 " ≅kf " => Isomorphism
+
+def Isomorphism.refl {v} {f : KripkeFrame v} : f ≅kf f := ⟨Equiv.refl _, by simp⟩
+def Isomorphism.symm {f1 : KripkeFrame v1} {f2 : KripkeFrame v2} (iso : f1 ≅kf f2) : f2 ≅kf f1 :=
+  ⟨iso.vertex_iso.symm, by simp [iso.preserves_accessibility]⟩
+def Isomorphism.trans (iso1 : f1 ≅kf f2) (iso2 : f2 ≅kf f3) : f1 ≅kf f3 :=
+  ⟨iso1.vertex_iso.trans iso2.vertex_iso, by simp [iso1.preserves_accessibility, iso2.preserves_accessibility]⟩
+
+def Isomorphic (f1 : KripkeFrame v1) (f2 : KripkeFrame v2) : Prop := ∃(_ : f1 ≅kf f2), True
+def Isomorphism.isomorphism (iso : f1 ≅kf f2) : Isomorphic f1 f2 := ⟨iso, trivial⟩
 
 def isomorphism_equivalence : Equivalence (KripkeFrame.Isomorphic (v1 := v) (v2 := v)) := by
   constructor
-  · intro frame; exact ⟨Equiv.refl v, by simp⟩
-  · intro frame1 frame2 ⟨f, h⟩; exact ⟨f.symm, by simp [h]⟩
-  · intro frame1 frame2 frame3 ⟨f1, h1⟩ ⟨f2, h2⟩; exact ⟨f1.trans f2, by simp [h1, h2]⟩
+  · intro frame; exact Isomorphism.refl.isomorphism
+  · intro frame1 frame2 ⟨f, _⟩; exact f.symm.isomorphism
+  · intro frame1 frame2 frame3 ⟨f1, _⟩ ⟨f2, _⟩; exact (f1.trans f2).isomorphism
 end Isomorphism
 
 instance isSetoid (v : Type) : Setoid (KripkeFrame v) :=
   ⟨KripkeFrame.Isomorphic, KripkeFrame.isomorphism_equivalence⟩
+
+instance instFunLikeEquiv {f f' : KripkeFrame v} : FunLike (f ≅kf f') v v where
+  coe iso v0 := iso.vertex_iso v0
+  coe_injective' := by intro iso1 iso2 eq; ext v0; tauto
 
 def UptoIso (v : Type) : Type := Quotient (isSetoid v)
 
