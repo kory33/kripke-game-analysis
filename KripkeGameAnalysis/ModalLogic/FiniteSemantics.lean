@@ -53,13 +53,17 @@ instance instFunLike : FunLike (FiniteKripkeFrame n) (Fin n) (Fin n → Bool) wh
 
 lemma getElem_eq_apply_finPairEquivSqFin_pair {frame : FiniteKripkeFrame n} (ij : Fin (n ^ 2)) :
   Function.uncurry frame (Fin.finPairEquivSqFin.symm ij) = frame.asBitVec[ij] := by
-  apply Eq.symm
-
-  simp only [
-    Fin.getElem_fin, Function.uncurry, ← equivToKripkeFrameFin_coe, equivToKripkeFrameFin,
-    Equiv.trans, Equiv.symm_symm, Equiv.coe_fn_mk, Function.comp_apply
-  ]
-  sorry
+  suffices pred_eq : ∀ p, p ij =
+                        (KripkeFrame.finNFramesEquivFinNSqPred.symm) p
+                          (Fin.finPairEquivSqFin.symm ij).1
+                          (Fin.finPairEquivSqFin.symm ij).2 by
+    apply Eq.symm
+    rw [Function.uncurry, DFunLike.coe]
+    dsimp only [instFunLike, asKripkeFrame, equivToKripkeFrameFin]
+    simp only [Equiv.trans, Function.comp, ←pred_eq, BitVec.equivToBitPred, Equiv.coe_fn_mk, asBitVec]
+  intro pred
+  simp only [KripkeFrame.finNFramesEquivFinNSqPred, Equiv.trans, Equiv.symm, Equiv.coe_fn_mk]
+  simp [Equiv.curry, Function.comp]
 
 lemma getElem_finPairEquivSqFin_equivalence_eq_apply_apply {frame : FiniteKripkeFrame n} (i j : Fin n) :
   frame.asBitVec[Fin.finPairEquivSqFin.toFun (i, j)] = frame i j := by
