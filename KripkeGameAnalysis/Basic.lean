@@ -34,6 +34,7 @@ def frameSize (_ : KripkeGameVisibleState n) : ℕ := n
 
 def InitialVisibleState (n: ℕ) : Type :=
   { state : KripkeGameVisibleState n // state.queriesAndAnswers = [] }
+
 instance : DecidableEq (InitialVisibleState n) :=
   inferInstanceAs (DecidableEq { state : KripkeGameVisibleState n // state.queriesAndAnswers = [] })
 
@@ -66,7 +67,9 @@ def withNewQueryAndAnswer (state : KripkeGameVisibleState n) (query : ModalFormu
   { state with queriesAndAnswers := (query, answer) :: state.queriesAndAnswers }
 
 def possibleFramesUptoIso (state : KripkeGameVisibleState n) : Finset (FiniteKripkeFrame.UptoIso state.frameSize) :=
-  sorry
+  (FiniteKripkeFrame.UptoIso.univ n).filter fun frame =>
+    state.accessiblityRelationSize = frame.accessibilityRelationCount ∧
+    state.queriesAndAnswers.all fun (query, answer) => frame.countSatisfyingNodes query = answer
 
 def possibleFramesUptoIsoCard (state : KripkeGameVisibleState n) : ℕ := state.possibleFramesUptoIso.card
 
