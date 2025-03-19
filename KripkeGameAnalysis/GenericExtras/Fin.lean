@@ -52,4 +52,8 @@ def finMulEquivMulFin {n m : Nat} : (Fin n) × (Fin m) ≃ Fin (n * m) :=
       rw [Nat.add_comm, Nat.mul_comm, Nat.mod_add_div _ _]
   }
 
+def finPairEquivSqFin {n : Nat} : (Fin n) × (Fin n) ≃ Fin (n ^ 2) := by
+  apply finMulEquivMulFin.trans
+  exact Equiv.cast (by rw [Nat.pow_two])
+
 end Fin

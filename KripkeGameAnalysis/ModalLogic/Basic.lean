@@ -70,7 +70,6 @@ def UptoIso (v : Type) : Type := Quotient (isSetoid v)
 def finNFramesEquivFinNSqPred : KripkeFrame (Fin n) ≃ (Fin (n ^ 2) → Bool) := by
   apply (Equiv.curry _ _ _).symm.trans
   refine Equiv.arrowCongr ?_ (Equiv.refl _)
-  apply Fin.finMulEquivMulFin.trans
-  exact Equiv.cast (by rw [Nat.pow_two])
+  exact Fin.finPairEquivSqFin
 
 end KripkeFrame

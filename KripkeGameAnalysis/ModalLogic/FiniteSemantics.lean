@@ -27,6 +27,8 @@ namespace FiniteKripkeFrame
 
 def mk (n : ℕ) (v : BitVec (n ^ 2)) : FiniteKripkeFrame n := v
 
+def asBitVec (frame : FiniteKripkeFrame n) : BitVec (n ^ 2) := frame
+
 def equivToKripkeFrameFin: FiniteKripkeFrame n ≃ KripkeFrame (Fin n) := by
   apply (BitVec.equivToBitPred (n ^ 2)).trans
   exact KripkeFrame.finNFramesEquivFinNSqPred.symm
@@ -48,6 +50,20 @@ instance instFunLike : FunLike (FiniteKripkeFrame n) (Fin n) (Fin n → Bool) wh
     simp only [asKripkeFrame, Equiv.toFun_as_coe, EmbeddingLike.apply_eq_iff_eq] at h'
     exact h'
 @[simp] theorem equivToKripkeFrameFin_coe (frame : FiniteKripkeFrame n) : (equivToKripkeFrameFin frame) i j = frame i j := by rfl
+
+lemma getElem_eq_apply_finPairEquivSqFin_pair {frame : FiniteKripkeFrame n} (ij : Fin (n ^ 2)) :
+  Function.uncurry frame (Fin.finPairEquivSqFin.symm ij) = frame.asBitVec[ij] := by
+  apply Eq.symm
+
+  simp only [
+    Fin.getElem_fin, Function.uncurry, ← equivToKripkeFrameFin_coe, equivToKripkeFrameFin,
+    Equiv.trans, Equiv.symm_symm, Equiv.coe_fn_mk, Function.comp_apply
+  ]
+  sorry
+
+lemma getElem_finPairEquivSqFin_equivalence_eq_apply_apply {frame : FiniteKripkeFrame n} (i j : Fin n) :
+  frame.asBitVec[Fin.finPairEquivSqFin.toFun (i, j)] = frame i j := by
+  rw [←getElem_eq_apply_finPairEquivSqFin_pair]; simp
 
 abbrev mkFromKripkeFrameFin (frame : KripkeFrame (Fin n)) : FiniteKripkeFrame n := equivToKripkeFrameFin.invFun frame
 @[simp] theorem mkFromKripkeFrameFin_coe (frame : KripkeFrame (Fin n)) : (mkFromKripkeFrameFin frame) i j = frame i j := by
@@ -82,7 +98,10 @@ def accessibilityRelationCount (frame : FiniteKripkeFrame n) : ℕ :=
 def accessibilityRelationCount_eq_card_of_accessible_pairs (frame : FiniteKripkeFrame n) :
     frame.accessibilityRelationCount = (Finset.univ.filter fun (i, j) => frame i j).card := by
   dsimp only [accessibilityRelationCount]
-  sorry
+  apply Eq.symm; apply Finset.card_equiv Fin.finPairEquivSqFin
+  intro ij; rcases ij with ⟨i, j⟩
+  suffices _ : frame i j = frame.asBitVec[Fin.finPairEquivSqFin (i, j)] by simpa
+  exact getElem_finPairEquivSqFin_equivalence_eq_apply_apply i j
 
 section FiniteValuation
 abbrev Valuation (frame : FiniteKripkeFrame n) (vars : Type) : Type := frame.asKripkeFrame.Valuation vars
