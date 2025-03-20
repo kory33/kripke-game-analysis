@@ -38,7 +38,7 @@ instance [Fintype v] : DecidableEq (KripkeFrame v) := inferInstanceAs (Decidable
 @[ext] lemma ext {v : Type} {frame1 frame2 : KripkeFrame v} (h : ∀i j, frame1 i j = frame2 i j) : frame1 = frame2 :=
   funext (λ i => funext (λ j => h i j))
 
-def vertices (_ : KripkeFrame v) : Type := v
+abbrev vertices (_ : KripkeFrame v) : Type := v
 abbrev accessible (frame : KripkeFrame v) (i j : frame.vertices) : Bool := frame i j
 
 def Valuation (frame : KripkeFrame v) (vars : Type) : Type := vars → frame.vertices → Bool
@@ -78,7 +78,58 @@ instance instFunLikeEquiv {f f' : KripkeFrame v} : FunLike (f ≅kf f') v v wher
   coe iso v0 := iso.vertex_iso v0
   coe_injective' := by intro iso1 iso2 eq; ext v0; tauto
 
+@[simp] theorem iso_iso_symm {f1 f2 : KripkeFrame v} (iso : f1 ≅kf f2) : ∀ v, iso (iso.symm v) = v := by
+  intro v
+  simp only [Isomorphism.symm, DFunLike.coe]
+  simp only [Equiv.toFun_as_coe, Equiv.apply_symm_apply]
+
+@[simp] theorem iso_symm_iso {f1 f2 : KripkeFrame v} (iso : f1 ≅kf f2) : ∀ v, iso.symm (iso v) = v := by
+  intro v
+  simp only [Isomorphism.symm, DFunLike.coe]
+  simp only [Equiv.toFun_as_coe, Equiv.symm_apply_apply]
+
+@[simp] lemma iso_symm_symm {f1 f2 : KripkeFrame v} (iso : f1 ≅kf f2) : iso.symm.symm = iso := by
+  simp only [Isomorphism.symm]
+  simp only [Equiv.symm_symm]
+
+lemma iso_accessible_iso_iso_eq_accessible {f1 f2 : KripkeFrame v} (iso : f1 ≅kf f2) (i j : f1.vertices) :
+  f2.accessible (iso i) (iso j) = f1.accessible i j := by
+  simp only [iso.preserves_accessibility, instFunLikeEquiv]
+
 def UptoIso (v : Type) : Type := Quotient (isSetoid v)
+
+def Valuation.pullbackIso {f1 f2 : KripkeFrame v} [Fintype v]
+                               (val : f1.Valuation vars) (iso : f1 ≅kf f2) : f2.Valuation vars :=
+  fun x i => val x (iso.symm i)
+
+lemma Valuation.pullbackIso_iso_eq {f1 f2 : KripkeFrame v} [Fintype v]
+                                  (iso : f1 ≅kf f2) (val : f1.Valuation vars):
+                                    ∀ x i, (val.pullbackIso iso) x (iso i) = val x i := by
+  intro x i; simp only [pullbackIso, iso_symm_iso]
+
+lemma Valuation.decideSatisfaction_iso {f1 f2 : KripkeFrame v} [Fintype v]
+                                     (iso : f1 ≅kf f2) (val : f1.Valuation vars)
+                                      : ∀ {i : v} {fml : ModalFormula vars},
+                                         (val.pullbackIso iso).decideSatisfaction (iso i) fml =
+                                         val.decideSatisfaction i fml := by
+  intro i fml
+  induction fml generalizing i with
+  | var x => simp [decideSatisfaction]; exact Valuation.pullbackIso_iso_eq _ _ _ _
+  | neg φ ih => simp [decideSatisfaction, ih]
+  | and φ1 φ2 ih1 ih2 => simp [decideSatisfaction, ih1, ih2]
+  | box φ ih =>
+      simp only [decideSatisfaction, decide_eq_decide, if_true_right]
+      apply Iff.intro
+      · intro h f1v i_to_f1v_accessible
+        rw [←ih (i := f1v)]
+        apply h (iso f1v)
+        simpa only [iso_accessible_iso_iso_eq_accessible iso i f1v]
+      · intro h f2v iso_i_to_f2v_accessible
+        have ih' := ih (i := iso.symm f2v)
+        simp only [iso_iso_symm] at ih'; rw [ih']
+        apply h (iso.symm f2v)
+        rw [←iso_iso_symm iso.symm i, iso_accessible_iso_iso_eq_accessible iso.symm _ _]
+        simpa only [iso_symm_symm]
 
 def finNFramesEquivFinNSqPred : KripkeFrame (Fin n) ≃ (Fin (n ^ 2) → Bool) := by
   apply (Equiv.curry _ _ _).symm.trans

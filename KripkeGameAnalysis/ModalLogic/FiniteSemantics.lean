@@ -108,32 +108,38 @@ def accessibilityRelationCount_eq_card_of_accessible_pairs (frame : FiniteKripke
   exact getElem_finPairEquivSqFin_equivalence_eq_apply_apply i j
 
 section FiniteValuation
-abbrev Valuation (frame : FiniteKripkeFrame n) (vars : Type) : Type := frame.asKripkeFrame.Valuation vars
-structure FiniteValuation (frame : FiniteKripkeFrame n) (finVars : Type) [Fintype finVars] [DecidableEq finVars] where
-  valuation : frame.Valuation finVars
+abbrev FiniteValuation (frame : FiniteKripkeFrame n) (finVars : Type) [Fintype finVars] [DecidableEq finVars] :=
+  frame.asKripkeFrame.Valuation finVars
+
+abbrev FiniteValuation.reinterpretAsValuationFor [Fintype vars] [DecidableEq vars] {f1 : FiniteKripkeFrame n}
+                                                 (val : f1.FiniteValuation vars)
+                                                 (f2 : FiniteKripkeFrame n) : f2.FiniteValuation vars := val
 
 variable {finVars : Type} [Fintype finVars] [DecidableEq finVars]
 def FiniteValuation.equivToFinSetRepresentation {frame : FiniteKripkeFrame n}:
                                 (frame.FiniteValuation finVars) ≃ (Finset (finVars × frame.vertices)) :=
-  let valPowersetEquiv : (frame.Valuation finVars) ≃ (Finset (finVars × frame.vertices)) :=
-    finsetProdEquivCurriedCharacteristic.symm
-  let valEquiv : (frame.FiniteValuation finVars) ≃ (frame.Valuation finVars) := {
-    toFun := fun val => val.valuation,
-    invFun := fun val => { valuation := val },
-    left_inv := by intro val; simp,
-    right_inv := by intro val; simp
-  }
-  valEquiv.trans valPowersetEquiv
+  finsetProdEquivCurriedCharacteristic.symm
 
 def allFinValuations (frame : FiniteKripkeFrame n) : Finset (frame.FiniteValuation finVars) :=
   let valuationsAsPsets := (Finset.product (inferInstance (α := Fintype finVars)).elems frame.allNodes).powerset
   valuationsAsPsets.map (FiniteValuation.equivToFinSetRepresentation (frame := frame).symm.toEmbedding)
 
-def satisfiesForAllValuations {frame : FiniteKripkeFrame n} (i : frame.vertices) (fml : ModalFormula finVars) : Bool :=
-  decide (∀finval ∈ frame.allFinValuations, finval.valuation.decideSatisfaction i fml)
+def allFinValuations_mem (frame : FiniteKripkeFrame n)
+                         (val : frame.FiniteValuation finVars) : val ∈ frame.allFinValuations := by
+  suffices _ : Finset.filter (fun a => val a.1 a.2 = true) Finset.univ ⊆ Finset.univ ×ˢ Finset.univ by
+    simp only [
+      allFinValuations,
+      Finset.product_eq_sprod, Finset.mem_map_equiv, Finset.mem_powerset,
+      Equiv.symm_symm
+    ]
+    simpa only
+  simp only [Finset.univ_product_univ, Finset.subset_univ]
+
+def satisfiesForAllValuations (frame : FiniteKripkeFrame n) (i : frame.vertices) (fml : ModalFormula finVars) : Bool :=
+  decide (∀finval ∈ frame.allFinValuations, finval.decideSatisfaction i fml)
 
 def countSatisfyingNodes (frame : FiniteKripkeFrame n) (fml : ModalFormula finVars) : ℕ :=
-  (frame.allNodes.filter (fun i => satisfiesForAllValuations i fml)).card
+  (frame.allNodes.filter (fun i => satisfiesForAllValuations frame i fml)).card
 
 lemma countSatisfyingNodes_leq_frameSize: ∀ {frame : FiniteKripkeFrame n} {fml : ModalFormula finVars},
                                             frame.countSatisfyingNodes fml ≤ n := by
@@ -158,6 +164,9 @@ instance isSetoid (n : ℕ) : Setoid (FiniteKripkeFrame n) where
     · intro _ _ h; exact Setoid.symm h
     · intro _ _ _ h1 h2; exact Setoid.trans h1 h2
 lemma kfIso_implies_equiv {f1 f2 : FiniteKripkeFrame n} (iso : f1 ≅kf f2) : (f1 ≈ f2) := by tauto
+instance instFunLikeEquiv {f f' : FiniteKripkeFrame n} : FunLike (f ≅kf f') (Fin n) (Fin n) :=
+  inferInstanceAs (FunLike (f.asKripkeFrame ≅kf f'.asKripkeFrame) (Fin n) (Fin n))
+
 
 def UptoIso (n: ℕ) : Type := Quotient (isSetoid n)
 
@@ -329,12 +338,28 @@ def accessibilityRelationCount (f : UptoIso n) : ℕ := f.liftOn (·.accessibili
     intro a b; simpa [KripkeFrame.accessible] using (iso_prop a b)
 )
 
+lemma satisfiesForAllValuations_iso_eq [Fintype finVars] [DecidableEq finVars]
+                                       {f1 f2 : FiniteKripkeFrame n} {i : Fin n} {fml : ModalFormula finVars}
+                                       (iso : f1 ≅kf f2) :
+  f2.satisfiesForAllValuations (iso i) fml = f1.satisfiesForAllValuations i fml := by
+  simp only [satisfiesForAllValuations, decide_eq_decide, allFinValuations_mem, forall_const]
+  apply Iff.intro
+  · intro h f1Val
+    rw [←KripkeFrame.Valuation.decideSatisfaction_iso iso f1Val]
+    simp [h]
+  · intro h f2Val
+    rw [←KripkeFrame.Valuation.decideSatisfaction_iso iso.symm f2Val, KripkeFrame.iso_symm_iso]
+    simp [h]
+
 def countSatisfyingNodes [Fintype finVars] [DecidableEq finVars]
                          (f : UptoIso n) (fml : ModalFormula finVars) : ℕ := f.liftOn (·.countSatisfyingNodes fml) (by
-  intro f1 f2 h; dsimp only
-  rcases h with ⟨iso, iso_prop⟩
+  intro f1 f2 h
   dsimp only [FiniteKripkeFrame.countSatisfyingNodes]
-  sorry
+  have iso := Classical.choice h
+  refine Finset.card_equiv iso.vertex_iso ?_
+  intro i
+  suffices _ : satisfiesForAllValuations f1 i fml = satisfiesForAllValuations f2 (iso i) fml by simpa [allNodes]
+  rw [satisfiesForAllValuations_iso_eq iso]
 )
 
 end UptoIso
