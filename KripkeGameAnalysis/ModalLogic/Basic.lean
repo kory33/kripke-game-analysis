@@ -63,19 +63,16 @@ def Isomorphism.symm {f1 : KripkeFrame v1} {f2 : KripkeFrame v2} (iso : f1 ≅kf
   ⟨iso.vertex_iso.symm, by simp [iso.preserves_accessibility]⟩
 def Isomorphism.trans (iso1 : f1 ≅kf f2) (iso2 : f2 ≅kf f3) : f1 ≅kf f3 :=
   ⟨iso1.vertex_iso.trans iso2.vertex_iso, by simp [iso1.preserves_accessibility, iso2.preserves_accessibility]⟩
+abbrev Isomorphic (f1 : KripkeFrame v1) (f2 : KripkeFrame v2) : Prop := Nonempty (f1 ≅kf f2)
 
-def Isomorphic (f1 : KripkeFrame v1) (f2 : KripkeFrame v2) : Prop := ∃(_ : f1 ≅kf f2), True
-def Isomorphism.isomorphism (iso : f1 ≅kf f2) : Isomorphic f1 f2 := ⟨iso, trivial⟩
-
-def isomorphism_equivalence : Equivalence (KripkeFrame.Isomorphic (v1 := v) (v2 := v)) := by
+def isomorphism_equivalence : Equivalence (fun (f f' : KripkeFrame v) => Isomorphic f f') := by
   constructor
-  · intro frame; exact Isomorphism.refl.isomorphism
-  · intro frame1 frame2 ⟨f, _⟩; exact f.symm.isomorphism
-  · intro frame1 frame2 frame3 ⟨f1, _⟩ ⟨f2, _⟩; exact (f1.trans f2).isomorphism
+  · intro _; exact ⟨Isomorphism.refl⟩
+  · intro _ _ iso_exists; exact ⟨(Classical.choice iso_exists).symm⟩
+  · intro _ _ _ f12_iso f23_iso; exact ⟨(Classical.choice f12_iso).trans (Classical.choice f23_iso)⟩
 end Isomorphism
 
-instance isSetoid (v : Type) : Setoid (KripkeFrame v) :=
-  ⟨KripkeFrame.Isomorphic, KripkeFrame.isomorphism_equivalence⟩
+instance isSetoid (v : Type) : Setoid (KripkeFrame v) := ⟨Isomorphic, isomorphism_equivalence⟩
 
 instance instFunLikeEquiv {f f' : KripkeFrame v} : FunLike (f ≅kf f') v v where
   coe iso v0 := iso.vertex_iso v0

@@ -146,13 +146,19 @@ end FiniteValuation
 
 section Isomorphism
 
+def Isomorphism (f1 : FiniteKripkeFrame n) (f2 : FiniteKripkeFrame n) : Type :=
+  f1.asKripkeFrame ≅kf f2.asKripkeFrame
+infix:50 " ≅kf " => Isomorphism
+
 instance isSetoid (n : ℕ) : Setoid (FiniteKripkeFrame n) where
   r := fun frame1 frame2 => frame1.asKripkeFrame ≈ frame2
   iseqv := by
     constructor
-    · intro frame; exact KripkeFrame.isomorphism_equivalence.refl _
-    · intro frame1 frame2 h; exact KripkeFrame.isomorphism_equivalence.symm h
-    · intro frame1 frame2 frame3 h1 h2; exact KripkeFrame.isomorphism_equivalence.trans h1 h2
+    · intro _; exact Setoid.refl _
+    · intro _ _ h; exact Setoid.symm h
+    · intro _ _ _ h1 h2; exact Setoid.trans h1 h2
+lemma kfIso_implies_equiv {f1 f2 : FiniteKripkeFrame n} (iso : f1 ≅kf f2) : (f1 ≈ f2) := by tauto
+
 def UptoIso (n: ℕ) : Type := Quotient (isSetoid n)
 
 instance FinClassSetoid (n : ℕ) : FinClassSetoid (FiniteKripkeFrame n) where
@@ -163,17 +169,17 @@ instance FinClassSetoid (n : ℕ) : FinClassSetoid (FiniteKripkeFrame n) where
   enumerateClass_mem_iff f f' := by
     simp only [Finset.mem_image, Finset.mem_univ, true_and]
     apply Iff.intro
-    · intro iso_exists
-      rcases iso_exists with ⟨iso, iso_prop⟩
-      exists iso
-      intros i j
-      apply congrArg (· i j) at iso_prop; simp only [mkFromKripkeFrameFin_coe] at iso_prop
-      simp only [KripkeFrame.accessible, Equiv.toFun_as_coe, equivToKripkeFrameFin_coe, asKripkeFrame, iso_prop]
-    · intro equiv
-      dsimp only [HasEquiv.Equiv] at equiv
-      rcases equiv with ⟨iso, iso_prop⟩
-      exists iso
-      ext i j; simp only [mkFromKripkeFrameFin_coe]; exact (iso_prop i j).symm
+    · intro perm_exists
+      rcases perm_exists with ⟨perm, perm_prop⟩
+      exact kfIso_implies_equiv {
+        vertex_iso := perm,
+        preserves_accessibility := by intro i j; rw [←perm_prop]; simp [asKripkeFrame]
+      }
+    · intro equiv; dsimp only [HasEquiv.Equiv] at equiv
+      rcases equiv with ⟨perm, perm_prop⟩
+      exists perm
+      ext i j; simp only [mkFromKripkeFrameFin_coe]
+      exact (perm_prop i j).symm
 abbrev enumerateClass (f : FiniteKripkeFrame n) : Finset (FiniteKripkeFrame n) := FinClassSetoid.enumerateClass f
 
 instance : SetoidWithCanonicalizer (FiniteKripkeFrame n) where
