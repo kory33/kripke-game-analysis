@@ -6,11 +6,10 @@ import Mathlib.Data.Finset.Sort
 import Mathlib.Data.Finset.Insert
 
 import KripkeGameAnalysis.Generic.FinClassSetoid
-import KripkeGameAnalysis.Generic.HashSetModExt
 import KripkeGameAnalysis.Generic.SetoidWithCanonicalizer
+import KripkeGameAnalysis.GenericExtras.Array
 import KripkeGameAnalysis.GenericExtras.BitVec
 import KripkeGameAnalysis.GenericExtras.Finset
-import KripkeGameAnalysis.GenericExtras.HashSet
 import KripkeGameAnalysis.ModalLogic.Basic
 
 /--
@@ -27,7 +26,11 @@ namespace FiniteKripkeFrame
 
 def mk (n : ℕ) (v : BitVec (n ^ 2)) : FiniteKripkeFrame n := v
 
+def ofFin (i : Fin (2 ^ (n ^ 2))) : FiniteKripkeFrame n := BitVec.ofFin i
 def asBitVec (frame : FiniteKripkeFrame n) : BitVec (n ^ 2) := frame
+
+@[simp] lemma ofFin_asBitVec_toFin_eq : ofFin (asBitVec f).toFin = f := by cases f; simp [ofFin, asBitVec]
+@[simp] lemma ofFin_fin_asBitVec_toFin_eq : (ofFin i).asBitVec.toFin = i := by simp only [ofFin, asBitVec]
 
 def equivToKripkeFrameFin: FiniteKripkeFrame n ≃ KripkeFrame (Fin n) := by
   apply (BitVec.equivToBitPred (n ^ 2)).trans
@@ -83,7 +86,6 @@ instance (frame : FiniteKripkeFrame n) : DecidableEq frame.vertices := inferInst
 
 instance : Fintype (FiniteKripkeFrame n) := inferInstanceAs (Fintype (BitVec (n ^ 2)))
 instance : DecidableEq (FiniteKripkeFrame n) := inferInstanceAs (DecidableEq (BitVec (n ^ 2)))
-instance : Hashable (FiniteKripkeFrame n) := inferInstanceAs (Hashable (BitVec (n ^ 2)))
 
 end FiniteKripkeFrame
 
@@ -214,59 +216,78 @@ instance : DecidableEq (UptoIso n) := inferInstanceAs (DecidableEq (Quotient (is
 
 namespace UptoIso
 private structure FintypeImplLoopState (n : ℕ) where
-  seen : HashSetModExt (FiniteKripkeFrame n)
+  /-- isomorphic to Finset (FiniteKripkeFrame n), since
+        FiniteKripkeFrame n
+         ≅ KripkeFrame (Fin n)
+         ≅ Fin n → Fin n → Bool
+         ≅ Fin (n * n) → Bool
+         ≅ Fin (2 ^ (n * n))
+      and Finset (Fin (2 ^ (n * n))) ≅ BitVec (2 ^ (n * n)) ≅ Array Bool (with size 2 ^ (n * n))
+    -/
+  seen : Array Bool
   accum : Finset (UptoIso n)
-  seen_quot_eq_accum : seen.asFinset.image (⟦·⟧) = accum
-  seen_covering : ∀ f f', f' ∈ seen → f ≈ f' → f ∈ seen
+  -- invariants
+  seen_size : seen.size = 2 ^ (n ^ 2)
+  seen_eq_quot_in_accum : ∀ (i : Fin (2 ^ (n ^ 2))), seen[i] = (⟦ofFin i⟧ ∈ accum)
+  seen_covering : ∀ (f f' : FiniteKripkeFrame n), f ≈ f' → seen[f'.asBitVec.toFin] = seen[f.asBitVec.toFin]
+
 private def FintypeImplLoopState.init : FintypeImplLoopState n :=
   {
-    seen := ∅,
+    seen := Array.mkArray (2 ^ (n ^ 2)) false,
     accum := ∅,
-    seen_quot_eq_accum := by apply Finset.image_eq_empty.mpr; exact HashSetModExt.emptyc_asFinset
+    seen_size := by simp,
+    seen_eq_quot_in_accum := by simp,
     seen_covering := by simp
   }
 private def FintypeImplLoopState.next (frame : FiniteKripkeFrame n) (state : FintypeImplLoopState n) : FintypeImplLoopState n :=
-  let ⟨seen, accum, seen_quot_eq_accum, seen_covering⟩ := state
-  if h : seen.contains frame then
+  let ⟨seen, accum, seen_size, seen_eq_quot_in_accum, seen_covering⟩ := state
+  if h : seen[frame.asBitVec.toFin] then
     state
   else
     let accum' := accum.cons ⟦frame⟧ (by
-      rw [←seen_quot_eq_accum]
-      suffices _ : ∀ x ∈ seen, ¬(x ≈ frame) by simpa
-      intro x x_in_seen x_equiv_frame
-      apply h
-      apply seen_covering frame x x_in_seen
-      exact Setoid.symm x_equiv_frame
+      have := seen_eq_quot_in_accum frame.asBitVec.toFin
+      simp only [ofFin_asBitVec_toFin_eq] at this
+      simp only [← this, h, Bool.false_eq_true, not_false_eq_true]
     )
-    let seen' := seen.insertAllOfFinset (frame.enumerateClass)
+    let setTrueOnSeenAt := fun f : FiniteKripkeFrame n => seen.set f.asBitVec.toFin true
+    let equivClassAsFin := frame.enumerateClass.map ⟨(·.asBitVec.toFin), by
+      intro f f' h; simp only [asBitVec] at h;
+      cases f; cases f'; simp only at h; simp only [h]
+    ⟩
+    have equivClassAsFin_mem : ∀ i, i ∈ equivClassAsFin ↔ (@Eq (UptoIso n) ⟦ofFin i⟧ ⟦frame⟧) := by
+      intro i; unfold equivClassAsFin
+      simp only [Finset.mem_map, Function.Embedding.coeFn_mk, FinClassSetoid.enumerateClass_mem_iff]
+      apply Iff.intro
+      · intro ⟨f, ⟨f_iso_frame, f_eq_i⟩⟩
+        rw [←f_eq_i, ofFin_asBitVec_toFin_eq]
+        exact Quotient.sound f_iso_frame
+      · intro h
+        exists (ofFin i)
+        exact ⟨Quotient.eq_iff_equiv.mp h, ofFin_fin_asBitVec_toFin_eq⟩
+    let seen' := seen.setValueAtIndices seen_size equivClassAsFin true
     {
       seen := seen',
       accum := accum',
-      seen_quot_eq_accum := by
+      seen_size := by unfold seen'; rw [Array.setValueAtIndices_size, seen_size]
+      seen_eq_quot_in_accum := by
         unfold seen'; unfold accum'
-        rw [
-          HashSetModExt.asFinset_insertAllOfFinset_eq_union,
-          Finset.image_union,
-          FinClassSetoid.image_quot_enumerateClass_eq_singleton frame,
-          Finset.cons_eq_insert,
-          seen_quot_eq_accum
-        ]
-        simp [Finset.singleton_union_eq_insert],
+        intro i
+        rw [Array.setValueAtIndices_eq]
+        suffices _ : i ∈ equivClassAsFin ∨ seen[i] = true ↔ ⟦ofFin i⟧ = ⟦frame⟧ ∨ ⟦ofFin i⟧ ∈ accum by
+          simpa only [Bool.if_true_left, Bool.or_eq_true, decide_eq_true_eq, Finset.cons_eq_insert, Finset.mem_insert, eq_iff_iff]
+        rw [seen_eq_quot_in_accum i, equivClassAsFin_mem]
       seen_covering := by
-        intro f f' f'_in_seen' f_equiv_f'
+        intro f f' f_equiv_f'
         unfold seen' at *
-        suffices _ : f ∈ frame.enumerateClass ∨ f ∈ seen by simpa [HashSetModExt.mem_insertAllOfFinset]
-        have f'_in_seen_or_f'_in_frame_enumerateClass : f' ∈ seen ∨ f' ∈ frame.enumerateClass := by
-          clear * - f'_in_seen'; simp only [HashSetModExt.mem_insertAllOfFinset] at f'_in_seen'; tauto
-        rcases f'_in_seen_or_f'_in_frame_enumerateClass
-        next f'_in_seen =>
-          apply Or.inr
-          exact seen_covering f f' f'_in_seen f_equiv_f'
-        next f_in_frame_enumerateClass =>
-          apply Or.inl
-          apply (FinClassSetoid.enumerateClass_mem_iff f frame).mpr
-          apply (FinClassSetoid.enumerateClass_mem_iff f' frame).mp at f_in_frame_enumerateClass
-          exact Setoid.trans f_equiv_f' f_in_frame_enumerateClass
+        rw [Array.setValueAtIndices_eq, Array.setValueAtIndices_eq]
+        have equivClassAsFin_eq : decide (f.asBitVec.toFin ∈ equivClassAsFin) = decide (f'.asBitVec.toFin ∈ equivClassAsFin) := by
+          simp only [decide_eq_decide]
+          rw [
+            equivClassAsFin_mem, equivClassAsFin_mem,
+            ofFin_asBitVec_toFin_eq, ofFin_asBitVec_toFin_eq,
+            Quotient.eq_iff_equiv.mpr f_equiv_f'
+          ]
+        simp [equivClassAsFin_eq, seen_covering f f' f_equiv_f']
     }
 
 instance : Fintype (UptoIso n) :=
@@ -274,25 +295,25 @@ instance : Fintype (UptoIso n) :=
   let allFramesOrdered : List (FiniteKripkeFrame n) := (List.finRange (2 ^ (n ^ 2))).map (BitVec.ofNat (n ^ 2))
   let elems := (allFramesOrdered.foldr FintypeImplLoopState.next FintypeImplLoopState.init).accum
 
-  let step_elem : ∀ (frame : FiniteKripkeFrame n) state,
+  have step_elem : ∀ (frame : FiniteKripkeFrame n) state,
                   ⟦frame⟧ ∈ (FintypeImplLoopState.next frame state).accum := by
     intro frame state
     simp only [FintypeImplLoopState.next, Finset.cons_eq_insert]
-    by_cases h : state.seen.contains frame
-    · suffices _ : ∃ a ∈ state.seen, (isSetoid n) a frame by simpa [h, ←state.seen_quot_eq_accum, HashSetModExt.mem_asFinset]
-      exists frame; exact ⟨h, Setoid.refl frame⟩
+    by_cases h : state.seen[frame.asBitVec.toFin]'(by rw [state.seen_size]; exact frame.toFin.is_lt) = true
+    · suffices _ : ⟦frame⟧ ∈ state.accum by simpa [h]
+      rw [←ofFin_asBitVec_toFin_eq (f := frame), ←state.seen_eq_quot_in_accum (frame.asBitVec.toFin), h]
     · simp [h]
 
-  let step_preserves_elem : ∀ state (frame : FiniteKripkeFrame n) frame',
+  have step_preserves_elem : ∀ state (frame : FiniteKripkeFrame n) frame',
                               ⟦frame⟧ ∈ state.accum →
                               ⟦frame⟧ ∈ (FintypeImplLoopState.next frame' state).accum := by
     intro state frame frame'
     simp only [FintypeImplLoopState.next, Finset.cons_eq_insert]
-    by_cases h : state.seen.contains frame'
+    by_cases h : state.seen[frame'.asBitVec.toFin]'(by rw [state.seen_size]; exact frame'.toFin.is_lt) = true
     · simp [h]
     · simp only [h, Bool.false_eq_true, ↓reduceDIte, Finset.mem_insert]; apply Or.inr
 
-  let step_mem : ∀ (frames : List _) frame,
+  have step_mem : ∀ (frames : List _) frame,
                   frame ∈ frames →
                   ⟦frame⟧ ∈ (frames.foldr FintypeImplLoopState.next FintypeImplLoopState.init).accum := by
     intro frames

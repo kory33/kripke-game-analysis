@@ -22,9 +22,4 @@ theorem enumerateClass_eq [Setoid α] [FinClassSetoid α] (x y : α) : enumerate
 instance instEquivDecidable [Setoid α] [FinClassSetoid α] [DecidableEq α] : DecidableRel ((· ≈ ·): α → α → Prop) := fun x y =>
   decidable_of_decidable_of_iff (FinClassSetoid.enumerateClass_mem_iff x y)
 
-theorem image_quot_enumerateClass_eq_singleton
-    [Setoid α] [FinClassSetoid α] [DecidableEq α]
-    (x : α) : Finset.image (⟦·⟧) (enumerateClass x) = {⟦x⟧} := by
-  sorry
-
 end FinClassSetoid
