@@ -4,11 +4,8 @@ import Mathlib.Data.Fin.Basic
 namespace Fin
 
 def finMulEquivMulFin {n m : Nat} : (Fin n) × (Fin m) ≃ Fin (n * m) :=
-  have fin_implies_gt_zero {k : Nat} : Fin k → k > 0 := fun i => by
-    have : k ≠ 0 := by intro h; rw [h] at i; exact Nat.not_lt_zero _ i.is_lt
-    exact Nat.pos_of_ne_zero this
-
-  have product_fin_implies_right_gt_zero {n m : Nat} : Fin (n * m) → (m > 0) := fun i => by
+  have fin_implies_gt_zero {k : Nat} : Fin k → 0 < k := fun i => Nat.lt_of_le_of_lt (Nat.zero_le i.val) i.is_lt
+  have product_fin_implies_right_gt_zero {n m : Nat} : Fin (n * m) → (0 < m) := fun i => by
     have prod_gt_zero : n * m > 0 := fin_implies_gt_zero i
     revert prod_gt_zero; contrapose!; simp only [Nat.le_zero_eq]
     intro h; rw [h]; simp
@@ -23,14 +20,12 @@ def finMulEquivMulFin {n m : Nat} : (Fin n) × (Fin m) ≃ Fin (n * m) :=
     ⟩,
     invFun := fun p => ⟨
       ⟨
-        p.val / m, by
-          apply (Nat.div_lt_iff_lt_mul _).mpr
-          · exact p.is_lt
-          · exact product_fin_implies_right_gt_zero p
+        p.val / m,
+        (Nat.div_lt_iff_lt_mul (product_fin_implies_right_gt_zero p)).mpr p.is_lt
       ⟩,
       ⟨
-        p.val % m, by
-          exact Nat.mod_lt _ (product_fin_implies_right_gt_zero p)
+        p.val % m,
+        Nat.mod_lt _ (product_fin_implies_right_gt_zero p)
       ⟩
     ⟩,
     left_inv := fun ⟨a, b⟩ => by
