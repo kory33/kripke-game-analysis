@@ -10,12 +10,10 @@ lemma enumerateClass_self_mem [Setoid α] [FinClassSetoid α] (x : α) : x ∈ e
   (FinClassSetoid.enumerateClass_mem_iff x x).mpr (Setoid.refl x)
 
 theorem enumerateClass_eq [Setoid α] [FinClassSetoid α] (x y : α) : enumerateClass x = enumerateClass y ↔ x ≈ y := by
-  apply Iff.intro
-  · intro h
-    have x_mem_enumerateClass_y : x ∈ enumerateClass y := by rw [←h]; exact enumerateClass_self_mem x
-    exact (enumerateClass_mem_iff x y).mp x_mem_enumerateClass_y
-  · intro h
-    ext a
+  apply Iff.intro <;> intro h
+  · have hx : x ∈ enumerateClass y := by simpa [h] using enumerateClass_self_mem x
+    exact (enumerateClass_mem_iff x y).mp hx
+  · ext a
     repeat rw [enumerateClass_mem_iff]
     exact ⟨(Setoid.trans · h), (Setoid.trans · (Setoid.symm h))⟩
 
