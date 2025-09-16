@@ -9,7 +9,6 @@ import KripkeGameAnalysis.Generic.FinClassSetoid
 import KripkeGameAnalysis.Generic.SetoidWithCanonicalizer
 import KripkeGameAnalysis.GenericExtras.Array
 import KripkeGameAnalysis.GenericExtras.BitVec
-import KripkeGameAnalysis.GenericExtras.Finset
 import KripkeGameAnalysis.ModalLogic.Basic
 
 /--

@@ -61,7 +61,7 @@ def setValueAtIndices {α : Type} (a : Array α) (a_size : a.size = n)
 theorem setValueAtIndices_size {α : Type} (a : Array α) (a_size : a.size = n)
                                 (indices : Finset (Fin n)) (value : α) :
     (setValueAtIndices a a_size indices value).size = a.size :=
-  by simp only [setValueAtIndices]; exact setAtIndices_size
+  by exact setAtIndices_size
 
 theorem setValueAtIndices_eq {α : Type} (a : Array α) (a_size : a.size = n)
                                 (indices : Finset (Fin n)) (value : α) (i : Fin n) :
