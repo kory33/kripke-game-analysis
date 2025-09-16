@@ -103,10 +103,10 @@ def accessibilityRelationCount (frame : FiniteKripkeFrame n) : ℕ :=
 def accessibilityRelationCount_eq_card_of_accessible_pairs (frame : FiniteKripkeFrame n) :
     frame.accessibilityRelationCount = (Finset.univ.filter fun (i, j) => frame i j).card := by
   dsimp only [accessibilityRelationCount]
-  apply Eq.symm; apply Finset.card_equiv Fin.finPairEquivSqFin
-  intro ij; rcases ij with ⟨i, j⟩
-  suffices _ : frame i j = frame.asBitVec[Fin.finPairEquivSqFin (i, j)] by simpa
-  exact getElem_finPairEquivSqFin_equivalence_eq_apply_apply i j
+  refine (Finset.card_equiv Fin.finPairEquivSqFin ?_).symm
+  intro ⟨i, j⟩
+  have := getElem_finPairEquivSqFin_equivalence_eq_apply_apply (frame := frame) i j
+  simpa [this]
 
 section FiniteValuation
 abbrev FiniteValuation (frame : FiniteKripkeFrame n) (finVars : Type) [Fintype finVars] [DecidableEq finVars] :=
