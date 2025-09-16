@@ -42,7 +42,7 @@ instance instLinOrd : LinearOrder (FiniteKripkeFrame n) where
   le_trans := by intro f1 f2 f3; simp [BitVec.ule]; exact Nat.le_trans
   le_antisymm := by intro f1 f2; simp [BitVec.ule]; intro h1 h2; apply BitVec.eq_of_toNat_eq; apply Nat.le_antisymm h1 h2
   le_total := by intro f1 f2; simp [BitVec.ule]; exact Nat.le_total _ _
-  decidableLE := fun f1 f2 => inferInstanceAs (Decidable ((f1 : BitVec (n ^ 2)).ule f2))
+  toDecidableLE := fun f1 f2 => inferInstanceAs (Decidable ((f1 : BitVec (n ^ 2)).ule f2))
 instance instCoe : Coe (FiniteKripkeFrame n) (KripkeFrame (Fin n)) where coe := equivToKripkeFrameFin.toFun
 abbrev asKripkeFrame (frame : FiniteKripkeFrame n) : KripkeFrame (Fin n) := frame
 instance instFunLike : FunLike (FiniteKripkeFrame n) (Fin n) (Fin n → Bool) where
@@ -199,12 +199,11 @@ instance : SetoidWithCanonicalizer (FiniteKripkeFrame n) where
     exact FinClassSetoid.enumerateClass_self_mem f
   )
   canonicalize_equiv_self f := by
-    dsimp only
     set lhs := (FinClassSetoid.enumerateClass f).min' _
     apply (FinClassSetoid.enumerateClass_mem_iff lhs f).mp
     exact Finset.min'_mem _ _
   equiv_then_canonicalize_eq f f' := by
-    intro h; dsimp only
+    intro h
     have enumerateClass_f_eq := (FinClassSetoid.enumerateClass_eq f f').mpr h
     simp only [enumerateClass_f_eq]
 end Isomorphism
@@ -233,7 +232,7 @@ private structure FintypeImplLoopState (n : ℕ) where
 
 private def FintypeImplLoopState.init : FintypeImplLoopState n :=
   {
-    seen := Array.mkArray (2 ^ (n ^ 2)) false,
+    seen := Array.replicate (2 ^ (n ^ 2)) false,
     accum := ∅,
     seen_size := by simp,
     seen_eq_quot_in_accum := by simp,

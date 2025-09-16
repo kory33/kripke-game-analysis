@@ -14,7 +14,7 @@ instance : RightCommutative (setAtIndexPreservingLength val) := {
     simp only [Subtype.mk.injEq, setAtIndexPreservingLength]
     by_cases h : a1 = a2
     · rw [h]
-    · rw [Array.set_comm (val a1) (val a2) arr (by revert h; contrapose!; exact Fin.eq_of_val_eq)]
+    · rw [Array.set_comm (val a1) (val a2) (by revert h; contrapose!; exact Fin.eq_of_val_eq)]
 }
 
 lemma setAtIndexPreservingLength_eq {value : Fin n → α}
@@ -24,7 +24,7 @@ lemma setAtIndexPreservingLength_eq {value : Fin n → α}
   by_cases h : i = j
   · simp [h]
   · simp only [Fin.getElem_fin, h, ↓reduceIte]
-    rw [Array.getElem_set_ne _ _ _ _ _ _]
+    rw [Array.getElem_set_ne _ _ _]
     simp [Fin.val_ne_of_ne h]
 
 def setAtIndices (a : Array α) (a_size : a.size = n) (indices : Finset (Fin n)) (value : Fin n → α) : Array α :=
@@ -41,9 +41,9 @@ theorem setAtIndices_eq (a : Array α) (a_size : a.size = n) :
   revert a
   induction indices using Finset.induction_on with
   | empty => simp
-  | insert headIndex_not_in_indices ih => next nextIndex restIndices =>
+  | insert nextIndex restIndices headIndex_not_in_indices ih =>
       intro a a_size
-      simp only [Finset.insert_val_of_not_mem headIndex_not_in_indices]
+      simp only [Finset.insert_val_of_notMem headIndex_not_in_indices]
       simp only [Multiset.foldl_cons, Finset.mem_insert]
       rw [ih _ _]
       by_cases h : i ∈ restIndices

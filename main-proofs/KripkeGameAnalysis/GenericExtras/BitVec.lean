@@ -24,7 +24,7 @@ def mkFromBitPred (n : Nat): (Fin n → Bool) -> BitVec n := fun f =>
     split
     · next h =>
       have i_eq : i = ⟨n, ?_⟩ := Fin.eq_of_val_eq h
-      rw [i_eq]; exact Nat.lt_succ_self n
+      rw [i_eq]
     · next h =>
       have i_lt_n : i.val < n := Nat.lt_of_le_of_ne (Nat.lt_succ_iff.mp i.is_lt) h
       rw [ih _ ⟨i.val, i_lt_n⟩];

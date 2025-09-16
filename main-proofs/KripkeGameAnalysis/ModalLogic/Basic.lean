@@ -80,13 +80,13 @@ instance instFunLikeEquiv {f f' : KripkeFrame v} : FunLike (f ≅kf f') v v wher
 
 @[simp] theorem iso_iso_symm {f1 f2 : KripkeFrame v} (iso : f1 ≅kf f2) : ∀ v, iso (iso.symm v) = v := by
   intro v
-  simp only [Isomorphism.symm, DFunLike.coe]
-  simp only [Equiv.toFun_as_coe, Equiv.apply_symm_apply]
+  dsimp only [Isomorphism.symm, DFunLike.coe]
+  simp
 
 @[simp] theorem iso_symm_iso {f1 f2 : KripkeFrame v} (iso : f1 ≅kf f2) : ∀ v, iso.symm (iso v) = v := by
   intro v
-  simp only [Isomorphism.symm, DFunLike.coe]
-  simp only [Equiv.toFun_as_coe, Equiv.symm_apply_apply]
+  dsimp only [Isomorphism.symm, DFunLike.coe]
+  simp
 
 @[simp] lemma iso_symm_symm {f1 f2 : KripkeFrame v} (iso : f1 ≅kf f2) : iso.symm.symm = iso := by
   simp only [Isomorphism.symm]
