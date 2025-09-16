@@ -47,13 +47,4 @@ def equivToBitPred (n : Nat) : BitVec n ≃ (Fin n → Bool) :=
     right_inv := by intro f; ext i; simp
   }
 
-def asFinsetOfFins (v : BitVec n) : Finset (Fin n) :=
-  Finset.univ.filter (fun i => equivToBitPred n v i = true)
-
-@[simp] theorem asFinsetOfFins_elem_eq_get (v : BitVec n) (i : Fin n) : (i ∈ v.asFinsetOfFins) = v[i] := by
-  simp [asFinsetOfFins, equivToBitPred]
-
-@[simp] theorem zero_asFinsetOfFins_eq_empty : (0#n).asFinsetOfFins = ∅ := by
-  ext i; simp [asFinsetOfFins, equivToBitPred]
-
 end BitVec
