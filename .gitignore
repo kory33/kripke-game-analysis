@@ -1,4 +1,4 @@
-**/.lake
 /.llmworkspace
 
 .vscode/mcp.json
+.vscode/settings.json
