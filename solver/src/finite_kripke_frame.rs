@@ -1,164 +1,12 @@
+use itertools::Itertools;
+
 use crate::formula::Formula;
 use crate::valuation::FiniteValuation;
+use std::sync::LazyLock;
 
 #[derive(Clone, Copy)]
 pub struct FiniteKripkeFrame<const N: usize> {
     accessibility: [[bool; N]; N],
-}
-
-#[allow(long_running_const_eval)]
-impl FiniteKripkeFrame<4> {
-    pub const fn to_u16_id(&self) -> u16 {
-        let mut id = 0u16;
-        let mut i = 0;
-        while i < 4 {
-            let mut j = 0;
-            while j < 4 {
-                if self.accessibility[i][j] {
-                    id |= 1 << (i * 4 + j);
-                }
-                j += 1;
-            }
-            i += 1;
-        }
-        id
-    }
-
-    pub const fn from_u16_id(id: u16) -> Self {
-        let mut accessibility = [[false; 4]; 4];
-        let mut i = 0;
-        while i < 4 {
-            let mut j = 0;
-            while j < 4 {
-                accessibility[i][j] = (id & (1 << (i * 4 + j))) != 0;
-                j += 1;
-            }
-            i += 1;
-        }
-        FiniteKripkeFrame { accessibility }
-    }
-
-    pub const fn empty_frame() -> Self {
-        FiniteKripkeFrame {
-            accessibility: [[false; 4]; 4],
-        }
-    }
-
-    pub const fn canonicalize_to_isomorphic_frame_with_min_id(&self) -> Self {
-        let mut min_id = self.to_u16_id();
-        let mut best_frame = *self;
-
-        const fn try_perm(
-            perm: &mut [usize; 4],
-            original: &FiniteKripkeFrame<4>,
-            min_id: &mut u16,
-            best_frame: &mut FiniteKripkeFrame<4>,
-        ) {
-            let mut frame = FiniteKripkeFrame::<4>::empty_frame();
-            let mut i = 0;
-            while i < 4 {
-                let mut j = 0;
-                while j < 4 {
-                    frame.accessibility[i][j] = original.accessibility[perm[i]][perm[j]];
-                    j += 1;
-                }
-                i += 1;
-            }
-            let id = frame.to_u16_id();
-            if id < *min_id {
-                *min_id = id;
-                *best_frame = frame;
-            }
-        }
-
-        const fn try_perms(
-            items_to_swap: usize,
-            current_perm: &mut [usize; 4],
-            original: &FiniteKripkeFrame<4>,
-            min_id: &mut u16,
-            best_frame: &mut FiniteKripkeFrame<4>,
-        ) {
-            // Heap's algorithm
-            if items_to_swap <= 1 {
-                try_perm(current_perm, original, min_id, best_frame);
-                return;
-            }
-            let mut i = 0;
-            while i < items_to_swap {
-                try_perms(
-                    items_to_swap - 1,
-                    current_perm,
-                    original,
-                    min_id,
-                    best_frame,
-                );
-                if items_to_swap % 2 == 0 {
-                    current_perm.swap(i, items_to_swap - 1);
-                } else {
-                    current_perm.swap(0, items_to_swap - 1);
-                }
-                i += 1;
-            }
-        }
-
-        try_perms(4, &mut [0, 1, 2, 3], self, &mut min_id, &mut best_frame);
-
-        best_frame
-    }
-
-    pub const ALL_FRAMES_COUNT: usize = 65536;
-
-    pub const FROM_U16_ID_CACHED: [FiniteKripkeFrame<4>; Self::ALL_FRAMES_COUNT] = {
-        let mut frames = [FiniteKripkeFrame::<4>::empty_frame(); Self::ALL_FRAMES_COUNT];
-        let mut id = 1u16;
-        loop {
-            frames[id as usize] = Self::from_u16_id(id);
-            if id == 0xFFFF {
-                break;
-            }
-            id += 1;
-        }
-        frames
-    };
-
-    pub const CANONICALIZED_FRAME_ID: [u16; Self::ALL_FRAMES_COUNT] = {
-        let mut ids = [0u16; Self::ALL_FRAMES_COUNT];
-        let mut i = 0;
-        while i < Self::ALL_FRAMES_COUNT {
-            ids[i] = Self::FROM_U16_ID_CACHED[i]
-                .canonicalize_to_isomorphic_frame_with_min_id()
-                .to_u16_id();
-            i += 1;
-        }
-        ids
-    };
-
-    pub const FRAME_IS_CANONICALIZED: [bool; Self::ALL_FRAMES_COUNT] = {
-        let mut flags = [false; Self::ALL_FRAMES_COUNT];
-        let mut i = 0;
-        while i < Self::ALL_FRAMES_COUNT {
-            flags[i] = Self::CANONICALIZED_FRAME_ID[i] == i as u16;
-            i += 1;
-        }
-        flags
-    };
-
-    // https://oeis.org/A000595
-    pub const NO_OF_FRAMES_UPTO_ISOMORPHISM: usize = 3044;
-
-    pub const CANONICALIZED_FRAMES_IDS: [u16; Self::NO_OF_FRAMES_UPTO_ISOMORPHISM] = {
-        let mut frames = [0u16; Self::NO_OF_FRAMES_UPTO_ISOMORPHISM];
-        let mut index = 0;
-        let mut id = 0u16;
-        while id < Self::ALL_FRAMES_COUNT as u16 {
-            if Self::FRAME_IS_CANONICALIZED[id as usize] {
-                frames[index] = id;
-                index += 1;
-            }
-            id += 1;
-        }
-        frames
-    };
 }
 
 impl<const N: usize> FiniteKripkeFrame<N> {
@@ -255,6 +103,13 @@ impl<const N: usize> FiniteKripkeFrame<N> {
         result
     }
 
+    pub fn number_of_worlds_validating<V: Eq + Clone>(&self, formula: &Formula<V>) -> usize {
+        self.worlds_that_validate_under_any_valuation(formula)
+            .into_iter()
+            .filter(|&b| b)
+            .count()
+    }
+
     pub fn accessibility_relation_count(&self) -> usize {
         let mut count = 0;
         for i in 0..N {
@@ -268,12 +123,165 @@ impl<const N: usize> FiniteKripkeFrame<N> {
     }
 }
 
+impl FiniteKripkeFrame<4> {
+    pub fn to_u16_id(&self) -> u16 {
+        let mut id = 0u16;
+        for (i, j) in (0..4).cartesian_product(0..4) {
+            if self.accessibility[i][j] {
+                id |= 1 << (i * 4 + j);
+            }
+        }
+        id
+    }
+
+    pub fn compute_from_u16_id(id: u16) -> Self {
+        let mut accessibility = [[false; 4]; 4];
+        for (i, j) in (0..4).cartesian_product(0..4) {
+            accessibility[i][j] = (id & (1 << (i * 4 + j))) != 0;
+        }
+        FiniteKripkeFrame { accessibility }
+    }
+
+    pub fn empty_frame() -> Self {
+        FiniteKripkeFrame {
+            accessibility: [[false; 4]; 4],
+        }
+    }
+
+    pub fn isomorphism_classes_with_possible_duplications(
+        &self,
+    ) -> impl Iterator<Item = FiniteKripkeFrame<4>> {
+        vec![0usize, 1, 2, 3]
+            .into_iter()
+            .permutations(4)
+            .map(move |perm| {
+                let mut new_frame = FiniteKripkeFrame::empty_frame();
+                for (i, j) in (0..4).cartesian_product(0..4) {
+                    new_frame.accessibility[perm[i]][perm[j]] = self.accessibility[i][j];
+                }
+                new_frame
+            })
+    }
+
+    pub fn compute_canonicalization(&self) -> Self {
+        self.isomorphism_classes_with_possible_duplications()
+            .min_by_key(|frame| frame.to_u16_id())
+            .unwrap()
+    }
+
+    pub fn all_ids_iter() -> impl Iterator<Item = u16> {
+        (0u16..=0xFFFF).into_iter()
+    }
+
+    pub const ALL_FRAMES_COUNT: usize = 65536;
+
+    // https://oeis.org/A000595
+    pub const NO_OF_FRAMES_UPTO_ISOMORPHISM: usize = 3044;
+}
+
+static ALL_FRAMES_CACHE: LazyLock<Vec<FiniteKripkeFrame<4>>> = LazyLock::new(|| {
+    let mut vec = Vec::with_capacity(FiniteKripkeFrame::<4>::ALL_FRAMES_COUNT);
+    for id in FiniteKripkeFrame::<4>::all_ids_iter() {
+        vec.push(FiniteKripkeFrame::<4>::compute_from_u16_id(id as u16));
+    }
+    vec
+});
+
+impl FiniteKripkeFrame<4> {
+    pub fn from_u16_id(id: u16) -> &'static FiniteKripkeFrame<4> {
+        static CACHE: LazyLock<Vec<FiniteKripkeFrame<4>>> = LazyLock::new(|| {
+            let mut vec = Vec::with_capacity(FiniteKripkeFrame::<4>::ALL_FRAMES_COUNT);
+            for id in FiniteKripkeFrame::<4>::all_ids_iter() {
+                vec.push(FiniteKripkeFrame::<4>::compute_from_u16_id(id as u16));
+            }
+            vec
+        });
+
+        &CACHE[id as usize]
+    }
+
+    fn canonicalized_frame_id(id: u16) -> u16 {
+        static CACHE: LazyLock<Vec<u16>> = LazyLock::new(|| {
+            // initially let all elements look at the empty frame
+            let mut vec = vec![];
+            vec.resize_with(FiniteKripkeFrame::<4>::ALL_FRAMES_COUNT, || 0u16);
+
+            for i in FiniteKripkeFrame::<4>::all_ids_iter() {
+                if i == 0 || vec[i as usize] != 0 {
+                    continue;
+                }
+
+                // Since we are looking frames in increasing order of IDs,
+                // the first time we see a frame in an isomorphism class
+                // is the canonicalized one.
+                FiniteKripkeFrame::<4>::from_u16_id(i)
+                    .isomorphism_classes_with_possible_duplications()
+                    .for_each(|frame| {
+                        vec[frame.to_u16_id() as usize] = i;
+                    });
+            }
+            vec
+        });
+
+        CACHE[id as usize]
+    }
+
+    pub fn canonicalize(&self) -> &'static FiniteKripkeFrame<4> {
+        Self::from_u16_id(Self::canonicalized_frame_id(self.to_u16_id()))
+    }
+
+    fn frame_at_id_is_canonical(id: u16) -> bool {
+        static FLAGS: LazyLock<Vec<bool>> = LazyLock::new(|| {
+            let mut vec = Vec::with_capacity(FiniteKripkeFrame::<4>::ALL_FRAMES_COUNT);
+            for i in FiniteKripkeFrame::<4>::all_ids_iter() {
+                vec.push(FiniteKripkeFrame::<4>::canonicalized_frame_id(i) == i);
+            }
+            vec
+        });
+
+        FLAGS[id as usize]
+    }
+
+    pub fn is_canonical(&self) -> bool {
+        Self::frame_at_id_is_canonical(self.to_u16_id())
+    }
+
+    fn canonical_frames_ids() -> &'static [u16] {
+        static FRAMES: LazyLock<Vec<u16>> = LazyLock::new(|| {
+            let mut vec = Vec::with_capacity(FiniteKripkeFrame::<4>::NO_OF_FRAMES_UPTO_ISOMORPHISM);
+            for id in FiniteKripkeFrame::<4>::all_ids_iter() {
+                if FiniteKripkeFrame::<4>::frame_at_id_is_canonical(id) {
+                    vec.push(id);
+                }
+            }
+            vec
+        });
+
+        &FRAMES
+    }
+
+    pub fn canonical_frames() -> &'static [&'static FiniteKripkeFrame<4>] {
+        static FRAMES: LazyLock<Vec<&'static FiniteKripkeFrame<4>>> = LazyLock::new(|| {
+            let ids = FiniteKripkeFrame::<4>::canonical_frames_ids();
+            let mut vec = Vec::with_capacity(ids.len());
+            for &id in ids.iter() {
+                vec.push(FiniteKripkeFrame::<4>::from_u16_id(id));
+            }
+            vec
+        });
+
+        &FRAMES
+    }
+}
+
 #[cfg(test)]
 mod tests {
+    use super::FiniteKripkeFrame;
+
     #[test]
     fn to_from_u16_id() {
         for id in 0u16..=0xFFFF {
-            let frame = super::super::FiniteKripkeFrame::from_u16_id(id);
+            let frame = FiniteKripkeFrame::from_u16_id(id);
             let id_back = frame.to_u16_id();
             assert_eq!(id, id_back);
         }
@@ -282,24 +290,30 @@ mod tests {
     #[test]
     fn canonicalization_idempotent() {
         for id in 0u16..=0xFFFF {
-            let frame = super::super::FiniteKripkeFrame::from_u16_id(id);
-            let canonical_frame = frame.canonicalize_to_isomorphic_frame_with_min_id();
-            let canonical_frame2 = canonical_frame.canonicalize_to_isomorphic_frame_with_min_id();
+            let frame = FiniteKripkeFrame::from_u16_id(id);
+            let canonical_frame = frame.compute_canonicalization();
+            let canonical_frame2 = canonical_frame.compute_canonicalization();
             assert_eq!(canonical_frame.to_u16_id(), canonical_frame2.to_u16_id());
         }
     }
 
     #[test]
+    fn canonical_frame_id_from_cache_eq_computed() {
+        for id in FiniteKripkeFrame::<4>::all_ids_iter() {
+            assert_eq!(
+                FiniteKripkeFrame::<4>::canonicalized_frame_id(id),
+                FiniteKripkeFrame::<4>::from_u16_id(id)
+                    .compute_canonicalization()
+                    .to_u16_id()
+            );
+        }
+    }
+
+    #[test]
     fn canonical_frames_count_eq_no_of_frames_upto_iso() {
-        let count = super::super::FiniteKripkeFrame::<4>::CANONICALIZED_FRAME_ID
-            .as_slice()
-            .iter()
-            .enumerate()
-            .filter(|a| a.0 == *a.1 as usize)
-            .count();
         assert_eq!(
-            count,
-            super::super::FiniteKripkeFrame::<4>::NO_OF_FRAMES_UPTO_ISOMORPHISM
+            FiniteKripkeFrame::<4>::canonical_frames().len(),
+            FiniteKripkeFrame::<4>::NO_OF_FRAMES_UPTO_ISOMORPHISM
         );
     }
 }
