@@ -4,7 +4,7 @@ use crate::formula::Formula;
 use crate::valuation::FiniteValuation;
 use std::sync::LazyLock;
 
-#[derive(Clone, Copy)]
+#[derive(Debug, Clone, Copy)]
 pub struct FiniteKripkeFrame<const N: usize> {
     accessibility: [[bool; N]; N],
 }
@@ -103,11 +103,11 @@ impl<const N: usize> FiniteKripkeFrame<N> {
         result
     }
 
-    pub fn number_of_worlds_validating<V: Eq + Clone>(&self, formula: &Formula<V>) -> usize {
+    pub fn number_of_worlds_validating<V: Eq + Clone>(&self, formula: &Formula<V>) -> u8 {
         self.worlds_that_validate_under_any_valuation(formula)
             .into_iter()
             .filter(|&b| b)
-            .count()
+            .count() as u8
     }
 
     pub fn accessibility_relation_count(&self) -> usize {
@@ -163,12 +163,6 @@ impl FiniteKripkeFrame<4> {
             })
     }
 
-    pub fn compute_canonicalization(&self) -> Self {
-        self.isomorphism_classes_with_possible_duplications()
-            .min_by_key(|frame| frame.to_u16_id())
-            .unwrap()
-    }
-
     pub fn all_ids_iter() -> impl Iterator<Item = u16> {
         (0u16..=0xFFFF).into_iter()
     }
@@ -178,14 +172,6 @@ impl FiniteKripkeFrame<4> {
     // https://oeis.org/A000595
     pub const NO_OF_FRAMES_UPTO_ISOMORPHISM: usize = 3044;
 }
-
-static ALL_FRAMES_CACHE: LazyLock<Vec<FiniteKripkeFrame<4>>> = LazyLock::new(|| {
-    let mut vec = Vec::with_capacity(FiniteKripkeFrame::<4>::ALL_FRAMES_COUNT);
-    for id in FiniteKripkeFrame::<4>::all_ids_iter() {
-        vec.push(FiniteKripkeFrame::<4>::compute_from_u16_id(id as u16));
-    }
-    vec
-});
 
 impl FiniteKripkeFrame<4> {
     pub fn from_u16_id(id: u16) -> &'static FiniteKripkeFrame<4> {
@@ -226,10 +212,6 @@ impl FiniteKripkeFrame<4> {
         CACHE[id as usize]
     }
 
-    pub fn canonicalize(&self) -> &'static FiniteKripkeFrame<4> {
-        Self::from_u16_id(Self::canonicalized_frame_id(self.to_u16_id()))
-    }
-
     fn frame_at_id_is_canonical(id: u16) -> bool {
         static FLAGS: LazyLock<Vec<bool>> = LazyLock::new(|| {
             let mut vec = Vec::with_capacity(FiniteKripkeFrame::<4>::ALL_FRAMES_COUNT);
@@ -240,10 +222,6 @@ impl FiniteKripkeFrame<4> {
         });
 
         FLAGS[id as usize]
-    }
-
-    pub fn is_canonical(&self) -> bool {
-        Self::frame_at_id_is_canonical(self.to_u16_id())
     }
 
     fn canonical_frames_ids() -> &'static [u16] {
@@ -284,28 +262,6 @@ mod tests {
             let frame = FiniteKripkeFrame::from_u16_id(id);
             let id_back = frame.to_u16_id();
             assert_eq!(id, id_back);
-        }
-    }
-
-    #[test]
-    fn canonicalization_idempotent() {
-        for id in 0u16..=0xFFFF {
-            let frame = FiniteKripkeFrame::from_u16_id(id);
-            let canonical_frame = frame.compute_canonicalization();
-            let canonical_frame2 = canonical_frame.compute_canonicalization();
-            assert_eq!(canonical_frame.to_u16_id(), canonical_frame2.to_u16_id());
-        }
-    }
-
-    #[test]
-    fn canonical_frame_id_from_cache_eq_computed() {
-        for id in FiniteKripkeFrame::<4>::all_ids_iter() {
-            assert_eq!(
-                FiniteKripkeFrame::<4>::canonicalized_frame_id(id),
-                FiniteKripkeFrame::<4>::from_u16_id(id)
-                    .compute_canonicalization()
-                    .to_u16_id()
-            );
         }
     }
 

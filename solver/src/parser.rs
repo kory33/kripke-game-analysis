@@ -74,7 +74,7 @@ mod parse {
     use combine::between;
     use combine::parser;
     use combine::token;
-    use combine::{ParseError, Parser, Stream, satisfy_map};
+    use combine::{Parser, Stream, satisfy_map};
 
     fn parse_atom<V: Eq + Clone, I>() -> impl Parser<I, Output = Formula<V>>
     where

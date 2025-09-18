@@ -4,4 +4,6 @@ mod offical_game_solver;
 mod parser;
 mod valuation;
 
-fn main() {}
+fn main() {
+    println!("{:?}", offical_game_solver::come_up_with_strategy())
+}
