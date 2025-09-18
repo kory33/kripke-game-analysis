@@ -4,4 +4,5 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+combine = "4.6.7"
 itertools = "0.14.0"
