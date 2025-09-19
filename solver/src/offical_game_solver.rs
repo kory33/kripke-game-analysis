@@ -105,18 +105,36 @@ fn come_up_with_strategy_for(
 ) -> StrategyAgainstFixedWorldCount {
     static QUERIES_TO_TRY: LazyLock<Vec<Formula<OfficialGamePropVar>>> = LazyLock::new(|| {
         vec![
+            // 1. nodes with self-loops
             "p → ◇p",
-            "◇(p → ◇p)",
-            "r → ◇((p → ◇p) ∧ ◇r)",
-            "p → ◇◇p",
-            "◇(p → □p)",
-            "◇□⊥",
-            "□(p → ◇p)",
+            // 2. nodes such that the only outgoing edge (if any) is a self-loop
             "p → □p",
-            "p → ◇◇◇p",
-            "p → ◇◇◇◇p",
+            // 3. nodes with an edge to (1)-nodes
+            "◇(p → ◇p)",
+            // 4. nodes having 2-way edges into (1)-nodes
+            "r → ◇((p → ◇p) ∧ ◇r)",
+            // 5. nodes in size-2 cycle
+            "p → ◇◇p",
+            // 6. nodes where all outgoing edges are two-way
+            "p → □◇p",
+            // 7. nodes with an edge into (2)-nodes
+            "◇(p → □p)",
+            // 8. sink nodes
             "□⊥",
-            "◇⊥",
+            // 9. nodes with an edge to a (8)-node
+            "◇□⊥",
+            // 10. nodes where all outgoing edges lead to (1)-nodes
+            "□(p → ◇p)",
+            // 11. nodes in size-3 cycle
+            "p → ◇◇◇p",
+            // 12. nodes in size-4 cycle
+            "p → ◇◇◇◇p",
+            // 13. nodes with an outgoing edge
+            "◇⊤",
+            // 14. nodes with an edge to (10)-nodes
+            "◇□(p → ◇p)",
+            // 15. a query separating [5602, 5767, 6019, 6050, 6373, 7334]
+            "(p → ◇p) ∧ (q → ◇◇◇q)",
         ]
         .into_iter()
         .map(|s| parsing::parse_official_game_formula(s).unwrap())
@@ -125,7 +143,7 @@ fn come_up_with_strategy_for(
 
     if remaining_moves == 0 {
         panic!(
-            "Ran out of moves with {} possible frames left (|R| = {}). Past moves: {}. Possible frames: {:?}",
+            "Ran out of moves with {} possible frames left (|R| = {}). Past moves: {}. Possible frames: {:?}. Run the following command to visualize them: \n####\n{}\n####",
             possible_frames.len(),
             trace.relation_count,
             trace.history_to_string(),
@@ -133,6 +151,17 @@ fn come_up_with_strategy_for(
                 .iter()
                 .map(|f| f.to_u16_id())
                 .collect::<Vec<_>>(),
+            format!(
+                // works in GNU bash (version 5.0.17(1)-release) + graphviz (version 13.1.2) + Chromium (version 140.0.7339.127)
+                r#"graph_data=$(cat <<EOF
+{}
+EOF
+); svg_html='<!DOCTYPE html>'; while IFS= read -r line; do svg_html+="<div style=\"margin-right: 100px; display: inline\">$(echo "$line" | dot -Tsvg)</div>"; done <<< "$graph_data"; chromium $(echo -n "data:text/html;base64,"; echo "$svg_html" | base64 -w 0)"#,
+                possible_frames
+                    .iter()
+                    .map(|f| f.into_graphviz_dot_string())
+                    .join("\n"),
+            )
         );
     } else if possible_frames.len() <= remaining_moves as usize {
         StrategyAgainstFixedWorldCount::ProceedWithExhaustiveSearch

@@ -167,6 +167,29 @@ impl FiniteKripkeFrame<4> {
         (0u16..=0xFFFF).into_iter()
     }
 
+    pub fn into_graphviz_dot_string(&self) -> String {
+        format!(
+            r#"strict digraph G {{ layout="fdp"; color="white"; node [label="", shape="circle"]; label="{}"; v0 [pos="0,0!"]; v1[pos="2,0!"]; v2 [pos="0,-2!"]; v3 [pos="2,-2!"]; {} }}"#,
+            self.to_u16_id(),
+            // edges
+            (0..4)
+                .cartesian_product(0..4)
+                .filter(|(i, j)| self.accessibility[*i][*j])
+                .map(|(i, j)| {
+                    if i == j {
+                        if i == 0 || i == 2 {
+                            format!("v{}:nw->v{}:sw;", i, j)
+                        } else {
+                            format!("v{}:ne->v{}:se;", i, j)
+                        }
+                    } else {
+                        format!("v{}->v{};", i, j)
+                    }
+                })
+                .join(" ")
+        )
+    }
+
     pub const ALL_FRAMES_COUNT: usize = 65536;
 
     // https://oeis.org/A000595
