@@ -5,5 +5,13 @@ mod parser;
 mod valuation;
 
 fn main() {
-    println!("{:?}", offical_game_solver::come_up_with_strategy())
+    println!("{:?}", offical_game_solver::come_up_with_strategy());
+
+    // offical_game_solver::search_for_formula_to_split_frames(
+    //     &vec![5625, 5869, 6061, 6073, 6121]
+    //         .iter()
+    //         .map(|id| finite_kripke_frame::FiniteKripkeFrame::from_u16_id(*id))
+    //         .collect::<Vec<_>>(),
+    //     6,
+    // );
 }

@@ -1,6 +1,6 @@
-use std::{collections::HashMap, fmt::Display, sync::LazyLock, u8};
+use std::{collections::BTreeMap, fmt::Display, sync::LazyLock, u8};
 
-use itertools::Itertools;
+use itertools::{Itertools, chain};
 
 use crate::{finite_kripke_frame::FiniteKripkeFrame, formula::Formula};
 
@@ -52,14 +52,14 @@ pub enum StrategyAgainstFixedWorldCount {
     ProceedWithExhaustiveSearch,
     AskQueryAndThen {
         query: Formula<OfficialGamePropVar>,
-        cont: HashMap</* answer world count */ u8, Box<StrategyAgainstFixedWorldCount>>,
+        cont: BTreeMap</* answer world count */ u8, Box<StrategyAgainstFixedWorldCount>>,
     },
 }
 
 #[derive(Debug)]
 #[allow(dead_code)]
 pub struct KripkeGameStrategy(
-    HashMap</* accessibility relation size */ u8, StrategyAgainstFixedWorldCount>,
+    BTreeMap</* accessibility relation size */ u8, StrategyAgainstFixedWorldCount>,
 );
 
 // When searching for a strategy, instead of considering the explicit pair (relation count, query-answer history)
@@ -70,7 +70,7 @@ type PossibleFramesForState = Vec<&'static FiniteKripkeFrame<4>>;
 struct GameHistoryElement {
     query: Formula<OfficialGamePropVar>,
     answer_count: u8,
-    possible_frames_split: HashMap<u8, Vec<&'static FiniteKripkeFrame<4>>>,
+    possible_frames_split: BTreeMap<u8, Vec<&'static FiniteKripkeFrame<4>>>,
 }
 
 struct DiagnosticTrace {
@@ -95,6 +95,21 @@ impl DiagnosticTrace {
             })
         )
     }
+}
+
+fn answer_distribution_for_query(
+    possible_frames: &[&'static FiniteKripkeFrame<4>],
+    query: &Formula<OfficialGamePropVar>,
+) -> BTreeMap<u8, Vec<&'static FiniteKripkeFrame<4>>> {
+    let mut frames_grouped_by_answer_count: BTreeMap<u8, Vec<&'static FiniteKripkeFrame<4>>> =
+        BTreeMap::new();
+    for frame in possible_frames {
+        frames_grouped_by_answer_count
+            .entry(frame.number_of_worlds_validating(query))
+            .or_insert_with(Vec::new)
+            .push(frame);
+    }
+    frames_grouped_by_answer_count
 }
 
 fn come_up_with_strategy_for(
@@ -134,7 +149,15 @@ fn come_up_with_strategy_for(
             // 14. nodes with an edge to (10)-nodes
             "◇□(p → ◇p)",
             // 15. a query separating [5602, 5767, 6019, 6050, 6373, 7334]
-            "(p → ◇p) ∧ (q → ◇◇◇q)",
+            "p → □◇◇p",
+            // 16. a query separating [5789, 6035, 6581, 6629] (1 ∧ 6)
+            "(p → ◇p) ∧ (q → □◇q)",
+            // 17. a query separating [447, 495, 509, 1005]
+            "p → □(□⊥ ∨ ◇p)",
+            // 18. a query separating [4469, 4473, 4581, 4711, 5033] (nodes with outdegree <= 1)
+            "◇p → □p",
+            // 19. a query separating [5625, 5869, 6061, 6073, 6121] (all nodes reachable in exactly 2 steps are reachable in exactly 1 step)
+            "◇◇p → ◇p",
         ]
         .into_iter()
         .map(|s| parsing::parse_official_game_formula(s).unwrap())
@@ -169,22 +192,15 @@ EOF
         let (query, resulting_possible_frames) = QUERIES_TO_TRY
             .iter()
             .map(|formula| {
-                let mut frames_grouped_by_answer_count: HashMap<
-                    u8,
-                    Vec<&'static FiniteKripkeFrame<4>>,
-                > = HashMap::new();
-                for frame in &possible_frames {
-                    frames_grouped_by_answer_count
-                        .entry(frame.number_of_worlds_validating(formula))
-                        .or_insert_with(Vec::new)
-                        .push(frame);
-                }
-                (formula, frames_grouped_by_answer_count)
+                (
+                    formula,
+                    answer_distribution_for_query(&possible_frames, formula),
+                )
             })
             .min_by_key(|(_, grouping)| grouping.values().map(|v| v.len()).max().unwrap_or(0))
             .unwrap();
 
-        let mut cont = HashMap::new();
+        let mut cont = BTreeMap::new();
         let resulting_possible_frames_cloned = resulting_possible_frames.clone();
         for (answer_count, frames) in resulting_possible_frames {
             if frames.len() > 0 {
@@ -208,11 +224,11 @@ EOF
 }
 
 pub fn come_up_with_strategy() -> KripkeGameStrategy {
-    let mut strategies = HashMap::new();
+    let mut strategies = BTreeMap::new();
 
-    let mut frames_grouped_by_relation_count: HashMap<u8, Vec<&'static FiniteKripkeFrame<4>>> =
+    let mut frames_grouped_by_relation_count: BTreeMap<u8, Vec<&'static FiniteKripkeFrame<4>>> =
         FiniteKripkeFrame::<4>::canonical_frames().into_iter().fold(
-            HashMap::new(),
+            BTreeMap::new(),
             |mut acc, frame| {
                 let rel_count = frame.accessibility_relation_count() as u8;
                 acc.entry(rel_count).or_insert_with(Vec::new).push(frame);
@@ -221,17 +237,19 @@ pub fn come_up_with_strategy() -> KripkeGameStrategy {
         );
 
     for relation_count in 0u8..=16 {
+        let possible_frames = frames_grouped_by_relation_count
+            .remove(&relation_count)
+            .unwrap_or(vec![]);
         println!(
-            "Computing strategy for relation count = {}...",
-            relation_count
+            "Computing strategy for relation count = {} (total frames to classify = {})...",
+            relation_count,
+            possible_frames.len()
         );
         strategies.insert(
             relation_count,
             come_up_with_strategy_for(
                 10,
-                frames_grouped_by_relation_count
-                    .remove(&relation_count)
-                    .unwrap_or(vec![]),
+                possible_frames,
                 &mut DiagnosticTrace {
                     game_history: vec![],
                     relation_count,
@@ -242,4 +260,82 @@ pub fn come_up_with_strategy() -> KripkeGameStrategy {
     }
 
     KripkeGameStrategy(strategies)
+}
+
+fn enumerate_formulae_of_exact_size(
+    size: u8,
+) -> Box<dyn Iterator<Item = Formula<OfficialGamePropVar>>> {
+    static BASE_FORMULAE: LazyLock<Vec<Formula<OfficialGamePropVar>>> = LazyLock::new(|| {
+        vec![
+            Formula::Var(OfficialGamePropVar::P),
+            Formula::Var(OfficialGamePropVar::Q),
+            Formula::True,
+            Formula::False,
+        ]
+    });
+
+    if size <= 1 {
+        Box::new(BASE_FORMULAE.iter().cloned())
+    } else {
+        Box::new(chain!(
+            enumerate_formulae_of_exact_size(size - 1).map(|f| Formula::Not(Box::new(f))),
+            enumerate_formulae_of_exact_size(size - 1).map(|f| Formula::MBox(Box::new(f))),
+            enumerate_formulae_of_exact_size(size - 1).map(|f| Formula::MDia(Box::new(f))),
+            (1..(size - 1))
+                .flat_map(|left_size| {
+                    let right_size = size - 1 - left_size;
+                    enumerate_formulae_of_exact_size(left_size)
+                        .flat_map(move |f1| {
+                            enumerate_formulae_of_exact_size(right_size)
+                                .map(move |f2| (f1.clone(), f2))
+                        })
+                        .flat_map(|(f1, f2)| {
+                            vec![
+                                Formula::And(Box::new(f1.clone()), Box::new(f2.clone())),
+                                Formula::Or(Box::new(f1.clone()), Box::new(f2.clone())),
+                                Formula::Imp(Box::new(f1.clone()), Box::new(f2.clone())),
+                                Formula::Iff(Box::new(f1.clone()), Box::new(f2)),
+                            ]
+                        })
+                })
+                .collect::<Vec<_>>()
+                .into_iter()
+        ))
+    }
+}
+
+fn enumerate_formulae_up_to_size(
+    size: u8,
+) -> Box<dyn Iterator<Item = Formula<OfficialGamePropVar>>> {
+    Box::new((1..=size).flat_map(enumerate_formulae_of_exact_size))
+}
+
+pub fn search_for_formula_to_split_frames(
+    frames: &[&'static FiniteKripkeFrame<4>],
+    formula_size_bound: u8,
+) {
+    for formula in enumerate_formulae_up_to_size(formula_size_bound) {
+        let grouping = answer_distribution_for_query(frames, &formula);
+        if grouping.len() > 1 {
+            println!(
+                "Formula {} splits {} frames into groups of sizes: {{{}}} ({{{}}})",
+                formula,
+                frames.len(),
+                grouping
+                    .iter()
+                    .sorted_by_key(|e| e.0)
+                    .map(|(k, v)| format!("{}: {}", k, v.len()))
+                    .join(", "),
+                grouping
+                    .iter()
+                    .sorted_by_key(|e| e.0)
+                    .map(|(k, v)| format!(
+                        "{}: [{}]",
+                        k,
+                        v.iter().map(|f| f.to_u16_id()).join(", ")
+                    ))
+                    .join(", "),
+            );
+        }
+    }
 }
