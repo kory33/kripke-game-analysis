@@ -8,7 +8,7 @@ fn main() {
     println!("{:?}", offical_game_solver::come_up_with_strategy());
 
     // offical_game_solver::search_for_formula_to_split_frames(
-    //     &vec![5625, 5869, 6061, 6073, 6121]
+    //     &vec![6046, 6590, 7100]
     //         .iter()
     //         .map(|id| finite_kripke_frame::FiniteKripkeFrame::from_u16_id(*id))
     //         .collect::<Vec<_>>(),

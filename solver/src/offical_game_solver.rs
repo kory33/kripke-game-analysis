@@ -148,16 +148,14 @@ fn come_up_with_strategy_for(
             "◇⊤",
             // 14. nodes with an edge to (10)-nodes
             "◇□(p → ◇p)",
-            // 15. a query separating [5602, 5767, 6019, 6050, 6373, 7334]
-            "p → □◇◇p",
-            // 16. a query separating [5789, 6035, 6581, 6629] (1 ∧ 6)
-            "(p → ◇p) ∧ (q → □◇q)",
-            // 17. a query separating [447, 495, 509, 1005]
-            "p → □(□⊥ ∨ ◇p)",
-            // 18. a query separating [4469, 4473, 4581, 4711, 5033] (nodes with outdegree <= 1)
+            // 15. nodes with outdegree <= 1 (separates [4469, 4473, 4581, 4711, 5033])
             "◇p → □p",
-            // 19. a query separating [5625, 5869, 6061, 6073, 6121] (all nodes reachable in exactly 2 steps are reachable in exactly 1 step)
+            // 16. all nodes reachable in exactly 2 steps are reachable in exactly 1 step (separates [5625, 5869, 6061, 6073, 6121])
             "◇◇p → ◇p",
+            // 17. nodes where all next nodes are mutually reachable (separates [5594, 6042, 6588, 6636, 7084])
+            "□p → □◇p",
+            // 18. query separating [6046, 6590, 7100]
+            "◇(p → □□p)",
         ]
         .into_iter()
         .map(|s| parsing::parse_official_game_formula(s).unwrap())
