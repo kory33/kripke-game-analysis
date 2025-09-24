@@ -5,9 +5,9 @@ use crate::valuation::FiniteValuation;
 use std::collections::BTreeMap;
 use std::sync::LazyLock;
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub struct FiniteKripkeFrame<const N: usize> {
-    accessibility: [[bool; N]; N],
+    pub accessibility: [[bool; N]; N],
 }
 
 impl<const N: usize> FiniteKripkeFrame<N> {
