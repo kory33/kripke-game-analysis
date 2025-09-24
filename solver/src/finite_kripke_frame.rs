@@ -2,6 +2,7 @@ use itertools::Itertools;
 
 use crate::formula::Formula;
 use crate::valuation::FiniteValuation;
+use std::collections::BTreeMap;
 use std::sync::LazyLock;
 
 #[derive(Debug, Clone, Copy)]
@@ -194,9 +195,7 @@ impl FiniteKripkeFrame<4> {
 
     // https://oeis.org/A000595
     pub const NO_OF_FRAMES_UPTO_ISOMORPHISM: usize = 3044;
-}
 
-impl FiniteKripkeFrame<4> {
     pub fn from_u16_id(id: u16) -> &'static FiniteKripkeFrame<4> {
         static CACHE: LazyLock<Vec<FiniteKripkeFrame<4>>> = LazyLock::new(|| {
             let mut vec = Vec::with_capacity(FiniteKripkeFrame::<4>::ALL_FRAMES_COUNT);
@@ -272,6 +271,21 @@ impl FiniteKripkeFrame<4> {
         });
 
         &FRAMES
+    }
+
+    pub fn canonical_frames_grouped_by_accessibility_count()
+    -> &'static BTreeMap<u8, Vec<&'static FiniteKripkeFrame<4>>> {
+        static GROUPED: LazyLock<BTreeMap<u8, Vec<&'static FiniteKripkeFrame<4>>>> =
+            LazyLock::new(|| {
+                let mut map = BTreeMap::new();
+                for frame in FiniteKripkeFrame::<4>::canonical_frames() {
+                    let count = frame.accessibility_relation_count() as u8;
+                    map.entry(count).or_insert_with(Vec::new).push(*frame);
+                }
+                map
+            });
+
+        &GROUPED
     }
 }
 

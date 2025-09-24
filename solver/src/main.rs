@@ -1,3 +1,5 @@
+use std::collections::{BTreeMap, HashSet};
+
 mod finite_kripke_frame;
 mod formula;
 mod offical_game_solver;
@@ -5,13 +7,36 @@ mod parser;
 mod valuation;
 
 fn main() {
-    println!("{:?}", offical_game_solver::come_up_with_strategy());
+    // println!("{:?}", offical_game_solver::come_up_with_strategy());
 
-    // offical_game_solver::search_for_formula_to_split_frames(
-    //     &vec![6046, 6590, 7100]
-    //         .iter()
-    //         .map(|id| finite_kripke_frame::FiniteKripkeFrame::from_u16_id(*id))
-    //         .collect::<Vec<_>>(),
-    //     6,
-    // );
+    let mut minmax_frame_counts = 5000;
+    let mut printed_distribution = HashSet::new();
+    offical_game_solver::search_for_formula_to_split_frames(
+        finite_kripke_frame::FiniteKripkeFrame::<4>::canonical_frames_grouped_by_accessibility_count().get(&4).unwrap(),
+        |grouping| {
+            let frame_counts = grouping
+                .iter()
+                .map(|(k, v)| (k.clone(), v.len()))
+                .collect::<BTreeMap<u8, usize>>();
+            let max_frame_count = frame_counts.iter().map(|(_, v)| *v).max().unwrap_or(5000);
+
+            let do_print = max_frame_count as f32 <= minmax_frame_counts as f32 * 1.5
+                && !(
+                    // if these conditions are true, the current formula is
+                    // probably equivalent/dual to a previously printed one, so skip
+                    printed_distribution.contains(&frame_counts)
+                        || printed_distribution
+                            .contains(&frame_counts.iter().map(|(k, v)| (4 - *k, *v)).collect())
+                );
+
+            if max_frame_count < minmax_frame_counts {
+                minmax_frame_counts = max_frame_count;
+            }
+            if do_print {
+                printed_distribution.insert(frame_counts.clone());
+            }
+            do_print
+        },
+        7,
+    );
 }

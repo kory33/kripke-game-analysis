@@ -13,6 +13,17 @@ pub enum OfficialGamePropVar {
     S,
 }
 
+impl OfficialGamePropVar {
+    pub fn from_ordinal_clamped(ordinal: u8) -> OfficialGamePropVar {
+        match ordinal {
+            0 => OfficialGamePropVar::P,
+            1 => OfficialGamePropVar::Q,
+            2 => OfficialGamePropVar::R,
+            _ => OfficialGamePropVar::S,
+        }
+    }
+}
+
 impl Display for OfficialGamePropVar {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
@@ -224,20 +235,12 @@ EOF
 pub fn come_up_with_strategy() -> KripkeGameStrategy {
     let mut strategies = BTreeMap::new();
 
-    let mut frames_grouped_by_relation_count: BTreeMap<u8, Vec<&'static FiniteKripkeFrame<4>>> =
-        FiniteKripkeFrame::<4>::canonical_frames().into_iter().fold(
-            BTreeMap::new(),
-            |mut acc, frame| {
-                let rel_count = frame.accessibility_relation_count() as u8;
-                acc.entry(rel_count).or_insert_with(Vec::new).push(frame);
-                acc
-            },
-        );
-
     for relation_count in 0u8..=16 {
-        let possible_frames = frames_grouped_by_relation_count
-            .remove(&relation_count)
-            .unwrap_or(vec![]);
+        let possible_frames =
+            FiniteKripkeFrame::<4>::canonical_frames_grouped_by_accessibility_count()
+                .get(&relation_count)
+                .cloned()
+                .unwrap_or(vec![]);
         println!(
             "Computing strategy for relation count = {} (total frames to classify = {})...",
             relation_count,
@@ -262,38 +265,64 @@ pub fn come_up_with_strategy() -> KripkeGameStrategy {
 
 fn enumerate_formulae_of_exact_size(
     size: u8,
-) -> Box<dyn Iterator<Item = Formula<OfficialGamePropVar>>> {
-    static BASE_FORMULAE: LazyLock<Vec<Formula<OfficialGamePropVar>>> = LazyLock::new(|| {
-        vec![
-            Formula::Var(OfficialGamePropVar::P),
-            Formula::Var(OfficialGamePropVar::Q),
-            Formula::True,
-            Formula::False,
-        ]
-    });
-
+    already_used_vars_count: u8,
+) -> Box<
+    dyn Iterator<
+        Item = (
+            Formula<OfficialGamePropVar>,
+            u8, /* used variables count */
+        ),
+    >,
+> {
     if size <= 1 {
-        Box::new(BASE_FORMULAE.iter().cloned())
+        Box::new(chain!(
+            vec![Formula::True, Formula::False]
+                .into_iter()
+                .map(move |f| (f, already_used_vars_count)),
+            // always use variables in increasing order (Do not use Q before using P etc.)
+            (0..already_used_vars_count).map(move |i| {
+                (
+                    Formula::Var(OfficialGamePropVar::from_ordinal_clamped(i)),
+                    already_used_vars_count,
+                )
+            }),
+            if already_used_vars_count < 4 {
+                vec![(
+                    Formula::Var(OfficialGamePropVar::from_ordinal_clamped(
+                        already_used_vars_count,
+                    )),
+                    already_used_vars_count + 1,
+                )]
+                .into_iter()
+            } else {
+                vec![].into_iter()
+            }
+        ))
     } else {
         Box::new(chain!(
-            enumerate_formulae_of_exact_size(size - 1).map(|f| Formula::Not(Box::new(f))),
-            enumerate_formulae_of_exact_size(size - 1).map(|f| Formula::MBox(Box::new(f))),
-            enumerate_formulae_of_exact_size(size - 1).map(|f| Formula::MDia(Box::new(f))),
+            enumerate_formulae_of_exact_size(size - 1, already_used_vars_count)
+                .map(|(f, uvc)| (Formula::Not(Box::new(f)), uvc)),
+            enumerate_formulae_of_exact_size(size - 1, already_used_vars_count)
+                .map(|(f, uvc)| (Formula::MBox(Box::new(f)), uvc)),
+            enumerate_formulae_of_exact_size(size - 1, already_used_vars_count)
+                .map(|(f, uvc)| (Formula::MDia(Box::new(f)), uvc)),
             (1..(size - 1))
                 .flat_map(|left_size| {
                     let right_size = size - 1 - left_size;
-                    enumerate_formulae_of_exact_size(left_size)
-                        .flat_map(move |f1| {
-                            enumerate_formulae_of_exact_size(right_size)
-                                .map(move |f2| (f1.clone(), f2))
+                    enumerate_formulae_of_exact_size(left_size, already_used_vars_count)
+                        .flat_map(move |(f1, uvc1)| {
+                            enumerate_formulae_of_exact_size(right_size, uvc1)
+                                .map(move |(f2, uvc2)| (f1.clone(), f2, uvc2))
                         })
-                        .flat_map(|(f1, f2)| {
+                        .flat_map(|(f1, f2, uvc2)| {
                             vec![
                                 Formula::And(Box::new(f1.clone()), Box::new(f2.clone())),
                                 Formula::Or(Box::new(f1.clone()), Box::new(f2.clone())),
                                 Formula::Imp(Box::new(f1.clone()), Box::new(f2.clone())),
                                 Formula::Iff(Box::new(f1.clone()), Box::new(f2)),
                             ]
+                            .into_iter()
+                            .map(move |f| (f, uvc2))
                         })
                 })
                 .collect::<Vec<_>>()
@@ -302,36 +331,26 @@ fn enumerate_formulae_of_exact_size(
     }
 }
 
-fn enumerate_formulae_up_to_size(
-    size: u8,
-) -> Box<dyn Iterator<Item = Formula<OfficialGamePropVar>>> {
-    Box::new((1..=size).flat_map(enumerate_formulae_of_exact_size))
+fn enumerate_formulae_up_to_size(size: u8) -> impl Iterator<Item = Formula<OfficialGamePropVar>> {
+    Box::new((1..=size).flat_map(|s| enumerate_formulae_of_exact_size(s, 0))).map(|(f, _)| f)
 }
 
 pub fn search_for_formula_to_split_frames(
     frames: &[&'static FiniteKripkeFrame<4>],
+    mut printing_condition: impl FnMut(&BTreeMap<u8, Vec<&'static FiniteKripkeFrame<4>>>) -> bool,
     formula_size_bound: u8,
 ) {
     for formula in enumerate_formulae_up_to_size(formula_size_bound) {
         let grouping = answer_distribution_for_query(frames, &formula);
-        if grouping.len() > 1 {
+        if printing_condition(&grouping) {
             println!(
-                "Formula {} splits {} frames into groups of sizes: {{{}}} ({{{}}})",
+                "Formula {} splits {} frames into groups of sizes: {{{}}}",
                 formula,
                 frames.len(),
                 grouping
                     .iter()
                     .sorted_by_key(|e| e.0)
                     .map(|(k, v)| format!("{}: {}", k, v.len()))
-                    .join(", "),
-                grouping
-                    .iter()
-                    .sorted_by_key(|e| e.0)
-                    .map(|(k, v)| format!(
-                        "{}: [{}]",
-                        k,
-                        v.iter().map(|f| f.to_u16_id()).join(", ")
-                    ))
                     .join(", "),
             );
         }
