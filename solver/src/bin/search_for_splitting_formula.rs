@@ -1,15 +1,11 @@
+extern crate kripke_game_solver;
+
+use kripke_game_solver::*;
 use std::collections::{BTreeMap, HashSet};
 
-mod finite_kripke_frame;
-mod formula;
-mod offical_game_solver;
-mod parser;
-mod valuation;
-
 fn main() {
-    // println!("{:?}", offical_game_solver::come_up_with_strategy());
-
-    let mut minmax_frame_counts = 5000;
+    let mut minmax_frame_counts =
+        finite_kripke_frame::FiniteKripkeFrame::<4>::canonical_frames().len();
     let mut printed_distribution = HashSet::new();
     offical_game_solver::search_for_formula_to_split_frames(
         finite_kripke_frame::FiniteKripkeFrame::<4>::canonical_frames_grouped_by_accessibility_count().get(&4).unwrap(),
