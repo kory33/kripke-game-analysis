@@ -4,7 +4,7 @@ use itertools::{Itertools, chain};
 
 use crate::{finite_kripke_frame::FiniteKripkeFrame, formula::Formula};
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[allow(dead_code)]
 pub enum OfficialGamePropVar {
     P,
@@ -35,7 +35,7 @@ impl Display for OfficialGamePropVar {
     }
 }
 
-mod parsing {
+pub mod parsing {
     use super::OfficialGamePropVar;
 
     pub fn parse_official_game_formula(
@@ -108,7 +108,7 @@ impl DiagnosticTrace {
     }
 }
 
-fn answer_distribution_for_query(
+pub fn answer_distribution_for_query(
     possible_frames: &[&'static FiniteKripkeFrame<4>],
     query: &Formula<OfficialGamePropVar>,
 ) -> BTreeMap<u8, Vec<&'static FiniteKripkeFrame<4>>> {
@@ -331,8 +331,16 @@ fn enumerate_formulae_of_exact_size(
     }
 }
 
-fn enumerate_formulae_up_to_size(size: u8) -> impl Iterator<Item = Formula<OfficialGamePropVar>> {
+pub fn enumerate_formulae_up_to_size(
+    size: u8,
+) -> impl Iterator<Item = Formula<OfficialGamePropVar>> {
     Box::new((1..=size).flat_map(|s| enumerate_formulae_of_exact_size(s, 0))).map(|(f, _)| f)
+}
+
+pub fn indefinitely_enumelate_formulae() -> impl Iterator<Item = Formula<OfficialGamePropVar>> {
+    (1..)
+        .flat_map(|s| enumerate_formulae_of_exact_size(s, 0))
+        .map(|(f, _)| f)
 }
 
 pub fn search_for_formula_to_split_frames(

@@ -208,6 +208,10 @@ impl FiniteKripkeFrame<4> {
         &CACHE[id as usize]
     }
 
+    pub fn swap_to_cached(&self) -> &'static FiniteKripkeFrame<4> {
+        FiniteKripkeFrame::<4>::from_u16_id(self.to_u16_id())
+    }
+
     fn canonicalized_frame_id(id: u16) -> u16 {
         static CACHE: LazyLock<Vec<u16>> = LazyLock::new(|| {
             // initially let all elements look at the empty frame
@@ -232,6 +236,10 @@ impl FiniteKripkeFrame<4> {
         });
 
         CACHE[id as usize]
+    }
+
+    pub fn canonicalize(&self) -> &'static FiniteKripkeFrame<4> {
+        FiniteKripkeFrame::<4>::from_u16_id(Self::canonicalized_frame_id(self.to_u16_id()))
     }
 
     fn frame_at_id_is_canonical(id: u16) -> bool {
