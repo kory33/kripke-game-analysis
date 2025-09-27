@@ -33,8 +33,8 @@ An initial visible state has an empty list of queries; only the edge count is kn
 
 On each move (provided we still have a query budget remaining) we may choose any modal formula φ built from the fixed set of variables (p, q, r, s in the official version of the game) using the usual connectives, verum/falsum and modal operators Box/Dia. We submit φ as a query.
 
-The answer we immediately receive is the number of worlds in the hidden frame F that satisfy φ. The relation "satisfy" is the usual one for Kripke semantics of modal logic: a world w satisfies
- - a propositional variable p if p is true at w
+The answer we immediately receive is the number of worlds in the hidden frame F that satisfy φ. The relation "satisfy" is the usual one for Kripke semantics of modal logic: Under a valuation `v: W × {P, Q, R, S} → bool` a world `w: W` satisfies
+ - a propositional variable p if `v(w, P) == true`
  - ⊤ (verum) always
  - ⊥ (falsum) never
  - ¬φ if w does not satisfy φ
@@ -43,6 +43,8 @@ The answer we immediately receive is the number of worlds in the hidden frame F 
  - φ ∧ ψ if w satisfies φ and w satisfies ψ
  - φ ∨ ψ if w satisfies φ or w satisfies ψ
  - φ → ψ if w does not satisfy φ or w satisfies ψ
+
+and a world `w: W` satisfies `φ` if all `w` satisfies `φ` under all valuations `v`.
 
 The visible game state is extended by cons-ing (φ, answer) onto the front of the list.
 
