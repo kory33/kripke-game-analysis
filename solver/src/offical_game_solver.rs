@@ -263,70 +263,83 @@ pub fn come_up_with_strategy() -> KripkeGameStrategy {
     KripkeGameStrategy(strategies)
 }
 
-fn enumerate_formulae_of_exact_size(
+fn size_1_formulae(
+    already_used_vars_count: u8,
+) -> impl Iterator<Item = (Formula<OfficialGamePropVar>, u8)> {
+    chain!(
+        vec![Formula::True, Formula::False]
+            .into_iter()
+            .map(move |f| (f, already_used_vars_count)),
+        // always use variables in increasing order (Do not use Q before using P etc.)
+        (0..already_used_vars_count).map(move |i| {
+            (
+                Formula::Var(OfficialGamePropVar::from_ordinal_clamped(i)),
+                already_used_vars_count,
+            )
+        }),
+        if already_used_vars_count < 4 {
+            vec![(
+                Formula::Var(OfficialGamePropVar::from_ordinal_clamped(
+                    already_used_vars_count,
+                )),
+                already_used_vars_count + 1,
+            )]
+            .into_iter()
+        } else {
+            vec![].into_iter()
+        }
+    )
+}
+
+fn lazy_iter<I, It: Iterator<Item = I>>(it: impl Fn() -> It) -> impl Iterator<Item = I> {
+    std::iter::once(()).flat_map(move |()| it())
+}
+
+pub fn enumerate_formulae_of_exact_size(
     size: u8,
     already_used_vars_count: u8,
 ) -> Box<
     dyn Iterator<
-        Item = (
-            Formula<OfficialGamePropVar>,
-            u8, /* used variables count */
-        ),
-    >,
+            Item = (
+                Formula<OfficialGamePropVar>,
+                u8, /* used variables count */
+            ),
+        > + Send,
 > {
     if size <= 1 {
-        Box::new(chain!(
-            vec![Formula::True, Formula::False]
-                .into_iter()
-                .map(move |f| (f, already_used_vars_count)),
-            // always use variables in increasing order (Do not use Q before using P etc.)
-            (0..already_used_vars_count).map(move |i| {
-                (
-                    Formula::Var(OfficialGamePropVar::from_ordinal_clamped(i)),
-                    already_used_vars_count,
-                )
-            }),
-            if already_used_vars_count < 4 {
-                vec![(
-                    Formula::Var(OfficialGamePropVar::from_ordinal_clamped(
-                        already_used_vars_count,
-                    )),
-                    already_used_vars_count + 1,
-                )]
-                .into_iter()
-            } else {
-                vec![].into_iter()
-            }
-        ))
+        Box::new(size_1_formulae(already_used_vars_count))
     } else {
         Box::new(chain!(
-            enumerate_formulae_of_exact_size(size - 1, already_used_vars_count)
-                .map(|(f, uvc)| (Formula::Not(Box::new(f)), uvc)),
-            enumerate_formulae_of_exact_size(size - 1, already_used_vars_count)
-                .map(|(f, uvc)| (Formula::MBox(Box::new(f)), uvc)),
-            enumerate_formulae_of_exact_size(size - 1, already_used_vars_count)
-                .map(|(f, uvc)| (Formula::MDia(Box::new(f)), uvc)),
-            (1..(size - 1))
-                .flat_map(|left_size| {
-                    let right_size = size - 1 - left_size;
-                    enumerate_formulae_of_exact_size(left_size, already_used_vars_count)
-                        .flat_map(move |(f1, uvc1)| {
-                            enumerate_formulae_of_exact_size(right_size, uvc1)
-                                .map(move |(f2, uvc2)| (f1.clone(), f2, uvc2))
-                        })
-                        .flat_map(|(f1, f2, uvc2)| {
-                            vec![
-                                Formula::And(Box::new(f1.clone()), Box::new(f2.clone())),
-                                Formula::Or(Box::new(f1.clone()), Box::new(f2.clone())),
-                                Formula::Imp(Box::new(f1.clone()), Box::new(f2.clone())),
-                                Formula::Iff(Box::new(f1.clone()), Box::new(f2)),
-                            ]
-                            .into_iter()
-                            .map(move |f| (f, uvc2))
-                        })
-                })
-                .collect::<Vec<_>>()
-                .into_iter()
+            lazy_iter(
+                move || enumerate_formulae_of_exact_size(size - 1, already_used_vars_count)
+                    .map(|(f, uvc)| (Formula::Not(Box::new(f)), uvc))
+            ),
+            lazy_iter(
+                move || enumerate_formulae_of_exact_size(size - 1, already_used_vars_count)
+                    .map(|(f, uvc)| (Formula::MBox(Box::new(f)), uvc))
+            ),
+            lazy_iter(
+                move || enumerate_formulae_of_exact_size(size - 1, already_used_vars_count)
+                    .map(|(f, uvc)| (Formula::MDia(Box::new(f)), uvc))
+            ),
+            (1..(size - 1)).flat_map(move |left_size| {
+                let right_size = size - 1 - left_size;
+                enumerate_formulae_of_exact_size(left_size, already_used_vars_count)
+                    .flat_map(move |(f1, uvc1)| {
+                        enumerate_formulae_of_exact_size(right_size, uvc1)
+                            .map(move |(f2, uvc2)| (f1.clone(), f2, uvc2))
+                    })
+                    .flat_map(|(f1, f2, uvc2)| {
+                        vec![
+                            Formula::And(Box::new(f1.clone()), Box::new(f2.clone())),
+                            Formula::Or(Box::new(f1.clone()), Box::new(f2.clone())),
+                            Formula::Imp(Box::new(f1.clone()), Box::new(f2.clone())),
+                            Formula::Iff(Box::new(f1.clone()), Box::new(f2)),
+                        ]
+                        .into_iter()
+                        .map(move |f| (f, uvc2))
+                    })
+            })
         ))
     }
 }
@@ -337,7 +350,7 @@ pub fn enumerate_formulae_up_to_size(
     Box::new((1..=size).flat_map(|s| enumerate_formulae_of_exact_size(s, 0))).map(|(f, _)| f)
 }
 
-pub fn indefinitely_enumelate_formulae() -> impl Iterator<Item = Formula<OfficialGamePropVar>> {
+pub fn indefinitely_enumerate_formulae() -> impl Iterator<Item = Formula<OfficialGamePropVar>> {
     (1..)
         .flat_map(|s| enumerate_formulae_of_exact_size(s, 0))
         .map(|(f, _)| f)
