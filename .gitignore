@@ -2,3 +2,6 @@
 
 .vscode/mcp.json
 .vscode/settings.json
+.vscode/launch.json
+
+target
