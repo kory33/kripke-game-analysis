@@ -1,0 +1,44 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/rust
+{
+    "name": "Rust",
+    // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": "."
+    },
+    "remoteUser": "vscode",
+    "features": {
+        "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {}
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "GitHub.copilot",
+                "Anthropic.claude-code",
+                "rust-lang.rust-analyzer",
+                "leanprover.lean4"
+            ],
+            "settings": {
+                "files.eol": "\n",
+                "files.insertFinalNewline": true,
+                "files.trimFinalNewlines": true,
+                "files.trimTrailingWhitespace": true,
+                "rust-analyzer.cargo.allFeatures": true,
+                "editor.formatOnSave": true
+            }
+        }
+    },
+    "workspaceFolder": "/workspace",
+    "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
+    "mounts": [
+        "source=claudeconfig-${devcontainerId},target=/home/vscode/.claude,type=volume",
+        "source=elan-toolchains-${devcontainerId},target=/home/vscode/.elan,type=volume",
+        "source=rustup-toolchains-${devcontainerId},target=/home/vscode/.rustup,type=volume",
+        "source=commandhistory-${devcontainerId},target=/commandhistory,type=volume"
+    ],
+    "containerEnv": {
+        "CLAUDE_CONFIG_DIR": "/home/vscode/.claude"
+    },
+    "postCreateCommand": "/workspace/.devcontainer/post-create.sh"
+}
