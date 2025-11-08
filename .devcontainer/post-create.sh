@@ -13,7 +13,7 @@ source "${HOME}/.elan/env"
 echo 'source "${HOME}/.elan/env"' >> "${HOME}/.bashrc"
 cd /workspace/main-proofs && elan show
 
-echo <<EOF
+cat <<EOF
 =========================
 
 Setup complete! You can now use Rust and Lean.
