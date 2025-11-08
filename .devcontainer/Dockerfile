@@ -2,6 +2,10 @@ FROM mcr.microsoft.com/devcontainers/base:bookworm
 
 ARG USERNAME=vscode
 
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    dos2unix \
+    && rm -rf /var/lib/apt/lists/*
+
 # Used to persist bash history as per https://code.visualstudio.com/remote/advancedcontainers/persist-bash-history
 RUN SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhistory/.bash_history" \
     && mkdir /commandhistory \
