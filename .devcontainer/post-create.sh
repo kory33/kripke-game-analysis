@@ -13,14 +13,20 @@ source "${HOME}/.elan/env"
 echo 'source "${HOME}/.elan/env"' >> "${HOME}/.bashrc"
 cd /workspace/main-proofs && elan show
 
+echo "=========================
+Setting up Lean project...
+========================="
+
+# Update and fetch mathlib cache
+cd /workspace/main-proofs && lake exe cache get
+
 cat <<EOF
+
 =========================
+Setup complete!
 
-Setup complete! You can now use Rust and Lean.
-
-We recommend downloading pre-built binaries for mathlib. To do so, run:
-
-cd /workspace/main-proofs && lake update mathlib && lake exe cache get
+You can now build the project with:
+  cd /workspace/main-proofs && lake build
 
 =========================
 EOF
