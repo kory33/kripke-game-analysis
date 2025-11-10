@@ -4,2887 +4,2885 @@ import KripkeGameAnalysis.Game.Strategy.Basic
 
 namespace KripkeGameAnalysis.Generated
 
-def strategy_for_relation_count_0 : KripkeGameStrategy 4 :=
-  KripkeGameStrategy.proceedWithExhaustiveSearch
+def strategy_for_relation_count_0 : KripkeGamePartialStrategy 4 :=
+  KripkeGamePartialStrategy.proceedWithExhaustiveSearch
 
-def strategy_for_relation_count_1 : KripkeGameStrategy 4 :=
-  KripkeGameStrategy.proceedWithExhaustiveSearch
+def strategy_for_relation_count_1 : KripkeGamePartialStrategy 4 :=
+  KripkeGamePartialStrategy.proceedWithExhaustiveSearch
 
-def strategy_for_relation_count_2 : KripkeGameStrategy 4 :=
-  KripkeGameStrategy.proceedWithExhaustiveSearch
+def strategy_for_relation_count_2 : KripkeGamePartialStrategy 4 :=
+  KripkeGamePartialStrategy.proceedWithExhaustiveSearch
 
-def strategy_for_relation_count_3 : KripkeGameStrategy 4 :=
-  (KripkeGameStrategy.askQueryAndThen
+def strategy_for_relation_count_3 : KripkeGamePartialStrategy 4 :=
+  (KripkeGamePartialStrategy.askQueryAndThen
     (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
-    (fun answer => match answer with
-    | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-    | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-    | 2 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))))
-        (fun answer => match answer with
-        | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        ))
-    | 3 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
-        (fun answer => match answer with
-        | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        ))
-    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-    ))
+    #[
+    KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+    KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))))
+      #[
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+    ]),
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
+      #[
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+    ]),
+    KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+  ])
 
-def strategy_for_relation_count_4 : KripkeGameStrategy 4 :=
-  (KripkeGameStrategy.askQueryAndThen
+def strategy_for_relation_count_4 : KripkeGamePartialStrategy 4 :=
+  (KripkeGamePartialStrategy.askQueryAndThen
     (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
-    (fun answer => match answer with
-    | 0 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
-        (fun answer => match answer with
-        | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        ))
-    | 1 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
-        (fun answer => match answer with
-        | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        ))
-    | 2 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
-        (fun answer => match answer with
-        | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 2 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 3 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 4 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.dia (ModalFormula.box (ModalFormula.var (KripkeGameVars.p) |> ModalFormula.and (ModalFormula.not (ModalFormula.var (KripkeGameVars.p))))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        ))
-    | 3 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-        (fun answer => match answer with
-        | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        ))
-    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-    ))
-
-def strategy_for_relation_count_5 : KripkeGameStrategy 4 :=
-  (KripkeGameStrategy.askQueryAndThen
-    (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
-    (fun answer => match answer with
-    | 0 => (KripkeGameStrategy.askQueryAndThen
+    #[
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
+      #[
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+    ]),
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
+      #[
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+    ]),
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
+      #[
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      (KripkeGamePartialStrategy.askQueryAndThen
         (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))))
-        (fun answer => match answer with
-        | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        ))
-    | 1 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.dia (ModalFormula.p)))))
-        (fun answer => match answer with
-        | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 2 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 3 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        ))
-    | 2 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-        (fun answer => match answer with
-        | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 1 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 2 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.dia (ModalFormula.box (ModalFormula.var (KripkeGameVars.p) |> ModalFormula.and (ModalFormula.not (ModalFormula.var (KripkeGameVars.p))))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 3 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        ))
-    | 3 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
-        (fun answer => match answer with
-        | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 1 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 2 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 3 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        ))
-    | 4 => (KripkeGameStrategy.askQueryAndThen
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
         (ModalFormula.dia (ModalFormula.box (ModalFormula.var (KripkeGameVars.p) |> ModalFormula.and (ModalFormula.not (ModalFormula.var (KripkeGameVars.p))))))
-        (fun answer => match answer with
-        | 0 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 2 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        ))
-    ))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ])
+    ]),
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+      #[
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+    ]),
+    KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+  ])
 
-def strategy_for_relation_count_6 : KripkeGameStrategy 4 :=
-  (KripkeGameStrategy.askQueryAndThen
+def strategy_for_relation_count_5 : KripkeGamePartialStrategy 4 :=
+  (KripkeGamePartialStrategy.askQueryAndThen
     (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
-    (fun answer => match answer with
-    | 0 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-        (fun answer => match answer with
-        | 0 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 1 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
-            (fun answer => match answer with
-            | 0 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 1 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.dia (ModalFormula.p)))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 2 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.dia (ModalFormula.p)))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 3 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        ))
-    | 1 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
-        (fun answer => match answer with
-        | 0 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 1 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.dia (ModalFormula.box (ModalFormula.var (KripkeGameVars.p) |> ModalFormula.and (ModalFormula.not (ModalFormula.var (KripkeGameVars.p))))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.dia (ModalFormula.p)))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 2 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 3 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 4 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            ))
-        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        ))
-    | 2 => (KripkeGameStrategy.askQueryAndThen
+    #[
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))))
+      #[
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+    ]),
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.dia (ModalFormula.p)))))
+      #[
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      (KripkeGamePartialStrategy.askQueryAndThen
         (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-        (fun answer => match answer with
-        | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 1 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 2 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 3 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 4 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        ))
-    | 3 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-        (fun answer => match answer with
-        | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 1 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 2 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.dia (ModalFormula.p)) (ModalFormula.box (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 3 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 4 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        ))
-    | 4 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
-        (fun answer => match answer with
-        | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 1 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 2 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 3 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 4 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        ))
-    ))
-
-def strategy_for_relation_count_7 : KripkeGameStrategy 4 :=
-  (KripkeGameStrategy.askQueryAndThen
-    (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-    (fun answer => match answer with
-    | 0 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
-        (fun answer => match answer with
-        | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 1 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 2 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        ))
-    | 1 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.dia (ModalFormula.p)))))
-        (fun answer => match answer with
-        | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 1 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 2 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 3 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.dia (ModalFormula.box (ModalFormula.var (KripkeGameVars.p) |> ModalFormula.and (ModalFormula.not (ModalFormula.var (KripkeGameVars.p))))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 4 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 4 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            ))
-        ))
-    | 2 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
-        (fun answer => match answer with
-        | 0 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 1 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 1 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => (KripkeGameStrategy.askQueryAndThen
-                    (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
-                    (fun answer => match answer with
-                    | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    ))
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 4 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => (KripkeGameStrategy.askQueryAndThen
-                    (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.dia (ModalFormula.p)))))
-                    (fun answer => match answer with
-                    | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    ))
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            ))
-        | 2 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 3 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        ))
-    | 3 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
-        (fun answer => match answer with
-        | 0 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 1 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => (KripkeGameStrategy.askQueryAndThen
-                    (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
-                    (fun answer => match answer with
-                    | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    ))
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => (KripkeGameStrategy.askQueryAndThen
-                    (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
-                    (fun answer => match answer with
-                    | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    ))
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 2 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 3 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        ))
-    | 4 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
-        (fun answer => match answer with
-        | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 1 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 2 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.dia (ModalFormula.p)) (ModalFormula.box (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 4 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            ))
-        | 3 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 4 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 4 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            ))
-        ))
-    ))
-
-def strategy_for_relation_count_8 : KripkeGameStrategy 4 :=
-  (KripkeGameStrategy.askQueryAndThen
-    (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
-    (fun answer => match answer with
-    | 0 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
-        (fun answer => match answer with
-        | 0 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 1 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 2 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 1 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => (KripkeGameStrategy.askQueryAndThen
-                    (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
-                    (fun answer => match answer with
-                    | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    ))
-                | 2 => (KripkeGameStrategy.askQueryAndThen
-                    (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-                    (fun answer => match answer with
-                    | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    ))
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 3 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 4 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        ))
-    | 1 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
-        (fun answer => match answer with
-        | 0 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 1 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => (KripkeGameStrategy.askQueryAndThen
-                    (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))))
-                    (fun answer => match answer with
-                    | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    ))
-                | 4 => (KripkeGameStrategy.askQueryAndThen
-                    (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
-                    (fun answer => match answer with
-                    | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    ))
-                ))
-            | 3 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => (KripkeGameStrategy.askQueryAndThen
-                    (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-                    (fun answer => match answer with
-                    | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 2 => (KripkeGameStrategy.askQueryAndThen
-                        (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
-                        (fun answer => match answer with
-                        | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                        | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                        | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                        | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                        ))
-                    | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    ))
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 4 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            ))
-        | 2 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
-            (fun answer => match answer with
-            | 0 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => (KripkeGameStrategy.askQueryAndThen
-                    (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.dia (ModalFormula.p)))))
-                    (fun answer => match answer with
-                    | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    ))
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 1 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => (KripkeGameStrategy.askQueryAndThen
-                    (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
-                    (fun answer => match answer with
-                    | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    ))
-                | 3 => (KripkeGameStrategy.askQueryAndThen
-                    (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))))
-                    (fun answer => match answer with
-                    | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    ))
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => (KripkeGameStrategy.askQueryAndThen
-                    (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-                    (fun answer => match answer with
-                    | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    ))
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 3 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => (KripkeGameStrategy.askQueryAndThen
-                    (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
-                    (fun answer => match answer with
-                    | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    ))
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        ))
-    | 2 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
-        (fun answer => match answer with
-        | 0 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 1 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => (KripkeGameStrategy.askQueryAndThen
-                    (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
-                    (fun answer => match answer with
-                    | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    ))
-                | 4 => (KripkeGameStrategy.askQueryAndThen
-                    (ModalFormula.implies (ModalFormula.dia (ModalFormula.p)) (ModalFormula.box (ModalFormula.p)))
-                    (fun answer => match answer with
-                    | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    ))
-                ))
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 1 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.dia (ModalFormula.p)))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => (KripkeGameStrategy.askQueryAndThen
-                    (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p)))
-                    (fun answer => match answer with
-                    | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    ))
-                | 4 => (KripkeGameStrategy.askQueryAndThen
-                    (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-                    (fun answer => match answer with
-                    | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    ))
-                ))
-            | 3 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => (KripkeGameStrategy.askQueryAndThen
-                    (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
-                    (fun answer => match answer with
-                    | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    ))
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 4 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            ))
-        | 2 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.dia (ModalFormula.box (ModalFormula.var (KripkeGameVars.p) |> ModalFormula.and (ModalFormula.not (ModalFormula.var (KripkeGameVars.p))))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 4 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.dia (ModalFormula.p)))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            ))
-        | 3 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        ))
-    | 3 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
-        (fun answer => match answer with
-        | 0 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.dia (ModalFormula.p)) (ModalFormula.box (ModalFormula.p)))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 1 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 2 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 3 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 4 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        ))
-    | 4 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
-        (fun answer => match answer with
-        | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 2 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p)))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 3 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 4 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        ))
-    ))
-
-def strategy_for_relation_count_9 : KripkeGameStrategy 4 :=
-  (KripkeGameStrategy.askQueryAndThen
-    (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
-    (fun answer => match answer with
-    | 0 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-        (fun answer => match answer with
-        | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 1 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => (KripkeGameStrategy.askQueryAndThen
-                    (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))))
-                    (fun answer => match answer with
-                    | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    ))
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 2 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => (KripkeGameStrategy.askQueryAndThen
-                    (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
-                    (fun answer => match answer with
-                    | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    ))
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => (KripkeGameStrategy.askQueryAndThen
-                    (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
-                    (fun answer => match answer with
-                    | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    ))
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 3 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 4 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        ))
-    | 1 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
-        (fun answer => match answer with
-        | 0 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 4 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            ))
-        | 1 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => (KripkeGameStrategy.askQueryAndThen
-                    (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-                    (fun answer => match answer with
-                    | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    ))
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => (KripkeGameStrategy.askQueryAndThen
-                    (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
-                    (fun answer => match answer with
-                    | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    ))
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 4 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => (KripkeGameStrategy.askQueryAndThen
-                    (ModalFormula.implies (ModalFormula.dia (ModalFormula.p)) (ModalFormula.box (ModalFormula.p)))
-                    (fun answer => match answer with
-                    | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    ))
-                | 2 => (KripkeGameStrategy.askQueryAndThen
-                    (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
-                    (fun answer => match answer with
-                    | 0 => (KripkeGameStrategy.askQueryAndThen
-                        (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-                        (fun answer => match answer with
-                        | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                        | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                        | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                        | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                        ))
-                    | 1 => (KripkeGameStrategy.askQueryAndThen
-                        (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-                        (fun answer => match answer with
-                        | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                        | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                        | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                        | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                        ))
-                    | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    ))
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            ))
-        | 2 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
-            (fun answer => match answer with
-            | 0 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 1 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => (KripkeGameStrategy.askQueryAndThen
-                    (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p)))
-                    (fun answer => match answer with
-                    | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    ))
-                | 4 => (KripkeGameStrategy.askQueryAndThen
-                    (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
-                    (fun answer => match answer with
-                    | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    ))
-                ))
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => (KripkeGameStrategy.askQueryAndThen
-                    (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-                    (fun answer => match answer with
-                    | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    ))
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 3 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        ))
-    | 2 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
-        (fun answer => match answer with
-        | 0 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.dia (ModalFormula.p)) (ModalFormula.box (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 1 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 1 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 4 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => (KripkeGameStrategy.askQueryAndThen
-                    (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-                    (fun answer => match answer with
-                    | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    ))
-                | 4 => (KripkeGameStrategy.askQueryAndThen
-                    (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
-                    (fun answer => match answer with
-                    | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    ))
-                ))
-            ))
-        | 2 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => (KripkeGameStrategy.askQueryAndThen
-                    (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-                    (fun answer => match answer with
-                    | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    ))
-                | 1 => (KripkeGameStrategy.askQueryAndThen
-                    (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
-                    (fun answer => match answer with
-                    | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    ))
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 3 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        ))
-    | 3 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
-        (fun answer => match answer with
-        | 0 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.dia (ModalFormula.p)) (ModalFormula.box (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 1 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 2 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        ))
-    | 4 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
-        (fun answer => match answer with
-        | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 1 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 2 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p)))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 3 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        ))
-    ))
-
-def strategy_for_relation_count_10 : KripkeGameStrategy 4 :=
-  (KripkeGameStrategy.askQueryAndThen
-    (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
-    (fun answer => match answer with
-    | 0 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
-        (fun answer => match answer with
-        | 0 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 1 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => (KripkeGameStrategy.askQueryAndThen
-                    (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-                    (fun answer => match answer with
-                    | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    ))
-                | 3 => (KripkeGameStrategy.askQueryAndThen
-                    (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
-                    (fun answer => match answer with
-                    | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    ))
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 2 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            ))
-        | 3 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        ))
-    | 1 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
-        (fun answer => match answer with
-        | 0 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => (KripkeGameStrategy.askQueryAndThen
-                    (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
-                    (fun answer => match answer with
-                    | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    ))
-                | 4 => (KripkeGameStrategy.askQueryAndThen
-                    (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-                    (fun answer => match answer with
-                    | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    ))
-                ))
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 1 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => (KripkeGameStrategy.askQueryAndThen
-                    (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
-                    (fun answer => match answer with
-                    | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    ))
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => (KripkeGameStrategy.askQueryAndThen
-                    (ModalFormula.implies (ModalFormula.dia (ModalFormula.p)) (ModalFormula.box (ModalFormula.p)))
-                    (fun answer => match answer with
-                    | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 1 => (KripkeGameStrategy.askQueryAndThen
-                        (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
-                        (fun answer => match answer with
-                        | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                        | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                        | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                        | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                        ))
-                    | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                    ))
-                ))
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 2 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        ))
-    | 2 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-        (fun answer => match answer with
-        | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 1 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
-            (fun answer => match answer with
-            | 0 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 1 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.dia (ModalFormula.p)) (ModalFormula.box (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 2 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 4 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            ))
-        | 3 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        ))
-    | 3 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-        (fun answer => match answer with
-        | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 1 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 2 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        ))
-    | 4 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
-        (fun answer => match answer with
-        | 0 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 1 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 2 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            ))
-        | 3 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        ))
-    ))
-
-def strategy_for_relation_count_11 : KripkeGameStrategy 4 :=
-  (KripkeGameStrategy.askQueryAndThen
-    (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
-    (fun answer => match answer with
-    | 0 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
-        (fun answer => match answer with
-        | 0 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 1 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 2 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        ))
-    | 1 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
-        (fun answer => match answer with
-        | 0 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 1 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.dia (ModalFormula.p)) (ModalFormula.box (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 2 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 2 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        ))
-    | 2 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-        (fun answer => match answer with
-        | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 1 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 2 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => (KripkeGameStrategy.askQueryAndThen
-                (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
-                (fun answer => match answer with
-                | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-                ))
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        ))
-    | 3 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
-        (fun answer => match answer with
-        | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        ))
-    | 4 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
-        (fun answer => match answer with
-        | 0 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 1 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 2 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        ))
-    ))
-
-def strategy_for_relation_count_12 : KripkeGameStrategy 4 :=
-  (KripkeGameStrategy.askQueryAndThen
-    (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
-    (fun answer => match answer with
-    | 0 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
-        (fun answer => match answer with
-        | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        ))
-    | 1 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-        (fun answer => match answer with
-        | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 2 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        ))
-    | 2 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-        (fun answer => match answer with
-        | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 1 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        ))
-    | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-    | 4 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
-        (fun answer => match answer with
-        | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 1 => (KripkeGameStrategy.askQueryAndThen
-            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-            (fun answer => match answer with
-            | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-            ))
-        | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        ))
-    ))
-
-def strategy_for_relation_count_13 : KripkeGameStrategy 4 :=
-  (KripkeGameStrategy.askQueryAndThen
-    (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
-    (fun answer => match answer with
-    | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-    | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-    | 2 => (KripkeGameStrategy.askQueryAndThen
-        (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
-        (fun answer => match answer with
-        | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        ))
-    | 3 => (KripkeGameStrategy.askQueryAndThen
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
         (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
-        (fun answer => match answer with
-        | 0 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 1 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 2 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 3 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-        ))
-    | 4 => KripkeGameStrategy.proceedWithExhaustiveSearch
-    ))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+    ]),
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+      #[
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.dia (ModalFormula.box (ModalFormula.var (KripkeGameVars.p) |> ModalFormula.and (ModalFormula.not (ModalFormula.var (KripkeGameVars.p))))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+    ]),
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
+      #[
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+    ]),
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.dia (ModalFormula.box (ModalFormula.var (KripkeGameVars.p) |> ModalFormula.and (ModalFormula.not (ModalFormula.var (KripkeGameVars.p))))))
+      #[
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+    ])
+  ])
 
-def strategy_for_relation_count_14 : KripkeGameStrategy 4 :=
-  KripkeGameStrategy.proceedWithExhaustiveSearch
+def strategy_for_relation_count_6 : KripkeGamePartialStrategy 4 :=
+  (KripkeGamePartialStrategy.askQueryAndThen
+    (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
+    #[
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+      #[
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
+        #[
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.dia (ModalFormula.p)))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.dia (ModalFormula.p)))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+    ]),
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
+      #[
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.dia (ModalFormula.box (ModalFormula.var (KripkeGameVars.p) |> ModalFormula.and (ModalFormula.not (ModalFormula.var (KripkeGameVars.p))))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.dia (ModalFormula.p)))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ])
+      ]),
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+    ]),
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+      #[
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ])
+    ]),
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+      #[
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.dia (ModalFormula.p)) (ModalFormula.box (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ])
+    ]),
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
+      #[
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ])
+    ])
+  ])
 
-def strategy_for_relation_count_15 : KripkeGameStrategy 4 :=
-  KripkeGameStrategy.proceedWithExhaustiveSearch
+def strategy_for_relation_count_7 : KripkeGamePartialStrategy 4 :=
+  (KripkeGamePartialStrategy.askQueryAndThen
+    (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+    #[
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
+      #[
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+    ]),
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.dia (ModalFormula.p)))))
+      #[
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.dia (ModalFormula.box (ModalFormula.var (KripkeGameVars.p) |> ModalFormula.and (ModalFormula.not (ModalFormula.var (KripkeGameVars.p))))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ])
+      ])
+    ]),
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
+      #[
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          (KripkeGamePartialStrategy.askQueryAndThen
+            (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
+            #[
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+          ]),
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          (KripkeGamePartialStrategy.askQueryAndThen
+            (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.dia (ModalFormula.p)))))
+            #[
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+          ]),
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ])
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+    ]),
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
+      #[
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          (KripkeGamePartialStrategy.askQueryAndThen
+            (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
+            #[
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+          ]),
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          (KripkeGamePartialStrategy.askQueryAndThen
+            (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
+            #[
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+          ]),
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+    ]),
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
+      #[
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.dia (ModalFormula.p)) (ModalFormula.box (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ])
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ])
+      ])
+    ])
+  ])
 
-def strategy_for_relation_count_16 : KripkeGameStrategy 4 :=
-  KripkeGameStrategy.proceedWithExhaustiveSearch
+def strategy_for_relation_count_8 : KripkeGamePartialStrategy 4 :=
+  (KripkeGamePartialStrategy.askQueryAndThen
+    (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
+    #[
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
+      #[
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          (KripkeGamePartialStrategy.askQueryAndThen
+            (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
+            #[
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+          ]),
+          (KripkeGamePartialStrategy.askQueryAndThen
+            (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+            #[
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+          ]),
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ])
+    ]),
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
+      #[
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          (KripkeGamePartialStrategy.askQueryAndThen
+            (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))))
+            #[
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+          ]),
+          (KripkeGamePartialStrategy.askQueryAndThen
+            (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
+            #[
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+          ])
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          (KripkeGamePartialStrategy.askQueryAndThen
+            (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+            #[
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            (KripkeGamePartialStrategy.askQueryAndThen
+              (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
+              #[
+              KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+              KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+              KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+              KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+              KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+            ]),
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+          ]),
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ])
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
+        #[
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          (KripkeGamePartialStrategy.askQueryAndThen
+            (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.dia (ModalFormula.p)))))
+            #[
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+          ]),
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          (KripkeGamePartialStrategy.askQueryAndThen
+            (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
+            #[
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+          ]),
+          (KripkeGamePartialStrategy.askQueryAndThen
+            (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))))
+            #[
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+          ]),
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          (KripkeGamePartialStrategy.askQueryAndThen
+            (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+            #[
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+          ]),
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          (KripkeGamePartialStrategy.askQueryAndThen
+            (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
+            #[
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+          ]),
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+    ]),
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
+      #[
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          (KripkeGamePartialStrategy.askQueryAndThen
+            (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
+            #[
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+          ]),
+          (KripkeGamePartialStrategy.askQueryAndThen
+            (ModalFormula.implies (ModalFormula.dia (ModalFormula.p)) (ModalFormula.box (ModalFormula.p)))
+            #[
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+          ])
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.dia (ModalFormula.p)))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          (KripkeGamePartialStrategy.askQueryAndThen
+            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p)))
+            #[
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+          ]),
+          (KripkeGamePartialStrategy.askQueryAndThen
+            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+            #[
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+          ])
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          (KripkeGamePartialStrategy.askQueryAndThen
+            (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
+            #[
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+          ]),
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ])
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.dia (ModalFormula.box (ModalFormula.var (KripkeGameVars.p) |> ModalFormula.and (ModalFormula.not (ModalFormula.var (KripkeGameVars.p))))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.dia (ModalFormula.p)))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ])
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+    ]),
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
+      #[
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.dia (ModalFormula.p)) (ModalFormula.box (ModalFormula.p)))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ])
+    ]),
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
+      #[
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p)))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ])
+    ])
+  ])
+
+def strategy_for_relation_count_9 : KripkeGamePartialStrategy 4 :=
+  (KripkeGamePartialStrategy.askQueryAndThen
+    (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
+    #[
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+      #[
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          (KripkeGamePartialStrategy.askQueryAndThen
+            (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))))
+            #[
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+          ]),
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          (KripkeGamePartialStrategy.askQueryAndThen
+            (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
+            #[
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+          ]),
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          (KripkeGamePartialStrategy.askQueryAndThen
+            (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
+            #[
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+          ]),
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ])
+    ]),
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
+      #[
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ])
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          (KripkeGamePartialStrategy.askQueryAndThen
+            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+            #[
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+          ]),
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          (KripkeGamePartialStrategy.askQueryAndThen
+            (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
+            #[
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+          ]),
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          (KripkeGamePartialStrategy.askQueryAndThen
+            (ModalFormula.implies (ModalFormula.dia (ModalFormula.p)) (ModalFormula.box (ModalFormula.p)))
+            #[
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+          ]),
+          (KripkeGamePartialStrategy.askQueryAndThen
+            (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
+            #[
+            (KripkeGamePartialStrategy.askQueryAndThen
+              (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+              #[
+              KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+              KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+              KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+              KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+              KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+            ]),
+            (KripkeGamePartialStrategy.askQueryAndThen
+              (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+              #[
+              KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+              KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+              KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+              KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+              KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+            ]),
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+          ]),
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ])
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
+        #[
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          (KripkeGamePartialStrategy.askQueryAndThen
+            (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p)))
+            #[
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+          ]),
+          (KripkeGamePartialStrategy.askQueryAndThen
+            (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
+            #[
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+          ])
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          (KripkeGamePartialStrategy.askQueryAndThen
+            (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+            #[
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+          ]),
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+    ]),
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
+      #[
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.dia (ModalFormula.p)) (ModalFormula.box (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          (KripkeGamePartialStrategy.askQueryAndThen
+            (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+            #[
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+          ]),
+          (KripkeGamePartialStrategy.askQueryAndThen
+            (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
+            #[
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+          ])
+        ])
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p)))
+          #[
+          (KripkeGamePartialStrategy.askQueryAndThen
+            (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+            #[
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+          ]),
+          (KripkeGamePartialStrategy.askQueryAndThen
+            (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
+            #[
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+          ]),
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+    ]),
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
+      #[
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.dia (ModalFormula.p)) (ModalFormula.box (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+    ]),
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
+      #[
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p)))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+    ])
+  ])
+
+def strategy_for_relation_count_10 : KripkeGamePartialStrategy 4 :=
+  (KripkeGamePartialStrategy.askQueryAndThen
+    (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
+    #[
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
+      #[
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          (KripkeGamePartialStrategy.askQueryAndThen
+            (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+            #[
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+          ]),
+          (KripkeGamePartialStrategy.askQueryAndThen
+            (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
+            #[
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+          ]),
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ])
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+    ]),
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
+      #[
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          (KripkeGamePartialStrategy.askQueryAndThen
+            (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
+            #[
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+          ]),
+          (KripkeGamePartialStrategy.askQueryAndThen
+            (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+            #[
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+          ])
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          (KripkeGamePartialStrategy.askQueryAndThen
+            (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
+            #[
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+          ]),
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          (KripkeGamePartialStrategy.askQueryAndThen
+            (ModalFormula.implies (ModalFormula.dia (ModalFormula.p)) (ModalFormula.box (ModalFormula.p)))
+            #[
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            (KripkeGamePartialStrategy.askQueryAndThen
+              (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
+              #[
+              KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+              KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+              KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+              KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+              KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+            ]),
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+            KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+          ])
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.box (ModalFormula.p)) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+    ]),
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+      #[
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
+        #[
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.dia (ModalFormula.p)) (ModalFormula.box (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ])
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+    ]),
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+      #[
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+    ]),
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
+      #[
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ])
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+    ])
+  ])
+
+def strategy_for_relation_count_11 : KripkeGamePartialStrategy 4 :=
+  (KripkeGamePartialStrategy.askQueryAndThen
+    (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
+    #[
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
+      #[
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.r) (ModalFormula.dia (ModalFormula.and (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.r)))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+    ]),
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
+      #[
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.dia (ModalFormula.p)) (ModalFormula.box (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+    ]),
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+      #[
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        (KripkeGamePartialStrategy.askQueryAndThen
+          (ModalFormula.dia (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))))
+          #[
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+          KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+        ]),
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+    ]),
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
+      #[
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+    ]),
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.implies (ModalFormula.dia (ModalFormula.dia (ModalFormula.p))) (ModalFormula.dia (ModalFormula.p)))
+      #[
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+    ])
+  ])
+
+def strategy_for_relation_count_12 : KripkeGamePartialStrategy 4 :=
+  (KripkeGamePartialStrategy.askQueryAndThen
+    (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
+    #[
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
+      #[
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+    ]),
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+      #[
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+    ]),
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+      #[
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+    ]),
+    KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.dia (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.box (ModalFormula.p)))))
+      #[
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      (KripkeGamePartialStrategy.askQueryAndThen
+        (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+        #[
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+        KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+      ]),
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+    ])
+  ])
+
+def strategy_for_relation_count_13 : KripkeGamePartialStrategy 4 :=
+  (KripkeGamePartialStrategy.askQueryAndThen
+    (ModalFormula.implies (ModalFormula.p) (ModalFormula.box (ModalFormula.dia (ModalFormula.p))))
+    #[
+    KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+    KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.box (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p))))
+      #[
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+    ]),
+    (KripkeGamePartialStrategy.askQueryAndThen
+      (ModalFormula.implies (ModalFormula.p) (ModalFormula.dia (ModalFormula.p)))
+      #[
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch,
+      KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+    ]),
+    KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+  ])
+
+def strategy_for_relation_count_14 : KripkeGamePartialStrategy 4 :=
+  KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+
+def strategy_for_relation_count_15 : KripkeGamePartialStrategy 4 :=
+  KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+
+def strategies : Array (KripkeGamePartialStrategy 4) :=
+  #[
+     strategy_for_relation_count_0,
+     strategy_for_relation_count_1,
+     strategy_for_relation_count_2,
+     strategy_for_relation_count_3,
+     strategy_for_relation_count_4,
+     strategy_for_relation_count_5,
+     strategy_for_relation_count_6,
+     strategy_for_relation_count_7,
+     strategy_for_relation_count_8,
+     strategy_for_relation_count_9,
+     strategy_for_relation_count_10,
+     strategy_for_relation_count_11,
+     strategy_for_relation_count_12,
+     strategy_for_relation_count_13,
+     strategy_for_relation_count_14,
+     strategy_for_relation_count_15
+   ]
 
 /--
 Select the appropriate strategy based on the accessibility relation size.
 -/
-def selectStrategyForRelationCount (relCount : Fin 17) : KripkeGameStrategy 4 :=
-  match relCount.val with
-  | 0 => strategy_for_relation_count_0
-  | 1 => strategy_for_relation_count_1
-  | 2 => strategy_for_relation_count_2
-  | 3 => strategy_for_relation_count_3
-  | 4 => strategy_for_relation_count_4
-  | 5 => strategy_for_relation_count_5
-  | 6 => strategy_for_relation_count_6
-  | 7 => strategy_for_relation_count_7
-  | 8 => strategy_for_relation_count_8
-  | 9 => strategy_for_relation_count_9
-  | 10 => strategy_for_relation_count_10
-  | 11 => strategy_for_relation_count_11
-  | 12 => strategy_for_relation_count_12
-  | 13 => strategy_for_relation_count_13
-  | 14 => strategy_for_relation_count_14
-  | 15 => strategy_for_relation_count_15
-  | 16 => strategy_for_relation_count_16
-  | _ => strategy_for_relation_count_0  -- unreachable
+def strategyForRelationCount (relCount : Fin 16) : KripkeGamePartialStrategy 4 := strategies[relCount]
 
 end KripkeGameAnalysis.Generated

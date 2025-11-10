@@ -7,7 +7,7 @@ def kripkeGame_winning_strategy_impl : ∀state : KripkeGameVisibleState.Initial
                                         KripkeGameWinningStrategy 10 state.val :=
   fun state =>
     let relCount : Fin 17 := state.val.accessiblityRelationSize
-    let strategy := KripkeGameAnalysis.Generated.selectStrategyForRelationCount relCount
+    let strategy := strategyForRelationCount relCount
     -- Convert the computable strategy to a proof-relevant WinningStrategy
     -- Note: The validation is computable but expensive, so we use sorry here
     -- In principle, this could be filled with native_decide or by having Rust emit proofs

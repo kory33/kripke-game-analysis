@@ -46,38 +46,46 @@ fn formula_to_lean(f: &Formula<OfficialGamePropVar>) -> String {
     }
 }
 
-/// Convert a strategy to Lean KripkeGameStrategy syntax
+/// Convert a strategy to Lean KripkeGamePartialStrategy syntax
 /// Returns the strategy code without the leading indent (caller adds indent)
 fn strategy_to_lean(strategy: &StrategyAgainstFixedWorldCount, indent: usize) -> String {
     let indent_str = "  ".repeat(indent);
     match strategy {
         StrategyAgainstFixedWorldCount::ProceedWithExhaustiveSearch => {
-            "KripkeGameStrategy.proceedWithExhaustiveSearch".to_string()
+            "KripkeGamePartialStrategy.proceedWithExhaustiveSearch".to_string()
         }
         StrategyAgainstFixedWorldCount::AskQueryAndThen { query, cont } => {
             let query_str = formula_to_lean(query);
-            let mut result = format!(
-                "(KripkeGameStrategy.askQueryAndThen\n{}  ({})\n{}  (fun answer => match answer with",
-                indent_str, query_str, indent_str
-            );
 
-            // Generate match cases for all possible answers (0 to 4 for frame size 4)
-            for answer in 0..=4u8 {
-                let strategy_for_answer = cont
-                    .get(&answer)
-                    .map(|boxed| boxed.as_ref())
-                    .unwrap_or(&StrategyAgainstFixedWorldCount::ProceedWithExhaustiveSearch);
+            // Collect strategies for all possible answers (0 to 4 for frame size 4)
+            let strategies: Vec<String> = (0..=4u8)
+                .map(|answer| {
+                    let strategy_for_answer = cont
+                        .get(&answer)
+                        .map(|boxed| boxed.as_ref())
+                        .unwrap_or(&StrategyAgainstFixedWorldCount::ProceedWithExhaustiveSearch);
+                    strategy_to_lean(strategy_for_answer, indent + 1)
+                })
+                .collect();
 
-                result.push_str(&format!(
-                    "\n{}  | {} => {}",
-                    indent_str,
-                    answer,
-                    strategy_to_lean(strategy_for_answer, indent + 2)
-                ));
-            }
+            // Generate the array of strategies
+            let array_str = if strategies.iter().all(|s| s.len() < 50 && !s.contains('\n')) {
+                // Short strategies: put on one line
+                format!("#[{}]", strategies.join(", "))
+            } else {
+                // Long strategies: put on multiple lines
+                let items = strategies
+                    .iter()
+                    .map(|s| format!("\n{}  {}", indent_str, s))
+                    .collect::<Vec<_>>()
+                    .join(",");
+                format!("#[{}{}]", items, format!("\n{}", indent_str))
+            };
 
-            result.push_str(&format!("\n{}  ))", indent_str));
-            result
+            format!(
+                "(KripkeGamePartialStrategy.askQueryAndThen\n{}  ({})\n{}  {})",
+                indent_str, query_str, indent_str, array_str
+            )
         }
     }
 }
@@ -103,8 +111,8 @@ fn main() -> std::io::Result<()> {
     writeln!(output, "namespace KripkeGameAnalysis.Generated")?;
     writeln!(output)?;
 
-    // For each relation count, generate the strategy
-    for relation_count in 0u8..=16 {
+    // For each relation count, generate the strategy (0 to 15, total 16)
+    for relation_count in 0u8..=15 {
         if let Some(strategy_for_count) = strategy.0.get(&relation_count) {
             eprintln!(
                 "  Generating strategy for relation count {}...",
@@ -112,13 +120,34 @@ fn main() -> std::io::Result<()> {
             );
             writeln!(
                 output,
-                "def strategy_for_relation_count_{} : KripkeGameStrategy 4 :=",
+                "def strategy_for_relation_count_{} : KripkeGamePartialStrategy 4 :=",
                 relation_count
             )?;
             writeln!(output, "  {}", strategy_to_lean(strategy_for_count, 1))?;
             writeln!(output)?;
         }
     }
+
+    // Generate the strategies array
+    writeln!(
+        output,
+        "def strategies : Array (KripkeGamePartialStrategy 4) :="
+    )?;
+    write!(output, "  #[")?;
+    for relation_count in 0u8..=15 {
+        if relation_count > 0 {
+            write!(output, ",")?;
+        }
+        writeln!(output)?;
+        write!(
+            output,
+            "     strategy_for_relation_count_{}",
+            relation_count
+        )?;
+    }
+    writeln!(output)?;
+    writeln!(output, "   ]")?;
+    writeln!(output)?;
 
     // Generate the dispatcher function
     writeln!(output, "/--")?;
@@ -129,19 +158,7 @@ fn main() -> std::io::Result<()> {
     writeln!(output, "-/")?;
     writeln!(
         output,
-        "def selectStrategyForRelationCount (relCount : Fin 17) : KripkeGameStrategy 4 :="
-    )?;
-    writeln!(output, "  match relCount.val with")?;
-    for relation_count in 0u8..=16 {
-        writeln!(
-            output,
-            "  | {} => strategy_for_relation_count_{}",
-            relation_count, relation_count
-        )?;
-    }
-    writeln!(
-        output,
-        "  | _ => strategy_for_relation_count_0  -- unreachable"
+        "def strategyForRelationCount (relCount : Fin 16) : KripkeGamePartialStrategy 4 := strategies[relCount]"
     )?;
     writeln!(output)?;
 
