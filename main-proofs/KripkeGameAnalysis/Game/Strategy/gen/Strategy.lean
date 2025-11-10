@@ -2860,6 +2860,9 @@ def strategy_for_relation_count_14 : KripkeGamePartialStrategy 4 :=
 def strategy_for_relation_count_15 : KripkeGamePartialStrategy 4 :=
   KripkeGamePartialStrategy.proceedWithExhaustiveSearch
 
+def strategy_for_relation_count_16 : KripkeGamePartialStrategy 4 :=
+  KripkeGamePartialStrategy.proceedWithExhaustiveSearch
+
 def strategies : Array (KripkeGamePartialStrategy 4) :=
   #[
      strategy_for_relation_count_0,
@@ -2877,12 +2880,13 @@ def strategies : Array (KripkeGamePartialStrategy 4) :=
      strategy_for_relation_count_12,
      strategy_for_relation_count_13,
      strategy_for_relation_count_14,
-     strategy_for_relation_count_15
+     strategy_for_relation_count_15,
+     strategy_for_relation_count_16
    ]
 
 /--
 Select the appropriate strategy based on the accessibility relation size.
 -/
-def strategyForRelationCount (relCount : Fin 16) : KripkeGamePartialStrategy 4 := strategies[relCount]
+def strategyForRelationCount (relCount : Fin 17) : KripkeGamePartialStrategy 4 := strategies[relCount]
 
 end KripkeGameAnalysis.Generated

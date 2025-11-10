@@ -111,8 +111,8 @@ fn main() -> std::io::Result<()> {
     writeln!(output, "namespace KripkeGameAnalysis.Generated")?;
     writeln!(output)?;
 
-    // For each relation count, generate the strategy (0 to 15, total 16)
-    for relation_count in 0u8..=15 {
+    // For each relation count, generate the strategy (0 to 16, total 17)
+    for relation_count in 0u8..=16 {
         if let Some(strategy_for_count) = strategy.0.get(&relation_count) {
             eprintln!(
                 "  Generating strategy for relation count {}...",
@@ -134,7 +134,7 @@ fn main() -> std::io::Result<()> {
         "def strategies : Array (KripkeGamePartialStrategy 4) :="
     )?;
     write!(output, "  #[")?;
-    for relation_count in 0u8..=15 {
+    for relation_count in 0u8..=16 {
         if relation_count > 0 {
             write!(output, ",")?;
         }
@@ -158,7 +158,7 @@ fn main() -> std::io::Result<()> {
     writeln!(output, "-/")?;
     writeln!(
         output,
-        "def strategyForRelationCount (relCount : Fin 16) : KripkeGamePartialStrategy 4 := strategies[relCount]"
+        "def strategyForRelationCount (relCount : Fin 17) : KripkeGamePartialStrategy 4 := strategies[relCount]"
     )?;
     writeln!(output)?;
 
