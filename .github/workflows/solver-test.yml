@@ -1,0 +1,44 @@
+name: Solver Tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup Rust toolchain
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Cache cargo dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            solver/target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('solver/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Build solver
+        working-directory: ./solver
+        run: cargo build --verbose
+
+      - name: Run solver tests
+        working-directory: ./solver
+        run: cargo test --verbose
+
+      - name: Build emit_lean_strategy binary
+        working-directory: ./solver
+        run: cargo build --bin emit_lean_strategy --verbose

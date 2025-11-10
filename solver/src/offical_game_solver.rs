@@ -70,7 +70,7 @@ pub enum StrategyAgainstFixedWorldCount {
 #[derive(Debug)]
 #[allow(dead_code)]
 pub struct KripkeGameStrategy(
-    BTreeMap</* accessibility relation size */ u8, StrategyAgainstFixedWorldCount>,
+    pub BTreeMap</* accessibility relation size */ u8, StrategyAgainstFixedWorldCount>,
 );
 
 // When searching for a strategy, instead of considering the explicit pair (relation count, query-answer history)
@@ -241,7 +241,7 @@ pub fn come_up_with_strategy() -> KripkeGameStrategy {
                 .get(&relation_count)
                 .cloned()
                 .unwrap_or(vec![]);
-        println!(
+        eprintln!(
             "Computing strategy for relation count = {} (total frames to classify = {})...",
             relation_count,
             possible_frames.len()
@@ -257,7 +257,7 @@ pub fn come_up_with_strategy() -> KripkeGameStrategy {
                 },
             ),
         );
-        println!("...done.");
+        eprintln!("...done.");
     }
 
     KripkeGameStrategy(strategies)

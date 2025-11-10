@@ -73,14 +73,4 @@ def possibleFramesUptoIso (state : KripkeGameVisibleState n) : Finset (FiniteKri
 
 def possibleFramesUptoIsoCard (state : KripkeGameVisibleState n) : ℕ := state.possibleFramesUptoIso.card
 
-inductive WinningStrategy : (moves: ℕ) -> (state: KripkeGameVisibleState n) -> Type where
-  | withExhaustiveSearch : possibleFramesUptoIsoCard state ≤ moves -> WinningStrategy moves state
-  | withParticularQuery : (nextQuery : ModalFormula KripkeGameVars) ->
-                (Π answer : Fin (state.frameSize + 1), WinningStrategy moves (withNewQueryAndAnswer state nextQuery answer)) ->
-                WinningStrategy (moves + 1) state
-
 end KripkeGameVisibleState
-
-def kripkeGame_winning_strategy : ∀state : KripkeGameVisibleState.InitialVisibleState 4,
-                                  KripkeGameVisibleState.WinningStrategy 10 state.val :=
-  sorry

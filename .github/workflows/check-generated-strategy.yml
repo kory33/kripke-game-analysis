@@ -1,0 +1,60 @@
+name: Check Generated Strategy
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup Rust toolchain
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Cache cargo dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            solver/target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('solver/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Save current generated strategy
+        run: cp main-proofs/KripkeGameAnalysis/Game/Strategy/gen/Strategy.lean /tmp/Strategy.lean.committed
+
+      - name: Regenerate strategy using portable script
+        run: ./regenerate-strategy.sh
+
+      - name: Check if generated strategy matches committed version
+        run: |
+          if ! diff -q main-proofs/KripkeGameAnalysis/Game/Strategy/gen/Strategy.lean /tmp/Strategy.lean.committed > /dev/null 2>&1; then
+            echo "ERROR: Generated strategy file does not match the committed version!"
+            echo ""
+            echo "The file main-proofs/KripkeGameAnalysis/Game/Strategy/gen/Strategy.lean is out of date."
+            echo "Please regenerate it by running:"
+            echo ""
+            echo "  ./regenerate-strategy.sh"
+            echo ""
+            echo "Then commit the updated file:"
+            echo ""
+            echo "  git add main-proofs/KripkeGameAnalysis/Game/Strategy/gen/Strategy.lean"
+            echo "  git commit -m \"Update generated strategy\""
+            echo ""
+            echo "Diff:"
+            diff main-proofs/KripkeGameAnalysis/Game/Strategy/gen/Strategy.lean /tmp/Strategy.lean.committed || true
+            exit 1
+          else
+            echo "✓ Generated strategy file is up to date!"
+          fi
