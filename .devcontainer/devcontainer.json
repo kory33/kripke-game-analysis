@@ -43,5 +43,5 @@
     // Hack: In Windows, every mounted file gets root:root ownership, so overwrite it to vscode:vscode.
     //       Also, convert all text files to Unix line endings.
     "onCreateCommand": "sudo chown -R $(id -u):$(id -g) /workspace && git ls-files -z | sudo xargs -0 dos2unix && git add -A",
-    "postCreateCommand": "/workspace/.devcontainer/post-create.sh"
+    "postCreateCommand": "chmod +x /workspace/.devcontainer/post-create.sh && /workspace/.devcontainer/post-create.sh"
 }
