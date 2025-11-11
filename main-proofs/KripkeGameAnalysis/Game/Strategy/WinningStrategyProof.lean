@@ -19,7 +19,7 @@ def kripkeGame_winning_strategy_impl : ∀state : KripkeGameVisibleState.Initial
 
       unfold strategy relCount
       match h : state.val.accessiblityRelationSize.val with
-      | 0 => sorry
+      | 0 => unfold KripkeGameStrategy.is_winning_strategy_fast; simp_all
       | 1 => sorry
       | 2 => sorry
       | 3 => sorry
