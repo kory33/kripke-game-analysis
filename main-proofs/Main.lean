@@ -1,4 +1,5 @@
 import KripkeGameAnalysis.Game.Basic
+import KripkeGameAnalysis.Game.Strategy.WinningStrategyProof
 
 def countInTwoWays (n : Nat) : IO Unit := do
   timeit s!"counting of UptoIso {n}:" do
