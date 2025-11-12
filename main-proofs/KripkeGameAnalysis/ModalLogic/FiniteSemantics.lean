@@ -381,5 +381,8 @@ def countSatisfyingNodes [Fintype finVars] [DecidableEq finVars]
   rw [satisfiesForAllValuations_iso_eq iso]
 )
 
+abbrev canonicalRepresentative : UptoIso n ↪ FiniteKripkeFrame n :=
+  SetoidWithCanonicalizer.canonicalRepresentative
+
 end UptoIso
 end FiniteKripkeFrame
