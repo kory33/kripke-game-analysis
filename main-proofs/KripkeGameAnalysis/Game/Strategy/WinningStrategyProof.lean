@@ -1,5 +1,8 @@
 import KripkeGameAnalysis.Game.Strategy.gen.Strategy
 import KripkeGameAnalysis.Game.Strategy.FastStrategyValidation
+import KripkeGameAnalysis.Game.Strategy.gen.PrecomputedFrameSets
+
+open KripkeGameAnalysis.Precomputed
 
 /--
 A winning strategy for the Kripke game, implemented using the Rust-generated certificate.
@@ -18,23 +21,57 @@ def kripkeGame_winning_strategy_impl : ∀state : KripkeGameVisibleState.Initial
       rw [this]
 
       unfold strategy relCount
-      match h : state.val.accessiblityRelationSize.val with
-      | 0 => unfold KripkeGameStrategy.is_winning_strategy_fast; simp_all
-      | 1 => sorry
-      | 2 => sorry
-      | 3 => sorry
-      | 4 => sorry
-      | 5 => sorry
-      | 6 => sorry
-      | 7 => sorry
-      | 8 => sorry
-      | 9 => sorry
-      | 10 => sorry
-      | 11 => sorry
-      | 12 => sorry
-      | 13 => sorry
-      | 14 => sorry
-      | 15 => sorry
-      | 16 => sorry
-      | n + 17 => omega
+      match state.val.accessiblityRelationSize with
+      | ⟨0, lt_witness⟩ =>
+          have : (lt_witness = (by decide)) := rfl; rw [this, possibleFramesUptoIso_initial_state_0]; clear * -;
+          native_decide
+      | ⟨1, lt_witness⟩ =>
+          have : (lt_witness = (by decide)) := rfl; rw [this, possibleFramesUptoIso_initial_state_1]; clear * -;
+          native_decide
+      | ⟨2, lt_witness⟩ =>
+          have : (lt_witness = (by decide)) := rfl; rw [this, possibleFramesUptoIso_initial_state_2]; clear * -;
+          native_decide
+      | ⟨3, lt_witness⟩ =>
+          have : (lt_witness = (by decide)) := rfl; rw [this, possibleFramesUptoIso_initial_state_3]; clear * -;
+          sorry
+      | ⟨4, lt_witness⟩ =>
+          have : (lt_witness = (by decide)) := rfl; rw [this, possibleFramesUptoIso_initial_state_4]; clear * -;
+          sorry
+      | ⟨5, lt_witness⟩ =>
+          have : (lt_witness = (by decide)) := rfl; rw [this, possibleFramesUptoIso_initial_state_5]; clear * -;
+          sorry
+      | ⟨6, lt_witness⟩ =>
+          have : (lt_witness = (by decide)) := rfl; rw [this, possibleFramesUptoIso_initial_state_6]; clear * -;
+          sorry
+      | ⟨7, lt_witness⟩ =>
+          have : (lt_witness = (by decide)) := rfl; rw [this, possibleFramesUptoIso_initial_state_7]; clear * -;
+          sorry
+      | ⟨8, lt_witness⟩ =>
+          have : (lt_witness = (by decide)) := rfl; rw [this, possibleFramesUptoIso_initial_state_8]; clear * -;
+          sorry
+      | ⟨9, lt_witness⟩ =>
+          have : (lt_witness = (by decide)) := rfl; rw [this, possibleFramesUptoIso_initial_state_9]; clear * -;
+          sorry
+      | ⟨10, lt_witness⟩ =>
+          have : (lt_witness = (by decide)) := rfl; rw [this, possibleFramesUptoIso_initial_state_10]; clear * -;
+          sorry
+      | ⟨11, lt_witness⟩ =>
+          have : (lt_witness = (by decide)) := rfl; rw [this, possibleFramesUptoIso_initial_state_11]; clear * -;
+          sorry
+      | ⟨12, lt_witness⟩ =>
+          have : (lt_witness = (by decide)) := rfl; rw [this, possibleFramesUptoIso_initial_state_12]; clear * -;
+          sorry
+      | ⟨13, lt_witness⟩ =>
+          have : (lt_witness = (by decide)) := rfl; rw [this, possibleFramesUptoIso_initial_state_13]; clear * -;
+          sorry
+      | ⟨14, lt_witness⟩ =>
+          have : (lt_witness = (by decide)) := rfl; rw [this, possibleFramesUptoIso_initial_state_14]; clear * -;
+          native_decide
+      | ⟨15, lt_witness⟩ =>
+          have : (lt_witness = (by decide)) := rfl; rw [this, possibleFramesUptoIso_initial_state_15]; clear * -;
+          native_decide
+      | ⟨16, lt_witness⟩ =>
+          have : (lt_witness = (by decide)) := rfl; rw [this, possibleFramesUptoIso_initial_state_16]; clear * -;
+          native_decide
+      | ⟨_+17, _⟩ => omega
     KripkeGameStrategy.as_winning_strategy strategy 10 state.val h
