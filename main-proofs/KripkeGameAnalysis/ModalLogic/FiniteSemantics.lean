@@ -384,5 +384,14 @@ def countSatisfyingNodes [Fintype finVars] [DecidableEq finVars]
 abbrev canonicalRepresentative : UptoIso n ↪ FiniteKripkeFrame n :=
   SetoidWithCanonicalizer.canonicalRepresentative
 
+def frameToId : (FiniteKripkeFrame.UptoIso n) ↪ Fin (2 ^ (n ^ 2)) :=
+  ⟨fun frame => frame.canonicalRepresentative.asBitVec.toFin, by
+    intro f1 f2 h
+    dsimp only at h
+    have h := BitVec.toFin_inj.mp h
+    dsimp only [FiniteKripkeFrame.asBitVec] at h
+    exact SetoidWithCanonicalizer.canonicalRepresentative.inj' h
+  ⟩
+
 end UptoIso
 end FiniteKripkeFrame

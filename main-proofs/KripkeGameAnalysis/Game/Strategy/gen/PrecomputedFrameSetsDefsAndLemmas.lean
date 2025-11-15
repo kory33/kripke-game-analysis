@@ -6,15 +6,6 @@ import KripkeGameAnalysis.Game.Basic
 
 namespace KripkeGameAnalysis.Precomputed
 
-def frameToId : (FiniteKripkeFrame.UptoIso 4) ↪ Fin 65536 :=
-  ⟨fun frame => frame.canonicalRepresentative.asBitVec.toFin, by
-    intro f1 f2 h
-    dsimp only at h
-    have h := BitVec.toFin_inj.mp h
-    dsimp only [FiniteKripkeFrame.asBitVec] at h
-    exact SetoidWithCanonicalizer.canonicalRepresentative.inj' h
-  ⟩
-
 theorem map_image_retract_eq [DecidableEq α] (f : α ↪ β) (g : β → α) (sect : ∀ x, g (f x) = x) (s : Finset α) :
     (s.map f).image g = s := by
   ext x; simp only [Finset.mem_image, Finset.mem_map, exists_exists_and_eq_and]; grind
@@ -23,8 +14,8 @@ def idToFrameEquivClass (id : Fin 65536) : FiniteKripkeFrame.UptoIso 4 :=
   ⟦FiniteKripkeFrame.ofFin id⟧
 
 lemma idToFrameEquivClass_retr (c : FiniteKripkeFrame.UptoIso 4) :
-    idToFrameEquivClass (frameToId c) = c := by
-  dsimp only [frameToId, DFunLike.coe]
+    idToFrameEquivClass (FiniteKripkeFrame.UptoIso.frameToId c) = c := by
+  dsimp only [FiniteKripkeFrame.UptoIso.frameToId, DFunLike.coe]
   simp only [Nat.reducePow, Function.Embedding.toFun_eq_coe]
   exact SetoidWithCanonicalizer.canonicalRepresentative_section_of_quot _
 

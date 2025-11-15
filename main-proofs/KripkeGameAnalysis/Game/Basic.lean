@@ -73,4 +73,14 @@ def possibleFramesUptoIso (state : KripkeGameVisibleState n) : Finset (FiniteKri
 
 def possibleFramesUptoIsoCard (state : KripkeGameVisibleState n) : ℕ := state.possibleFramesUptoIso.card
 
+lemma withNewQueryAndAnswer_possibileFramesUptoIso
+    (state : KripkeGameVisibleState n)
+    (query : ModalFormula KripkeGameVars)
+    (answer : Fin (state.frameSize + 1)) :
+      (state.withNewQueryAndAnswer query answer).possibleFramesUptoIso
+      = state.possibleFramesUptoIso.filter fun frame => frame.countSatisfyingNodes query = ↑answer := by
+  ext frameClass
+  simp [withNewQueryAndAnswer, possibleFramesUptoIso]
+  grind
+
 end KripkeGameVisibleState

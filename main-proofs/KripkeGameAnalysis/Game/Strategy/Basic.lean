@@ -30,6 +30,9 @@ theorem allFin_true_then_true {n : ℕ} {f : Fin n -> Bool} (h : allFin f = true
   apply List.all_eq_true.mp h i
   exact List.mem_finRange i
 
+theorem allFin_ext {n : ℕ} {f g : Fin n -> Bool} (h : ∀ i : Fin n, f i = g i) : allFin f = allFin g :=
+  by grind [allFin]
+
 def is_winning_strategy (strategy : KripkeGamePartialStrategy n) (moves : ℕ) (state : KripkeGameVisibleState n) : Bool :=
   match strategy, moves with
   | .proceedWithExhaustiveSearch, moves =>
