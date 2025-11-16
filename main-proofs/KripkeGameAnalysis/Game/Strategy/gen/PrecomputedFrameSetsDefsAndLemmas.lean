@@ -149,4 +149,18 @@ lemma Multiset_map_sec_retr_on_image_of_sec [DecidableEq α] [DecidableEq β] (s
       rw [←sx_eq_y, ←Function.comp_apply (f := r), retr]
       simp
 
+/-- Mapping a finset image through a retraction yields the original multiset. -/
+lemma Finset.image_val_map_retract [DecidableEq α] [DecidableEq β]
+    (s : Finset β) (f : α → β) (g : β → α)
+    (retr : g ∘ f = id)
+    (subset : ↑s ⊆ f '' A) :
+    (s.image g).val.map f = s.val := by
+  rw [Finset.image_val_of_injOn (retr_injOn_subset_of_image f g retr subset)]
+  simp only [Multiset.map_map, Function.comp_apply]
+  rw [Multiset_map_sec_retr_on_image_of_sec f g retr subset]
+
+lemma idToFrameEquivClass_frameToId_comp :
+    idToFrameEquivClass ∘ (FiniteKripkeFrame.UptoIso.frameToId (n := 4)) = id := by
+  ext c; exact idToFrameEquivClass_retr c
+
 end KripkeGameAnalysis.Precomputed

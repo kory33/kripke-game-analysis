@@ -588,6 +588,17 @@ theorem allFramesUptoIso_4 :
   rw [← allFramesUptoIso_4_as_ids]
   rw [map_image_retract_eq _ _ (fun c => idToFrameEquivClass_retr c) _]
 
+private lemma frameIdsSet_subset_frameToId_image (frameIdsSet : Finset (Fin 65536))
+    (h : frameIdsSet ⊆ allFrameIdsSet) :
+    ↑frameIdsSet ⊆ ⇑(FiniteKripkeFrame.UptoIso.frameToId (n := 4)) '' ↑(FiniteKripkeFrame.UptoIso.univ 4) := by
+  rw [allFramesUptoIso_4_image_eq]; simp [h]
+
+private lemma frameIdsSet_image_val_map_frameToId (frameIdsSet : Finset (Fin 65536))
+    (h : frameIdsSet ⊆ allFrameIdsSet) :
+    (frameIdsSet.image idToFrameEquivClass).val.map (FiniteKripkeFrame.UptoIso.frameToId (n := 4)) = frameIdsSet.val := by
+  exact Finset.image_val_map_retract frameIdsSet _ _ idToFrameEquivClass_frameToId_comp
+    (frameIdsSet_subset_frameToId_image frameIdsSet h)
+
 /--
 Frame IDs with 0 accessibility relations (as Nat array).
 -/
@@ -629,22 +640,7 @@ theorem possibleFramesUptoIso_initial_state_0_map_frameToId {lt_witness : 0 < 17
     ({ accessiblityRelationSize := ⟨0, lt_witness⟩, queriesAndAnswers := [] } : KripkeGameVisibleState 4).possibleFramesUptoIso.val.map FiniteKripkeFrame.UptoIso.frameToId : Multiset (Fin (2 ^ 4 ^ 2))
   ) = frameIdsSet_0.val := by
   rw [possibleFramesUptoIso_initial_state_0]
-  have frameIdsSet_subset_image : ↑frameIdsSet_0 ⊆ ⇑(FiniteKripkeFrame.UptoIso.frameToId (n := 4)) '' ↑(FiniteKripkeFrame.UptoIso.univ 4) := by
-    rw [allFramesUptoIso_4_image_eq]; simp [frameIdsSet_0_is_subset_of_allFrameIdsSet]
-  rw [Finset.image_val_of_injOn (
-    retr_injOn_subset_of_image (A := FiniteKripkeFrame.UptoIso.univ 4)
-      (FiniteKripkeFrame.UptoIso.frameToId (n := 4))
-      idToFrameEquivClass
-      (by ext c; exact idToFrameEquivClass_retr c)
-      frameIdsSet_subset_image
-  )]
-  simp only [Multiset.map_map, Function.comp_apply]
-  rw [Multiset_map_sec_retr_on_image_of_sec
-      (FiniteKripkeFrame.UptoIso.frameToId (n := 4))
-      idToFrameEquivClass
-      (by ext c; exact idToFrameEquivClass_retr c)
-      frameIdsSet_subset_image
-  ]
+  exact frameIdsSet_image_val_map_frameToId frameIdsSet_0 frameIdsSet_0_is_subset_of_allFrameIdsSet
 
 /--
 Frame IDs with 1 accessibility relations (as Nat array).
