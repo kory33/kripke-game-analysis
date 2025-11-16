@@ -599,34 +599,6 @@ def frameIdsArrayNat_0 : Array Nat :=
 def frameIdsSet_0 : Finset (Fin 65536) :=
   (frameIdsArrayNat_0.map (fun n => Fin.mk (n % 65536) (Nat.mod_lt n (by decide : 0 < 65536)))).toList.toFinset
 
-lemma mem_fold_insert_exthashmap_iff_list_mem
-    {α : Type} [Hashable α] [BEq α] [LawfulHashable α] [EquivBEq α]
-    (l : List α) (a : α) (s : Std.ExtHashSet α) :
-    a ∈ l.foldl (fun acc a => acc.insert a) s ↔ l.elem a ∨ a ∈ s := by
-  induction l generalizing s with
-  | nil => simp
-  | cons hd tl ih => simp only [List.foldl_cons, ih (s.insert hd)]; grind [BEq.comm]
-
-def finsetToHashSet {α : Type} [Hashable α] [BEq α] [LawfulHashable α] [LawfulBEq α] [EquivBEq α] (s : Finset α) : Std.ExtHashSet α :=
-  Quotient.liftOn
-    (s.val)
-    (·.foldl (fun acc a => acc.insert a) (Std.ExtHashSet.emptyWithCapacity (capacity := s.card)))
-    (by
-      intros l₁ l₂ l₁_eqv_l₂
-      simp only [Std.ExtHashSet.emptyWithCapacity_eq]
-      apply Std.ExtHashSet.ext_mem; intro k
-      suffices _ : k ∈ l₁ ↔ k ∈ l₂ by simpa [mem_fold_insert_exthashmap_iff_list_mem]
-      simp [List.Perm.mem_iff l₁_eqv_l₂]
-    )
-
-theorem finsetToHashSet_mem_iff {α : Type} [Hashable α] [BEq α] [LawfulHashable α] [LawfulBEq α] [EquivBEq α]
-    (s : Finset α) (a : α) :
-    a ∈ finsetToHashSet s ↔ a ∈ s := by
-  simp only [finsetToHashSet]
-  rw (occs := .pos [2]) [Membership.mem]; simp only [Finset.instMembership]
-  induction s.val using Quotient.inductionOn with | _ s =>
-  simp [mem_fold_insert_exthashmap_iff_list_mem]
-
 theorem frameIdsSet_0_is_subset_of_allFrameIdsSet :
     frameIdsSet_0 ⊆ allFrameIdsSet := by
   suffices h : (let s := finsetToHashSet allFrameIdsSet ; ∀ id ∈ frameIdsSet_0, id ∈ s) by
@@ -651,93 +623,6 @@ theorem possibleFramesUptoIso_initial_state_0 :
   ]
   apply congrArg
   native_decide
-
-theorem retract_bijOn_image_of_sect (s : α → β) (r : β → α) (retr : r ∘ s = id) (A : Set α) : Set.BijOn r (s '' A) A :=
-  by
-    constructor
-    · suffices h : Set.MapsTo r (s '' A) A by exact h
-      unfold Set.MapsTo; intro y h
-      simp only [Set.mem_image] at h
-      rcases h with ⟨x₁, x₁_in_A, sx₁_eq_x⟩
-      have retr := congrFun retr x₁; simp only [Function.comp_apply, id_eq] at retr
-      rwa [←sx₁_eq_x, retr]
-    constructor
-    · suffices h : Set.InjOn r (s '' A) by exact h
-      unfold Set.InjOn
-      intro y₁ y₁_in_s''A y₂ y₂_in_s''A ry₁_eq_ry₂
-      simp only [Set.mem_image] at y₁_in_s''A y₂_in_s''A
-      rcases y₁_in_s''A with ⟨x₁, x₁_in_A, sx₁_eq_y₁⟩
-      rcases y₂_in_s''A with ⟨x₂, x₂_in_A, sx₂_eq_y₂⟩
-      rw [←sx₁_eq_y₁, ←sx₂_eq_y₂, ←Function.comp_apply (f := r), ←Function.comp_apply (f := r), retr] at ry₁_eq_ry₂
-      simp_all
-    · suffices h : Set.SurjOn r (s '' A) A by exact h
-      unfold Set.SurjOn
-      intro a a_in_A
-      have h : r (s a) ∈ r '' (s '' A) := by grind
-      rw [←Function.comp_apply (f := r), retr] at h
-      assumption
-
-theorem sects_injOn (s : α → β) (r : β → α) (retr : r ∘ s = id) : Set.InjOn s A := by
-  unfold Set.InjOn
-  intro x₁ x₁_in_A x₂ x₂_in_A sx₁_eq_sx₂
-  have rsx₁_eq_rsx₂ : r (s x₁) = r (s x₂) := by rw [sx₁_eq_sx₂]
-  rwa [←Function.comp_apply (f := r), ←Function.comp_apply (f := r), retr] at rsx₁_eq_rsx₂
-
-lemma injOn_restriction (ι : α → β) (subset : A' ⊆ A) (injOn : Set.InjOn ι A) : Set.InjOn ι A' := by
-  rw [Set.InjOn] at *
-  intro a₁ a₁_in_A' a₂ a₂_in_A' h
-  exact injOn (subset a₁_in_A') (subset a₂_in_A') h
-
-theorem retr_injOn_subset_of_image (s : α → β) (r : β → α) (retr : r ∘ s = id)
-                                   {A : Set α} {C : Set β} (subset : C ⊆ s '' A) : Set.InjOn r C := by
-  have ⟨_, injOnImr, _⟩ := retract_bijOn_image_of_sect s r retr A
-  exact injOn_restriction _ subset injOnImr
-
-theorem sec_retr_injOn_image_of_sect (s : α → β) (r : β → α) (retr : r ∘ s = id)
-                                     {A : Set α} : Set.InjOn (fun y => s (r y)) (s '' A) := by
-  have ⟨_, injOnImr, _⟩ := retract_bijOn_image_of_sect s r retr A
-  apply Set.InjOn.comp (t := A) (sects_injOn s r retr) injOnImr
-  unfold Set.MapsTo
-  intro y y_in_ImA
-  simp only [Set.mem_image] at y_in_ImA
-  rcases y_in_ImA with ⟨x, x_in_A, sx_eq_y⟩
-  rwa [←sx_eq_y, ←Function.comp_apply (f := r), retr]
-
-theorem sec_retr_injOn_subset_of_image_of_sect (s : α → β) (r : β → α) (retr : r ∘ s = id)
-                                               {A : Set α} (subset : C ⊆ s '' A) : Set.InjOn (fun y => s (r y)) C := by
-  have injOnImr := sec_retr_injOn_image_of_sect s r retr (A := A)
-  exact injOn_restriction _ subset injOnImr
-
-lemma sec_retr_on_image_of_sec_eq (s : α → β) (r : β → α) (retr : r ∘ s = id)
-                                  (y : β) (A : Set α) (y_mem : y ∈ s '' A) : s (r y) = y := by
-  simp only [Set.mem_image] at y_mem
-  rcases y_mem with ⟨x, x_in_A, sx_eq_y⟩
-  rw [←sx_eq_y, ←Function.comp_apply (f := r), retr]
-  simp
-
-lemma Multiset_map_sec_retr_on_image_of_sec [DecidableEq α] [DecidableEq β] (s : α → β) (r : β → α) (retr : r ∘ s = id)
-                                            {ms : Finset β} (subset : ↑ms ⊆ s '' A) :
-                                            ms.val.map (fun y => s (r y)) = ms.val := by
-  rw [←Finset.image_val_of_injOn (sec_retr_injOn_subset_of_image_of_sect s r retr subset)]
-  apply congrArg
-  ext y
-  simp
-  constructor
-  · intro ⟨y', y'_in_ms, sry'_eq_y⟩
-    have y'_in_im_A := subset (y'_in_ms)
-    simp only [Set.mem_image] at y'_in_im_A
-    rcases y'_in_im_A with ⟨x, x_in_A, sx_eq_y'⟩
-    rw [←sx_eq_y', ←Function.comp_apply (f := r), retr] at sry'_eq_y
-    grind
-  · intro y_in_ms
-    use y
-    have y_in_im_A := subset (y_in_ms)
-    simp only [Set.mem_image] at y_in_im_A
-    constructor
-    · trivial
-    · rcases y_in_im_A with ⟨x, x_in_A, sx_eq_y⟩
-      rw [←sx_eq_y, ←Function.comp_apply (f := r), retr]
-      simp
 
 theorem possibleFramesUptoIso_initial_state_0_map_frameToId {lt_witness : 0 < 17} :
   (
