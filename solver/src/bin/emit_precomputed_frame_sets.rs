@@ -246,8 +246,7 @@ fn main() -> std::io::Result<()> {
         )?;
         writeln!(output)?;
 
-        // Generate the main theorem for possibleFramesUptoIso
-        // All theorems use the optimized pattern (work at ID level, not equivalence class level)
+        // Generate the main theorem for possibleFramesUptoIso (equivalence class level)
         writeln!(
             output,
             "theorem possibleFramesUptoIso_initial_state_{} :",
