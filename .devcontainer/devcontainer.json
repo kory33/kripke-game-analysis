@@ -35,6 +35,8 @@
         "source=claudeconfig-${devcontainerId},target=/home/vscode/.claude,type=volume",
         "source=elan-toolchains-${devcontainerId},target=/home/vscode/.elan,type=volume",
         "source=rustup-toolchains-${devcontainerId},target=/home/vscode/.rustup,type=volume",
+        "source=uv-cache-${devcontainerId},target=/home/vscode/.cache/uv,type=volume",
+        "source=uv-local-${devcontainerId},target=/home/vscode/.local,type=volume",
         "source=commandhistory-${devcontainerId},target=/commandhistory,type=volume"
     ],
     "containerEnv": {

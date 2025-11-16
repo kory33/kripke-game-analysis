@@ -4,6 +4,7 @@ ARG USERNAME=vscode
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     dos2unix \
+    ripgrep \
     && rm -rf /var/lib/apt/lists/*
 
 # Used to persist bash history as per https://code.visualstudio.com/remote/advancedcontainers/persist-bash-history
@@ -19,6 +20,8 @@ RUN mkdir /home/$USERNAME/.claude && chown -R $USERNAME /home/$USERNAME/.claude
 RUN mkdir /home/$USERNAME/.rustup && chown -R $USERNAME /home/$USERNAME/.rustup
 # Lean toolchain
 RUN mkdir /home/$USERNAME/.elan && chown -R $USERNAME /home/$USERNAME/.elan
+# uv (Python package manager) cache and local bin
+RUN mkdir -p /home/$USERNAME/.cache/uv /home/$USERNAME/.local && chown -R $USERNAME /home/$USERNAME/.cache /home/$USERNAME/.local
 
 # Use with caution.
 # The devcontainer may contain Claude credentials so this is not entirely safe.
