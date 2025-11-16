@@ -38,6 +38,34 @@ Pre-caching lean-lsp-mcp server...
 "${HOME}/.local/bin/uvx" --version > /dev/null 2>&1 || true
 "${HOME}/.local/bin/uvx" lean-lsp-mcp --help > /dev/null 2>&1 || true
 
+echo "=========================
+Installing Lean4 Skills for Claude...
+========================="
+
+# Clone lean4-skills repository
+SKILLS_TEMP_DIR=$(mktemp -d)
+cd "${SKILLS_TEMP_DIR}"
+git clone https://github.com/cameronfreer/lean4-skills.git
+cd lean4-skills
+
+# Create skills directory if it doesn't exist
+mkdir -p "${HOME}/.claude/skills"
+
+# Install core skill (REQUIRED)
+echo "Installing lean4-theorem-proving (core skill)..."
+cp -r plugins/lean4-theorem-proving "${HOME}/.claude/skills/"
+
+# Install optional skills
+echo "Installing lean4-memories (optional)..."
+cp -r plugins/lean4-memories "${HOME}/.claude/skills/"
+
+echo "Installing lean4-subagents (optional)..."
+cp -r plugins/lean4-subagents "${HOME}/.claude/skills/"
+
+# Clean up
+cd /
+rm -rf "${SKILLS_TEMP_DIR}"
+
 cat <<EOF
 
 =========================
@@ -49,6 +77,11 @@ You can now build the project with:
 lean-lsp-mcp server is configured and ready to use!
 Configuration: /workspace/.mcp.json
 To test it: uvx lean-lsp-mcp --help
+
+Lean4 Skills installed:
+- lean4-theorem-proving (core)
+- lean4-memories (optional)
+- lean4-subagents (optional)
 
 =========================
 EOF
