@@ -5,19 +5,6 @@ import Mathlib.Data.Finset.Dedup
 
 open KripkeGameAnalysis.Precomputed
 
-theorem multiset_map_tofinset_eq_dedup_image[DecidableEq α] [DecidableEq β] (f : α -> β) (s : Multiset α) :
-    (s.map f).toFinset = s.toFinset.image f := by
-  sorry
-
-theorem map_dedup_map_emb_eq [DecidableEq α] [DecidableEq β] [DecidableEq γ] (s : Multiset α) (f : α → β)
-                             (emb : β ↪ γ) :
-    (s.map f).dedup.map emb = (s.map (emb ∘ f)).dedup := by
-  rw [← Multiset.toFinset_val, ← Multiset.toFinset_val, ←Finset.map_val]
-  rw [multiset_map_tofinset_eq_dedup_image]
-  rw [Finset.map_eq_image, Finset.image_image]
-  simp
-  sorry
-
 /--
 A winning strategy for the Kripke game, implemented using the Rust-generated certificate.
 -/
@@ -41,52 +28,68 @@ def kripkeGame_winning_strategy_impl : ∀state : KripkeGameVisibleState.Initial
           rw [possibleFramesUptoIso_initial_state_0_map_frameToId]; clear * -;
           native_decide
       | ⟨1, lt_witness⟩ =>
-          have : (lt_witness = (by decide)) := rfl; rw [this, possibleFramesUptoIso_initial_state_1]; clear * -;
+          have : (lt_witness = (by decide)) := rfl; rw [this]
+          rw [possibleFramesUptoIso_initial_state_1_map_frameToId]; clear * -;
           native_decide
       | ⟨2, lt_witness⟩ =>
-          have : (lt_witness = (by decide)) := rfl; rw [this, possibleFramesUptoIso_initial_state_2]; clear * -;
+          have : (lt_witness = (by decide)) := rfl; rw [this]
+          rw [possibleFramesUptoIso_initial_state_2_map_frameToId]; clear * -;
           native_decide
       | ⟨3, lt_witness⟩ =>
-          have : (lt_witness = (by decide)) := rfl; rw [this, possibleFramesUptoIso_initial_state_3]; clear * -;
+          have : (lt_witness = (by decide)) := rfl; rw [this]
+          rw [possibleFramesUptoIso_initial_state_3_map_frameToId]; clear * -;
           sorry
       | ⟨4, lt_witness⟩ =>
-          have : (lt_witness = (by decide)) := rfl; rw [this, possibleFramesUptoIso_initial_state_4]; clear * -;
+          have : (lt_witness = (by decide)) := rfl; rw [this]
+          rw [possibleFramesUptoIso_initial_state_4_map_frameToId]; clear * -;
           sorry
       | ⟨5, lt_witness⟩ =>
-          have : (lt_witness = (by decide)) := rfl; rw [this, possibleFramesUptoIso_initial_state_5]; clear * -;
+          have : (lt_witness = (by decide)) := rfl; rw [this]
+          rw [possibleFramesUptoIso_initial_state_5_map_frameToId]; clear * -;
           sorry
       | ⟨6, lt_witness⟩ =>
-          have : (lt_witness = (by decide)) := rfl; rw [this, possibleFramesUptoIso_initial_state_6]; clear * -;
+          have : (lt_witness = (by decide)) := rfl; rw [this]
+          rw [possibleFramesUptoIso_initial_state_6_map_frameToId]; clear * -;
           sorry
       | ⟨7, lt_witness⟩ =>
-          have : (lt_witness = (by decide)) := rfl; rw [this, possibleFramesUptoIso_initial_state_7]; clear * -;
+          have : (lt_witness = (by decide)) := rfl; rw [this]
+          rw [possibleFramesUptoIso_initial_state_7_map_frameToId]; clear * -;
           sorry
       | ⟨8, lt_witness⟩ =>
-          have : (lt_witness = (by decide)) := rfl; rw [this, possibleFramesUptoIso_initial_state_8]; clear * -;
+          have : (lt_witness = (by decide)) := rfl; rw [this]
+          rw [possibleFramesUptoIso_initial_state_8_map_frameToId]; clear * -;
           sorry
       | ⟨9, lt_witness⟩ =>
-          have : (lt_witness = (by decide)) := rfl; rw [this, possibleFramesUptoIso_initial_state_9]; clear * -;
+          have : (lt_witness = (by decide)) := rfl; rw [this]
+          rw [possibleFramesUptoIso_initial_state_9_map_frameToId]; clear * -;
           sorry
       | ⟨10, lt_witness⟩ =>
-          have : (lt_witness = (by decide)) := rfl; rw [this, possibleFramesUptoIso_initial_state_10]; clear * -;
+          have : (lt_witness = (by decide)) := rfl; rw [this]
+          rw [possibleFramesUptoIso_initial_state_10_map_frameToId]; clear * -;
           sorry
       | ⟨11, lt_witness⟩ =>
-          have : (lt_witness = (by decide)) := rfl; rw [this, possibleFramesUptoIso_initial_state_11]; clear * -;
+          have : (lt_witness = (by decide)) := rfl; rw [this]
+          rw [possibleFramesUptoIso_initial_state_11_map_frameToId]; clear * -;
           sorry
       | ⟨12, lt_witness⟩ =>
-          have : (lt_witness = (by decide)) := rfl; rw [this, possibleFramesUptoIso_initial_state_12]; clear * -;
+          have : (lt_witness = (by decide)) := rfl; rw [this]
+          rw [possibleFramesUptoIso_initial_state_12_map_frameToId]; clear * -;
           sorry
       | ⟨13, lt_witness⟩ =>
-          have : (lt_witness = (by decide)) := rfl; rw [this, possibleFramesUptoIso_initial_state_13]; clear * -;
+          have : (lt_witness = (by decide)) := rfl; rw [this]
+          rw [possibleFramesUptoIso_initial_state_13_map_frameToId]; clear * -;
           sorry
       | ⟨14, lt_witness⟩ =>
-          have : (lt_witness = (by decide)) := rfl; rw [this, possibleFramesUptoIso_initial_state_14]; clear * -;
+          have : (lt_witness = (by decide)) := rfl; rw [this]
+          rw [possibleFramesUptoIso_initial_state_14_map_frameToId]; clear * -;
           native_decide
       | ⟨15, lt_witness⟩ =>
-          have : (lt_witness = (by decide)) := rfl; rw [this, possibleFramesUptoIso_initial_state_15]; clear * -;
+          have : (lt_witness = (by decide)) := rfl; rw [this]
+          rw [possibleFramesUptoIso_initial_state_15_map_frameToId]; clear * -;
           native_decide
       | ⟨16, lt_witness⟩ =>
-          have : (lt_witness = (by decide)) := rfl; rw [this, possibleFramesUptoIso_initial_state_16]; clear * -;
+          have : (lt_witness = (by decide)) := rfl; rw [this]
+          rw [possibleFramesUptoIso_initial_state_16_map_frameToId]; clear * -;
           native_decide
       | ⟨_+17, _⟩ => omega
     KripkeGameStrategy.as_winning_strategy strategy 10 state.val h

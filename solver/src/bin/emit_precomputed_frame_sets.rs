@@ -25,6 +25,7 @@ fn main() -> std::io::Result<()> {
         output,
         "import KripkeGameAnalysis.Game.Strategy.gen.PrecomputedFrameSetsDefsAndLemmas"
     )?;
+    writeln!(output, "import Std.Data.ExtHashSet.Lemmas")?;
     writeln!(output)?;
 
     writeln!(output, "namespace KripkeGameAnalysis.Precomputed")?;
@@ -109,13 +110,29 @@ fn main() -> std::io::Result<()> {
     writeln!(output, "theorem allFramesUptoIso_4_as_ids :")?;
     writeln!(
         output,
-        "    (FiniteKripkeFrame.UptoIso.univ 4).map frameToId = allFrameIdsSet := by"
+        "    (FiniteKripkeFrame.UptoIso.univ 4).map FiniteKripkeFrame.UptoIso.frameToId = allFrameIdsSet := by"
     )?;
     writeln!(
         output,
-        "  -- This theorem is quite expensive to prove. I (kory33) doubt this could be done with `decide` alone."
+        "  -- This theorem is quite expensive to prove,"
+    )?;
+    writeln!(
+        output,
+        "  -- particularly due to (FiniteKripkeFrame.UptoIso.univ 4) and the equality of Finset 65536 being costly."
+    )?;
+    writeln!(
+        output,
+        "  -- I (kory33) doubt this could be done with `decide` alone, but pull requests are welcome!"
     )?;
     writeln!(output, "  native_decide")?;
+    writeln!(output)?;
+
+    writeln!(output, "theorem allFramesUptoIso_4_image_eq :")?;
+    writeln!(
+        output,
+        "    ⇑(FiniteKripkeFrame.UptoIso.frameToId (n := 4)) '' ↑(FiniteKripkeFrame.UptoIso.univ 4) = allFrameIdsSet := by"
+    )?;
+    writeln!(output, "  rw [←allFramesUptoIso_4_as_ids]; simp")?;
     writeln!(output)?;
 
     writeln!(output, "theorem allFramesUptoIso_4 :")?;
@@ -127,6 +144,62 @@ fn main() -> std::io::Result<()> {
     writeln!(
         output,
         "  rw [map_image_retract_eq _ _ (fun c => idToFrameEquivClass_retr c) _]"
+    )?;
+    writeln!(output)?;
+
+    // Generate helper lemmas for simplified proofs
+    writeln!(output, "/--")?;
+    writeln!(
+        output,
+        "Helper lemma: any subset of allFrameIdsSet is a subset of the frameToId image of all frames."
+    )?;
+    writeln!(
+        output,
+        "This lemma will be used in the `possibleFramesUptoIso_initial_state_n_map_frameToId` proofs."
+    )?;
+    writeln!(output, "-/")?;
+    writeln!(
+        output,
+        "private lemma frameIdsSet_subset_frameToId_image (frameIdsSet : Finset (Fin 65536))"
+    )?;
+    writeln!(output, "    (h : frameIdsSet ⊆ allFrameIdsSet) :")?;
+    writeln!(
+        output,
+        "    ↑frameIdsSet ⊆ ⇑(FiniteKripkeFrame.UptoIso.frameToId (n := 4)) '' ↑(FiniteKripkeFrame.UptoIso.univ 4) := by"
+    )?;
+    writeln!(output, "  rw [allFramesUptoIso_4_image_eq]; simp [h]")?;
+    writeln!(output)?;
+
+    writeln!(output, "/--")?;
+    writeln!(
+        output,
+        "Specialized lemma for the frameIdsSet pattern: mapping the image through frameToId"
+    )?;
+    writeln!(
+        output,
+        "yields the original multiset. This is the key lemma that simplifies the"
+    )?;
+    writeln!(
+        output,
+        "`possibleFramesUptoIso_initial_state_n_map_frameToId` proofs."
+    )?;
+    writeln!(output, "-/")?;
+    writeln!(
+        output,
+        "private lemma frameIdsSet_image_val_map_frameToId (frameIdsSet : Finset (Fin 65536))"
+    )?;
+    writeln!(output, "    (h : frameIdsSet ⊆ allFrameIdsSet) :")?;
+    writeln!(
+        output,
+        "    (frameIdsSet.image idToFrameEquivClass).val.map (FiniteKripkeFrame.UptoIso.frameToId (n := 4)) = frameIdsSet.val := by"
+    )?;
+    writeln!(
+        output,
+        "  exact Finset.image_val_map_retract frameIdsSet _ _ idToFrameEquivClass_frameToId_comp"
+    )?;
+    writeln!(
+        output,
+        "    (frameIdsSet_subset_frameToId_image frameIdsSet h)"
     )?;
     writeln!(output)?;
 
@@ -246,6 +319,29 @@ fn main() -> std::io::Result<()> {
         )?;
         writeln!(output)?;
 
+        // Generate subset theorem
+        writeln!(
+            output,
+            "theorem frameIdsSet_{}_is_subset_of_allFrameIdsSet :",
+            relation_count
+        )?;
+        writeln!(
+            output,
+            "    frameIdsSet_{} ⊆ allFrameIdsSet := by",
+            relation_count
+        )?;
+        writeln!(
+            output,
+            "  suffices h : (let s := finsetToHashSet allFrameIdsSet ; ∀ id ∈ frameIdsSet_{}, id ∈ s) by",
+            relation_count
+        )?;
+        writeln!(output, "    intro i")?;
+        writeln!(output, "    specialize h i")?;
+        writeln!(output, "    rw [finsetToHashSet_mem_iff] at h;")?;
+        writeln!(output, "    assumption")?;
+        writeln!(output, "  native_decide")?;
+        writeln!(output)?;
+
         // Generate the main theorem for possibleFramesUptoIso (equivalence class level)
         writeln!(
             output,
@@ -292,6 +388,35 @@ fn main() -> std::io::Result<()> {
         writeln!(output, "  ]")?;
         writeln!(output, "  apply congrArg")?;
         writeln!(output, "  native_decide")?;
+        writeln!(output)?;
+
+        // Generate the simplified map_frameToId theorem (ID level)
+        writeln!(
+            output,
+            "theorem possibleFramesUptoIso_initial_state_{}_map_frameToId {{lt_witness : {} < 17}} :",
+            relation_count, relation_count
+        )?;
+        writeln!(output, "  (")?;
+        writeln!(
+            output,
+            "    ({{ accessiblityRelationSize := ⟨{}, lt_witness⟩, queriesAndAnswers := [] }} : KripkeGameVisibleState 4).possibleFramesUptoIso.val.map FiniteKripkeFrame.UptoIso.frameToId : Multiset (Fin (2 ^ 4 ^ 2))",
+            relation_count
+        )?;
+        writeln!(
+            output,
+            "  ) = frameIdsSet_{}.val := by",
+            relation_count
+        )?;
+        writeln!(
+            output,
+            "  rw [possibleFramesUptoIso_initial_state_{}]",
+            relation_count
+        )?;
+        writeln!(
+            output,
+            "  exact frameIdsSet_image_val_map_frameToId frameIdsSet_{} frameIdsSet_{}_is_subset_of_allFrameIdsSet",
+            relation_count, relation_count
+        )?;
         writeln!(output)?;
     }
 
