@@ -49,18 +49,12 @@ git clone https://github.com/cameronfreer/lean4-skills.git
 cd lean4-skills
 
 # Create skills directory if it doesn't exist
-mkdir -p "${HOME}/.claude/skills"
+mkdir -p "${HOME}/.agents/skills"
+cp -r plugins/lean4/skills/lean4 "${HOME}/.agents/skills/lean4"
 
-# Install core skill (REQUIRED)
-echo "Installing lean4-theorem-proving (core skill)..."
-cp -r plugins/lean4-theorem-proving "${HOME}/.claude/skills/"
-
-# Install optional skills
-echo "Installing lean4-memories (optional)..."
-cp -r plugins/lean4-memories "${HOME}/.claude/skills/"
-
-echo "Installing lean4-subagents (optional)..."
-cp -r plugins/lean4-subagents "${HOME}/.claude/skills/"
+# Install to Claude Code
+claude plugin marketplace add cameronfreer/lean4-skills
+claude plugin install lean4
 
 # Clean up
 cd /
@@ -73,15 +67,6 @@ Setup complete!
 
 You can now build the project with:
   cd /workspace/main-proofs && lake build
-
-lean-lsp-mcp server is configured and ready to use!
-Configuration: /workspace/.mcp.json
-To test it: uvx lean-lsp-mcp --help
-
-Lean4 Skills installed:
-- lean4-theorem-proving (core)
-- lean4-memories (optional)
-- lean4-subagents (optional)
 
 =========================
 EOF
