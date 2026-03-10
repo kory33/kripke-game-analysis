@@ -1,8 +1,68 @@
 import KripkeGameAnalysis.Game.Strategy.Basic
+import KripkeGameAnalysis.Game.Strategy.FastFiniteSemantics4
 
 namespace KripkeGameStrategy
 
 variable {n : ℕ}
+
+def partitionPossibleFrames
+    (possibleFrames : Multiset (Fin (2^(n^2))))
+    (query : ModalFormula KripkeGameVars)
+    : Array (Multiset (Fin (2^(n^2)))) :=
+  let framesWithCounts : Multiset (Fin (2^(n^2)) × ℕ) := possibleFrames.map (fun frameId =>
+    (frameId, (FiniteKripkeFrame.ofFin frameId).countSatisfyingNodes query))
+  Array.ofFn (fun answer : Fin (n + 1) =>
+    (framesWithCounts.filter (fun pair : Fin (2^(n^2)) × ℕ => pair.2 = (answer : ℕ))).map Prod.fst)
+
+@[simp] theorem partitionPossibleFrames_size
+    (possibleFrames : Multiset (Fin (2^(n^2))))
+    (query : ModalFormula KripkeGameVars) :
+    (partitionPossibleFrames possibleFrames query).size = n + 1 := by
+  simp [partitionPossibleFrames]
+
+@[simp] theorem partitionPossibleFrames_get
+    (possibleFrames : Multiset (Fin (2^(n^2))))
+    (query : ModalFormula KripkeGameVars)
+    (answer : Fin (n + 1)) :
+    (partitionPossibleFrames possibleFrames query)[answer] =
+      ((possibleFrames.map (fun frameId =>
+        (frameId, (FiniteKripkeFrame.ofFin frameId).countSatisfyingNodes query))
+      ).filter (fun pair : Fin (2^(n^2)) × ℕ => pair.2 = (answer : ℕ))).map Prod.fst := by
+  simp [partitionPossibleFrames]
+
+def partitionPossibleFrames4
+    (possibleFrames : Multiset (Fin 65536))
+    (query : ModalFormula KripkeGameVars)
+    : Array (Multiset (Fin 65536)) :=
+  let framesWithCounts : Multiset (Fin 65536 × ℕ) := possibleFrames.map (fun frameId =>
+    (frameId, FiniteKripkeFrame.countSatisfyingNodesFast4 (FiniteKripkeFrame.ofFin (n := 4) frameId) query))
+  Array.ofFn (fun answer : Fin 5 =>
+    (framesWithCounts.filter (fun pair : Fin 65536 × ℕ => pair.2 = (answer : ℕ))).map Prod.fst)
+
+@[simp] theorem partitionPossibleFrames4_size
+    (possibleFrames : Multiset (Fin 65536))
+    (query : ModalFormula KripkeGameVars) :
+    (partitionPossibleFrames4 possibleFrames query).size = 5 := by
+  simp [partitionPossibleFrames4]
+
+@[simp] theorem partitionPossibleFrames4_get
+    (possibleFrames : Multiset (Fin 65536))
+    (query : ModalFormula KripkeGameVars)
+    (answer : Fin 5) :
+    (partitionPossibleFrames4 possibleFrames query)[answer] =
+      ((possibleFrames.map (fun frameId =>
+        (frameId, FiniteKripkeFrame.countSatisfyingNodesFast4 (FiniteKripkeFrame.ofFin (n := 4) frameId) query))
+      ).filter (fun pair : Fin 65536 × ℕ => pair.2 = (answer : ℕ))).map Prod.fst := by
+  simp [partitionPossibleFrames4]
+
+theorem partitionPossibleFrames4_get_eq_partitionPossibleFrames_get
+    (possibleFrames : Multiset (Fin 65536))
+    (query : ModalFormula KripkeGameVars)
+    (answer : Fin 5) :
+    (partitionPossibleFrames4 possibleFrames query)[answer] =
+      (partitionPossibleFrames (n := 4) possibleFrames query)[answer] := by
+  rw [partitionPossibleFrames4_get, partitionPossibleFrames_get]
+  simp [FiniteKripkeFrame.countSatisfyingNodesFast4_eq]
 
 lemma class_frameOfFin_frameToId_eq (frame : FiniteKripkeFrame.UptoIso n) :
     ⟦FiniteKripkeFrame.ofFin (FiniteKripkeFrame.UptoIso.frameToId frame)⟧ = frame := by
@@ -33,23 +93,83 @@ def is_winning_strategy_fast
       false
   | .askQueryAndThen query continuations, moves + 1 =>
       if h : continuations.size = state.frameSize + 1 then
-        -- Optimization: Precompute countSatisfyingNodes once per frame (not once per answer)
-        -- Use Multiset.map to compute counts (computable!)
-        let framesWithCounts := possibleFrames.map (fun frameId =>
-          (frameId, (FiniteKripkeFrame.ofFin frameId).countSatisfyingNodes query))
-
-        -- Partition frames by their precomputed counts
-        let partitionedFrames := Array.ofFn (fun answer : Fin (state.frameSize + 1) =>
-          (framesWithCounts.filter (fun pair => pair.2 = (answer : ℕ))).map Prod.fst)
-
         allFin (fun answer =>
           is_winning_strategy_fast
             (continuations[answer]'(by simp [h]))
             moves
             (state.withNewQueryAndAnswer query answer)
-            (partitionedFrames[answer.val]'(by grind [Array.size_ofFn])))
+            ((partitionPossibleFrames possibleFrames query)[answer.val]'(by
+              rw [partitionPossibleFrames_size]
+              simpa [KripkeGameVisibleState.frameSize] using answer.isLt)))
       else
         false
+
+/--
+Specialized winning strategy checker for 4-world frames that only tracks the
+current possible frame IDs.
+-/
+def is_winning_strategy_on_frames
+    (strategy : KripkeGamePartialStrategy 4)
+    (moves : ℕ)
+    (possibleFrames : Multiset (Fin 65536))
+    : Bool :=
+  match strategy, moves with
+  | .proceedWithExhaustiveSearch, moves =>
+      decide (possibleFrames.card ≤ moves)
+  | .askQueryAndThen _ _, 0 =>
+      false
+  | .askQueryAndThen query continuations, moves + 1 =>
+      if h : continuations.size = 5 then
+        allFin (fun answer : Fin 5 =>
+          is_winning_strategy_on_frames
+            (continuations[answer]'(by simp [h]))
+            moves
+            ((partitionPossibleFrames4 possibleFrames query)[answer.val]'(by
+              rw [partitionPossibleFrames4_size]
+              exact answer.isLt)))
+      else
+        false
+
+theorem is_winning_strategy_on_frames_eq_fast
+    (strategy : KripkeGamePartialStrategy 4)
+    (moves : ℕ)
+    (state : KripkeGameVisibleState 4)
+    (possibleFrames : Multiset (Fin 65536))
+    : is_winning_strategy_on_frames strategy moves possibleFrames
+      = is_winning_strategy_fast strategy moves state possibleFrames := by
+  match strategy, moves with
+  | .proceedWithExhaustiveSearch, moves =>
+      unfold is_winning_strategy_on_frames is_winning_strategy_fast
+      rfl
+  | .askQueryAndThen _ _, 0 =>
+      unfold is_winning_strategy_on_frames is_winning_strategy_fast
+      rfl
+  | .askQueryAndThen query continuations, moves + 1 =>
+      by_cases h : continuations.size = 5
+      · have h' : continuations.size = state.frameSize + 1 := by
+          simpa [KripkeGameVisibleState.frameSize] using h
+        simp [is_winning_strategy_on_frames, is_winning_strategy_fast, h, h']
+        apply allFin_ext
+        intro answerCount
+        have hPartition :
+            ((partitionPossibleFrames4 possibleFrames query)[answerCount.val]'(by
+              rw [partitionPossibleFrames4_size]
+              exact answerCount.isLt)) =
+            ((partitionPossibleFrames possibleFrames query)[answerCount.val]'(by
+              rw [partitionPossibleFrames_size]
+              exact answerCount.isLt)) := by
+          simpa using partitionPossibleFrames4_get_eq_partitionPossibleFrames_get possibleFrames query answerCount
+        have hRec := is_winning_strategy_on_frames_eq_fast
+          (continuations[answerCount]'(by simpa [h, KripkeGameVisibleState.frameSize] using answerCount.isLt))
+          moves
+          (state.withNewQueryAndAnswer query answerCount)
+          ((partitionPossibleFrames4 possibleFrames query)[answerCount.val]'(by
+            rw [partitionPossibleFrames4_size]
+            exact answerCount.isLt))
+        simpa [hPartition] using hRec
+      · have h' : ¬ continuations.size = state.frameSize + 1 := by
+          simpa [KripkeGameVisibleState.frameSize] using h
+        simp [is_winning_strategy_on_frames, is_winning_strategy_fast, h, h']
 
 lemma idToFrame_frameToId (frame : FiniteKripkeFrame.UptoIso n) :
     idToFrame (FiniteKripkeFrame.UptoIso.frameToId frame) = frame := by
@@ -105,9 +225,12 @@ theorem is_winning_strategy_fast_eq_slow
       unfold is_winning_strategy_fast is_winning_strategy
       split <;> (rename_i h)
       · unfold allFin; apply allFin_ext; intro answerCount
-        rw [←is_winning_strategy_fast_eq_slow continuations[answerCount] moves _]
+        rw [←is_winning_strategy_fast_eq_slow
+          (continuations[answerCount]'(by simpa [h, KripkeGameVisibleState.frameSize] using answerCount.isLt))
+          moves
+          _]
         congr
-        simp [Multiset.filter_map]
+        simp [partitionPossibleFrames, Multiset.filter_map]
         apply congrArg
         rw [KripkeGameVisibleState.withNewQueryAndAnswer_possibileFramesUptoIso]
         have : (fun (x : FiniteKripkeFrame.UptoIso n) => (FiniteKripkeFrame.ofFin (FiniteKripkeFrame.UptoIso.frameToId x)).countSatisfyingNodes query = ↑answerCount)

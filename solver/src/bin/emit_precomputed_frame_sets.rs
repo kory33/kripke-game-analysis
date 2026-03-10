@@ -112,10 +112,7 @@ fn main() -> std::io::Result<()> {
         output,
         "    (FiniteKripkeFrame.UptoIso.univ 4).map FiniteKripkeFrame.UptoIso.frameToId = allFrameIdsSet := by"
     )?;
-    writeln!(
-        output,
-        "  -- This theorem is quite expensive to prove,"
-    )?;
+    writeln!(output, "  -- This theorem is quite expensive to prove,")?;
     writeln!(
         output,
         "  -- particularly due to (FiniteKripkeFrame.UptoIso.univ 4) and the equality of Finset 65536 being costly."
@@ -402,11 +399,7 @@ fn main() -> std::io::Result<()> {
             "    ({{ accessiblityRelationSize := ⟨{}, lt_witness⟩, queriesAndAnswers := [] }} : KripkeGameVisibleState 4).possibleFramesUptoIso.val.map FiniteKripkeFrame.UptoIso.frameToId : Multiset (Fin (2 ^ 4 ^ 2))",
             relation_count
         )?;
-        writeln!(
-            output,
-            "  ) = frameIdsSet_{}.val := by",
-            relation_count
-        )?;
+        writeln!(output, "  ) = frameIdsSet_{}.val := by", relation_count)?;
         writeln!(
             output,
             "  rw [possibleFramesUptoIso_initial_state_{}]",

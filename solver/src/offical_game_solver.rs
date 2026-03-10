@@ -73,6 +73,55 @@ pub struct KripkeGameStrategy(
     pub BTreeMap</* accessibility relation size */ u8, StrategyAgainstFixedWorldCount>,
 );
 
+pub static OFFICIAL_GAME_QUERIES_TO_TRY: LazyLock<Vec<Formula<OfficialGamePropVar>>> =
+    LazyLock::new(|| {
+        vec![
+            // 1. nodes with self-loops
+            "p → ◇p",
+            // 2. nodes such that the only outgoing edge (if any) is a self-loop
+            "p → □p",
+            // 3. nodes with an edge to (1)-nodes
+            "◇(p → ◇p)",
+            // 4. nodes having 2-way edges into (1)-nodes
+            "r → ◇((p → ◇p) ∧ ◇r)",
+            // 5. nodes in size-2 cycle
+            "p → ◇◇p",
+            // 6. nodes where all outgoing edges are two-way
+            "p → □◇p",
+            // 7. nodes with an edge into (2)-nodes
+            "◇(p → □p)",
+            // 8. sink nodes
+            "□⊥",
+            // 9. nodes with an edge to a (8)-node
+            "◇□⊥",
+            // 10. nodes where all outgoing edges lead to (1)-nodes
+            "□(p → ◇p)",
+            // 11. nodes in size-3 cycle
+            "p → ◇◇◇p",
+            // 12. nodes in size-4 cycle
+            "p → ◇◇◇◇p",
+            // 13. nodes with an outgoing edge
+            "◇⊤",
+            // 14. nodes with an edge to (10)-nodes
+            "◇□(p → ◇p)",
+            // 15. nodes with outdegree <= 1 (separates [4469, 4473, 4581, 4711, 5033])
+            "◇p → □p",
+            // 16. all nodes reachable in exactly 2 steps are reachable in exactly 1 step (separates [5625, 5869, 6061, 6073, 6121])
+            "◇◇p → ◇p",
+            // 17. nodes where all next nodes are mutually reachable (separates [5594, 6042, 6588, 6636, 7084])
+            "□p → □◇p",
+            // 18. query separating [6046, 6590, 7100]
+            "◇(p → □□p)",
+        ]
+        .into_iter()
+        .map(|s| parsing::parse_official_game_formula(s).unwrap())
+        .collect()
+    });
+
+pub fn official_game_queries_to_try() -> &'static [Formula<OfficialGamePropVar>] {
+    &OFFICIAL_GAME_QUERIES_TO_TRY
+}
+
 // When searching for a strategy, instead of considering the explicit pair (relation count, query-answer history)
 // as a game state, we actually only need to consider the set of all equivalence classes of worlds that
 // conform to the pair (relation count, query-answer history).
@@ -129,50 +178,6 @@ fn come_up_with_strategy_for(
 
     trace: &mut DiagnosticTrace,
 ) -> StrategyAgainstFixedWorldCount {
-    static QUERIES_TO_TRY: LazyLock<Vec<Formula<OfficialGamePropVar>>> = LazyLock::new(|| {
-        vec![
-            // 1. nodes with self-loops
-            "p → ◇p",
-            // 2. nodes such that the only outgoing edge (if any) is a self-loop
-            "p → □p",
-            // 3. nodes with an edge to (1)-nodes
-            "◇(p → ◇p)",
-            // 4. nodes having 2-way edges into (1)-nodes
-            "r → ◇((p → ◇p) ∧ ◇r)",
-            // 5. nodes in size-2 cycle
-            "p → ◇◇p",
-            // 6. nodes where all outgoing edges are two-way
-            "p → □◇p",
-            // 7. nodes with an edge into (2)-nodes
-            "◇(p → □p)",
-            // 8. sink nodes
-            "□⊥",
-            // 9. nodes with an edge to a (8)-node
-            "◇□⊥",
-            // 10. nodes where all outgoing edges lead to (1)-nodes
-            "□(p → ◇p)",
-            // 11. nodes in size-3 cycle
-            "p → ◇◇◇p",
-            // 12. nodes in size-4 cycle
-            "p → ◇◇◇◇p",
-            // 13. nodes with an outgoing edge
-            "◇⊤",
-            // 14. nodes with an edge to (10)-nodes
-            "◇□(p → ◇p)",
-            // 15. nodes with outdegree <= 1 (separates [4469, 4473, 4581, 4711, 5033])
-            "◇p → □p",
-            // 16. all nodes reachable in exactly 2 steps are reachable in exactly 1 step (separates [5625, 5869, 6061, 6073, 6121])
-            "◇◇p → ◇p",
-            // 17. nodes where all next nodes are mutually reachable (separates [5594, 6042, 6588, 6636, 7084])
-            "□p → □◇p",
-            // 18. query separating [6046, 6590, 7100]
-            "◇(p → □□p)",
-        ]
-        .into_iter()
-        .map(|s| parsing::parse_official_game_formula(s).unwrap())
-        .collect()
-    });
-
     if remaining_moves == 0 {
         panic!(
             "Ran out of moves with {} possible frames left (|R| = {}). Past moves: {}. Possible frames: {:?}. Run the following command to visualize them: \n####\n{}\n####",
@@ -198,7 +203,7 @@ EOF
     } else if possible_frames.len() <= remaining_moves as usize {
         StrategyAgainstFixedWorldCount::ProceedWithExhaustiveSearch
     } else {
-        let (query, resulting_possible_frames) = QUERIES_TO_TRY
+        let (query, resulting_possible_frames) = official_game_queries_to_try()
             .iter()
             .map(|formula| {
                 (
