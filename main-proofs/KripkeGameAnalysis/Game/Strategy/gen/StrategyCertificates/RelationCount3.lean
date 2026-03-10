@@ -80,40 +80,6 @@ theorem certificate_for_relation_count_3_rootFrames_eq :
     certificate_for_relation_count_3.rootFrames = frameIdsSet_3.val := by
   native_decide
 
-private def strategy_for_relation_count_3_child_2 : KripkeGamePartialStrategy 4 :=
-  match strategy_for_relation_count_3 with
-  | .askQueryAndThen _ continuations => continuations[2]!
-  | .proceedWithExhaustiveSearch => .proceedWithExhaustiveSearch
-
-private def strategy_for_relation_count_3_child_3 : KripkeGamePartialStrategy 4 :=
-  match strategy_for_relation_count_3 with
-  | .askQueryAndThen _ continuations => continuations[3]!
-  | .proceedWithExhaustiveSearch => .proceedWithExhaustiveSearch
-
-private def certificate_for_relation_count_3_child_2 : KripkeGameStrategy.StrategyCertificate :=
-  match certificate_for_relation_count_3 with
-  | .ask _ children => children[2]!
-  | .exhaustive _ => .exhaustive ∅
-
-private def certificate_for_relation_count_3_child_3 : KripkeGameStrategy.StrategyCertificate :=
-  match certificate_for_relation_count_3 with
-  | .ask _ children => children[3]!
-  | .exhaustive _ => .exhaustive ∅
-
-private theorem certificate_for_relation_count_3_child_2_valid :
-    KripkeGameStrategy.StrategyCertificate.proves
-      strategy_for_relation_count_3_child_2
-      9
-      certificate_for_relation_count_3_child_2 = true := by
-  native_decide
-
-private theorem certificate_for_relation_count_3_child_3_valid :
-    KripkeGameStrategy.StrategyCertificate.proves
-      strategy_for_relation_count_3_child_3
-      9
-      certificate_for_relation_count_3_child_3 = true := by
-  native_decide
-
 theorem certificate_for_relation_count_3_valid :
     KripkeGameStrategy.StrategyCertificate.proves strategy_for_relation_count_3 10 certificate_for_relation_count_3 = true := by
   native_decide
@@ -122,6 +88,5 @@ theorem strategy_for_relation_count_3_is_winning_on_frames :
     KripkeGameStrategy.is_winning_strategy_on_frames strategy_for_relation_count_3 10 frameIdsSet_3.val = true := by
   have h := KripkeGameStrategy.StrategyCertificate.proves_sound strategy_for_relation_count_3 10 certificate_for_relation_count_3 certificate_for_relation_count_3_valid
   simpa [certificate_for_relation_count_3_rootFrames_eq] using h
-
 
 end KripkeGameAnalysis.Generated

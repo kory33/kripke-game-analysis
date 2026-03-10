@@ -1245,5 +1245,4 @@ theorem strategy_for_relation_count_7_is_winning_on_frames :
   have h := KripkeGameStrategy.StrategyCertificate.proves_sound strategy_for_relation_count_7 10 certificate_for_relation_count_7 certificate_for_relation_count_7_valid
   simpa [certificate_for_relation_count_7_rootFrames_eq] using h
 
-
 end KripkeGameAnalysis.Generated

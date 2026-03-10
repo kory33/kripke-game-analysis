@@ -23,7 +23,7 @@ fn main() -> std::io::Result<()> {
     writeln!(output)?;
     writeln!(
         output,
-        "import KripkeGameAnalysis.Game.Strategy.gen.PrecomputedFrameSetsDefsAndLemmas"
+        "import KripkeGameAnalysis.Game.Strategy.PrecomputedFrameSetsDefsAndLemmas"
     )?;
     writeln!(output, "import Std.Data.ExtHashSet.Lemmas")?;
     writeln!(output)?;
