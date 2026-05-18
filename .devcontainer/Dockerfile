@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/devcontainers/base:2-bookworm@sha256:23fa69fed758b7927c60061317d73baf7d66b9fca5c344e80bce3a940b229af0
+FROM mcr.microsoft.com/devcontainers/base:2-bookworm@sha256:9e35ebf156350ba25b117da6869907034b6e2437b1891e3a43395af0b7d3eda4
 
 ARG USERNAME=vscode
 
